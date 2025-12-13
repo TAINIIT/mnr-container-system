@@ -212,27 +212,44 @@ export function DataProvider({ children }) {
                 }
             } else {
                 // Production: save to Firebase
-                // Note: Firebase updates are handled individually in each operation
-                // This batch save is for consistency and backup
-                FirebaseDataService.saveAll('containers', containers);
+                // Only save when data has items to prevent race condition overwriting
+                if (containers.length > 0) {
+                    FirebaseDataService.saveAll('containers', containers);
+                }
 
                 // For surveys, remove large images before saving to Firebase
-                const surveysToSave = surveys.map(s => ({
-                    ...s,
-                    images: s.images?.slice(0, 3).map(img => ({
-                        ...img,
-                        dataUrl: img.dataUrl?.substring(0, 1000) || '' // Truncate large images
-                    })) || []
-                }));
-                FirebaseDataService.saveAll('surveys', surveysToSave);
+                if (surveys.length > 0) {
+                    const surveysToSave = surveys.map(s => ({
+                        ...s,
+                        images: s.images?.slice(0, 3).map(img => ({
+                            ...img,
+                            dataUrl: img.dataUrl?.substring(0, 1000) || '' // Truncate large images
+                        })) || []
+                    }));
+                    FirebaseDataService.saveAll('surveys', surveysToSave);
+                }
 
-                FirebaseDataService.saveAll('eors', eors);
-                FirebaseDataService.saveAll('repairOrders', repairOrders);
-                FirebaseDataService.saveAll('washingOrders', washingOrders);
-                FirebaseDataService.saveAll('shunting', shunting);
-                FirebaseDataService.saveAll('preinspections', preinspections);
-                FirebaseDataService.saveAll('stacking', stacking);
-                FirebaseDataService.saveAll('auditLogs', auditLogs.slice(0, 500));
+                if (eors.length > 0) {
+                    FirebaseDataService.saveAll('eors', eors);
+                }
+                if (repairOrders.length > 0) {
+                    FirebaseDataService.saveAll('repairOrders', repairOrders);
+                }
+                if (washingOrders.length > 0) {
+                    FirebaseDataService.saveAll('washingOrders', washingOrders);
+                }
+                if (shunting.length > 0) {
+                    FirebaseDataService.saveAll('shunting', shunting);
+                }
+                if (preinspections.length > 0) {
+                    FirebaseDataService.saveAll('preinspections', preinspections);
+                }
+                if (stacking.length > 0) {
+                    FirebaseDataService.saveAll('stacking', stacking);
+                }
+                if (auditLogs.length > 0) {
+                    FirebaseDataService.saveAll('auditLogs', auditLogs.slice(0, 500));
+                }
             }
         }
     }, [containers, surveys, eors, repairOrders, washingOrders, shunting, preinspections, stacking, auditLogs, isLoading]);
