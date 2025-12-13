@@ -47,6 +47,11 @@ export default function ChatManagement() {
 
     // Get filtered chats based on status
     const getFilteredChats = () => {
+        // Ensure chats is an array (may be undefined while loading from Firebase)
+        if (!chats || !Array.isArray(chats)) {
+            return [];
+        }
+
         let filtered = [...chats];
 
         if (filterStatus === 'active') {
