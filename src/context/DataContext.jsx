@@ -1,6 +1,8 @@
-import { createContext, useContext, useState, useEffect } from 'react';
+import { createContext, useContext, useState, useEffect, useRef } from 'react';
 import { mockContainers, mockSurveys, mockEORs, mockRepairOrders, mockAuditLogs } from '../data/mockContainers';
 import { CONFIG, AUDIT_ACTIONS } from '../config/constants';
+import FirebaseDataService from '../services/firebaseDataService';
+import { DEMO_MODE } from '../config/firebase';
 
 const DataContext = createContext(null);
 
@@ -40,10 +42,14 @@ export function DataProvider({ children }) {
     const [eors, setEORs] = useState([]);
     const [repairOrders, setRepairOrders] = useState([]);
     const [washingOrders, setWashingOrders] = useState([]);
+    const [shunting, setShunting] = useState([]);
+    const [preinspections, setPreinspections] = useState([]);
+    const [stacking, setStacking] = useState([]);
     const [auditLogs, setAuditLogs] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
+    const unsubscribesRef = useRef([]);
 
-    // Load data from localStorage or use mock data
+    // Load data from localStorage (for DEMO_MODE fallback)
     const loadDataFromStorage = () => {
         const savedContainers = localStorage.getItem('mnr_containers');
         const savedSurveys = localStorage.getItem('mnr_surveys');
@@ -61,8 +67,88 @@ export function DataProvider({ children }) {
         setIsLoading(false);
     };
 
+    // Initialize data - Firebase or localStorage
     useEffect(() => {
-        loadDataFromStorage();
+        if (DEMO_MODE) {
+            // Demo mode: use localStorage
+            loadDataFromStorage();
+        } else {
+            // Production: subscribe to Firebase
+            console.log('🔥 DataContext: Connecting to Firebase...');
+
+            // Subscribe to containers
+            const unsubContainers = FirebaseDataService.subscribe('containers', (data) => {
+                console.log('🔥 Containers: Received', data.length, 'items');
+                setContainers(data.length > 0 ? data : mockContainers);
+            });
+            unsubscribesRef.current.push(unsubContainers);
+
+            // Subscribe to surveys
+            const unsubSurveys = FirebaseDataService.subscribe('surveys', (data) => {
+                console.log('🔥 Surveys: Received', data.length, 'items');
+                setSurveys(data.length > 0 ? data : mockSurveys);
+            });
+            unsubscribesRef.current.push(unsubSurveys);
+
+            // Subscribe to EORs
+            const unsubEORs = FirebaseDataService.subscribe('eors', (data) => {
+                console.log('🔥 EORs: Received', data.length, 'items');
+                setEORs(data.length > 0 ? data : mockEORs);
+            });
+            unsubscribesRef.current.push(unsubEORs);
+
+            // Subscribe to repair orders
+            const unsubROs = FirebaseDataService.subscribe('repairOrders', (data) => {
+                console.log('🔥 RepairOrders: Received', data.length, 'items');
+                setRepairOrders(data.length > 0 ? data : mockRepairOrders);
+            });
+            unsubscribesRef.current.push(unsubROs);
+
+            // Subscribe to washing orders
+            const unsubWashing = FirebaseDataService.subscribe('washingOrders', (data) => {
+                console.log('🔥 WashingOrders: Received', data.length, 'items');
+                setWashingOrders(data);
+            });
+            unsubscribesRef.current.push(unsubWashing);
+
+            // Subscribe to shunting
+            const unsubShunting = FirebaseDataService.subscribe('shunting', (data) => {
+                console.log('🔥 Shunting: Received', data.length, 'items');
+                setShunting(data);
+            });
+            unsubscribesRef.current.push(unsubShunting);
+
+            // Subscribe to preinspections
+            const unsubPreinspections = FirebaseDataService.subscribe('preinspections', (data) => {
+                console.log('🔥 Preinspections: Received', data.length, 'items');
+                setPreinspections(data);
+            });
+            unsubscribesRef.current.push(unsubPreinspections);
+
+            // Subscribe to stacking
+            const unsubStacking = FirebaseDataService.subscribe('stacking', (data) => {
+                console.log('🔥 Stacking: Received', data.length, 'items');
+                setStacking(data);
+            });
+            unsubscribesRef.current.push(unsubStacking);
+
+            // Subscribe to audit logs
+            const unsubLogs = FirebaseDataService.subscribe('auditLogs', (data) => {
+                console.log('🔥 AuditLogs: Received', data.length, 'items');
+                setAuditLogs(data.length > 0 ? data : mockAuditLogs);
+            });
+            unsubscribesRef.current.push(unsubLogs);
+
+            setIsLoading(false);
+
+            // Cleanup subscriptions
+            return () => {
+                console.log('🔥 DataContext: Unsubscribing from Firebase...');
+                unsubscribesRef.current.forEach(unsub => {
+                    if (typeof unsub === 'function') unsub();
+                });
+            };
+        }
     }, []);
 
     // Reload data from localStorage (called after external modifications like Job Monitoring deletes)
@@ -70,66 +156,86 @@ export function DataProvider({ children }) {
         loadDataFromStorage();
     };
 
-    // Persist data to localStorage with error handling
+    // Persist data to storage (localStorage for demo, Firebase for production)
     useEffect(() => {
         if (!isLoading) {
-            try {
-                localStorage.setItem('mnr_containers', JSON.stringify(containers));
-            } catch (e) {
-                console.warn('Failed to save containers to localStorage:', e.message);
-            }
+            if (DEMO_MODE) {
+                // Demo mode: save to localStorage
+                try {
+                    localStorage.setItem('mnr_containers', JSON.stringify(containers));
+                } catch (e) {
+                    console.warn('Failed to save containers to localStorage:', e.message);
+                }
 
-            try {
-                // For surveys, strip large images if quota is exceeded
+                try {
+                    const surveysToSave = surveys.map(s => ({
+                        ...s,
+                        images: s.images?.slice(0, 5).map((img, idx) => ({
+                            ...img,
+                            dataUrl: idx < 3 ? img.dataUrl : '[REMOVED DUE TO SIZE]'
+                        })) || []
+                    }));
+                    localStorage.setItem('mnr_surveys', JSON.stringify(surveysToSave));
+                } catch (e) {
+                    console.warn('Failed to save surveys to localStorage:', e.message);
+                    try {
+                        const surveysNoImages = surveys.map(s => ({ ...s, images: [] }));
+                        localStorage.setItem('mnr_surveys', JSON.stringify(surveysNoImages));
+                    } catch (e2) {
+                        console.error('Cannot save surveys at all:', e2.message);
+                    }
+                }
+
+                try {
+                    localStorage.setItem('mnr_eors', JSON.stringify(eors));
+                } catch (e) {
+                    console.warn('Failed to save EORs to localStorage:', e.message);
+                }
+
+                try {
+                    localStorage.setItem('mnr_repair_orders', JSON.stringify(repairOrders));
+                } catch (e) {
+                    console.warn('Failed to save repair orders to localStorage:', e.message);
+                }
+
+                try {
+                    localStorage.setItem('mnr_washing_orders', JSON.stringify(washingOrders));
+                } catch (e) {
+                    console.warn('Failed to save washing orders to localStorage:', e.message);
+                }
+
+                try {
+                    const logsToSave = auditLogs.slice(0, 500);
+                    localStorage.setItem('mnr_audit_logs', JSON.stringify(logsToSave));
+                } catch (e) {
+                    console.warn('Failed to save audit logs to localStorage:', e.message);
+                }
+            } else {
+                // Production: save to Firebase
+                // Note: Firebase updates are handled individually in each operation
+                // This batch save is for consistency and backup
+                FirebaseDataService.saveAll('containers', containers);
+
+                // For surveys, remove large images before saving to Firebase
                 const surveysToSave = surveys.map(s => ({
                     ...s,
-                    // Limit images: only keep metadata, not full dataUrl if too many
-                    images: s.images?.slice(0, 5).map(img => ({
+                    images: s.images?.slice(0, 3).map(img => ({
                         ...img,
-                        // Keep dataUrl only for first 3 images to save space
-                        dataUrl: s.images.indexOf(img) < 3 ? img.dataUrl : '[REMOVED DUE TO SIZE]'
+                        dataUrl: img.dataUrl?.substring(0, 1000) || '' // Truncate large images
                     })) || []
                 }));
-                localStorage.setItem('mnr_surveys', JSON.stringify(surveysToSave));
-            } catch (e) {
-                console.warn('Failed to save surveys to localStorage:', e.message);
-                // Try saving without images
-                try {
-                    const surveysNoImages = surveys.map(s => ({ ...s, images: [] }));
-                    localStorage.setItem('mnr_surveys', JSON.stringify(surveysNoImages));
-                    console.info('Saved surveys without images due to quota');
-                } catch (e2) {
-                    console.error('Cannot save surveys at all:', e2.message);
-                }
-            }
+                FirebaseDataService.saveAll('surveys', surveysToSave);
 
-            try {
-                localStorage.setItem('mnr_eors', JSON.stringify(eors));
-            } catch (e) {
-                console.warn('Failed to save EORs to localStorage:', e.message);
-            }
-
-            try {
-                localStorage.setItem('mnr_repair_orders', JSON.stringify(repairOrders));
-            } catch (e) {
-                console.warn('Failed to save repair orders to localStorage:', e.message);
-            }
-
-            try {
-                localStorage.setItem('mnr_washing_orders', JSON.stringify(washingOrders));
-            } catch (e) {
-                console.warn('Failed to save washing orders to localStorage:', e.message);
-            }
-
-            try {
-                // Limit audit logs to prevent overflow
-                const logsToSave = auditLogs.slice(0, 500);
-                localStorage.setItem('mnr_audit_logs', JSON.stringify(logsToSave));
-            } catch (e) {
-                console.warn('Failed to save audit logs to localStorage:', e.message);
+                FirebaseDataService.saveAll('eors', eors);
+                FirebaseDataService.saveAll('repairOrders', repairOrders);
+                FirebaseDataService.saveAll('washingOrders', washingOrders);
+                FirebaseDataService.saveAll('shunting', shunting);
+                FirebaseDataService.saveAll('preinspections', preinspections);
+                FirebaseDataService.saveAll('stacking', stacking);
+                FirebaseDataService.saveAll('auditLogs', auditLogs.slice(0, 500));
             }
         }
-    }, [containers, surveys, eors, repairOrders, washingOrders, auditLogs, isLoading]);
+    }, [containers, surveys, eors, repairOrders, washingOrders, shunting, preinspections, stacking, auditLogs, isLoading]);
 
     // Add audit log entry
     const addAuditLog = (entityType, entityId, action, userId, details = {}, oldValue = null, newValue = null) => {
@@ -720,6 +826,9 @@ export function DataProvider({ children }) {
         eors,
         repairOrders,
         washingOrders,
+        shunting,
+        preinspections,
+        stacking,
         auditLogs,
         isLoading,
 
@@ -785,7 +894,10 @@ export function DataProvider({ children }) {
         setEORs,
         setRepairOrders,
         setContainers,
-        setWashingOrders
+        setWashingOrders,
+        setShunting,
+        setPreinspections,
+        setStacking
     };
 
     return (
