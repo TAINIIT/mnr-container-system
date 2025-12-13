@@ -116,18 +116,20 @@ export function ChatProvider({ children }) {
 
     // Get or create chat for current user/guest
     const getOrCreateChat = useCallback((guestInfo = null, user = null) => {
+        const safeChats = Array.isArray(chats) ? chats : [];
+
         // If there's an active chat, return it
         if (activeChat) {
-            const existing = chats.find(c => c.id === activeChat && c.status === 'active');
+            const existing = safeChats.find(c => c.id === activeChat && c.status === 'active');
             if (existing) return existing;
         }
 
         // Try to find existing active chat for this user/guest
         let existingChat = null;
         if (user?.id) {
-            existingChat = chats.find(c => c.userId === user.id && c.status === 'active');
+            existingChat = safeChats.find(c => c.userId === user.id && c.status === 'active');
         } else if (guestInfo?.email) {
-            existingChat = chats.find(c => c.guestEmail === guestInfo.email && c.status === 'active');
+            existingChat = safeChats.find(c => c.guestEmail === guestInfo.email && c.status === 'active');
         }
 
         if (existingChat) {
@@ -231,17 +233,20 @@ export function ChatProvider({ children }) {
 
     // Get unread count for a chat
     const getUnreadCount = useCallback((chatId) => {
-        const chat = chats.find(c => c.id === chatId);
-        if (!chat) return 0;
+        const safeChats = Array.isArray(chats) ? chats : [];
+        const chat = safeChats.find(c => c.id === chatId);
+        if (!chat || !Array.isArray(chat.messages)) return 0;
         return chat.messages.filter(m => !m.read && m.sender !== 'agent').length;
     }, [chats]);
 
     // Get total unread for admin
     const getTotalUnreadAdmin = useCallback(() => {
-        return chats
+        const safeChats = Array.isArray(chats) ? chats : [];
+        return safeChats
             .filter(c => c.status === 'active')
             .reduce((total, chat) => {
-                const unread = chat.messages.filter(m =>
+                const messages = Array.isArray(chat.messages) ? chat.messages : [];
+                const unread = messages.filter(m =>
                     (m.sender === 'user' || m.sender === 'guest') && !m.read
                 ).length;
                 return total + unread;
@@ -250,13 +255,15 @@ export function ChatProvider({ children }) {
 
     // Get active chats for admin
     const getActiveChats = useCallback(() => {
-        return chats.filter(c => c.status === 'active')
+        const safeChats = Array.isArray(chats) ? chats : [];
+        return safeChats.filter(c => c.status === 'active')
             .sort((a, b) => new Date(b.updatedAt) - new Date(a.updatedAt));
     }, [chats]);
 
     // Get chat by ID
     const getChat = useCallback((chatId) => {
-        return chats.find(c => c.id === chatId);
+        const safeChats = Array.isArray(chats) ? chats : [];
+        return safeChats.find(c => c.id === chatId);
     }, [chats]);
 
     // Refresh chats from storage (for manual refresh)
