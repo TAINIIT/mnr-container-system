@@ -1,0 +1,269 @@
+
+[1m[46m RUN [49m[22m [36mv4.0.15 [39m[90mC:/Users/taini/.gemini/antigravity/MnR2[39m
+
+Error: useWorkflow must be used within a WorkflowProvider
+    at useWorkflow (C:/Users/taini/.gemini/antigravity/MnR2/src/context/WorkflowContext.jsx:245:15)
+    at Header (C:/Users/taini/.gemini/antigravity/MnR2/src/components/Layout/Header.jsx:28:59)
+    at renderWithHooks (C:\Users\taini\.gemini\antigravity\MnR2\node_modules\react-dom\cjs\react-dom.development.js:15486:18)
+    at mountIndeterminateComponent (C:\Users\taini\.gemini\antigravity\MnR2\node_modules\react-dom\cjs\react-dom.development.js:20103:13)
+    at beginWork (C:\Users\taini\.gemini\antigravity\MnR2\node_modules\react-dom\cjs\react-dom.development.js:21626:16)
+    at HTMLUnknownElement.callCallback (C:\Users\taini\.gemini\antigravity\MnR2\node_modules\react-dom\cjs\react-dom.development.js:4164:14)
+    at HTMLUnknownElement.callTheUserObjectsOperation (C:\Users\taini\.gemini\antigravity\MnR2\node_modules\jsdom\lib\jsdom\living\generated\EventListener.js:26:30)
+    at innerInvokeEventListeners (C:\Users\taini\.gemini\antigravity\MnR2\node_modules\jsdom\lib\jsdom\living\events\EventTarget-impl.js:360:16)
+    at invokeEventListeners (C:\Users\taini\.gemini\antigravity\MnR2\node_modules\jsdom\lib\jsdom\living\events\EventTarget-impl.js:296:3)
+    at HTMLUnknownElementImpl._dispatch (C:\Users\taini\.gemini\antigravity\MnR2\node_modules\jsdom\lib\jsdom\living\events\EventTarget-impl.js:243:9)
+Error: useTabs must be used within a TabProvider
+    at useTabs (C:/Users/taini/.gemini/antigravity/MnR2/src/context/TabContext.jsx:223:15)
+    at TabBar (C:/Users/taini/.gemini/antigravity/MnR2/src/components/Layout/TabBar.jsx:8:95)
+    at renderWithHooks (C:\Users\taini\.gemini\antigravity\MnR2\node_modules\react-dom\cjs\react-dom.development.js:15486:18)
+    at mountIndeterminateComponent (C:\Users\taini\.gemini\antigravity\MnR2\node_modules\react-dom\cjs\react-dom.development.js:20103:13)
+    at beginWork (C:\Users\taini\.gemini\antigravity\MnR2\node_modules\react-dom\cjs\react-dom.development.js:21626:16)
+    at HTMLUnknownElement.callCallback (C:\Users\taini\.gemini\antigravity\MnR2\node_modules\react-dom\cjs\react-dom.development.js:4164:14)
+    at HTMLUnknownElement.callTheUserObjectsOperation (C:\Users\taini\.gemini\antigravity\MnR2\node_modules\jsdom\lib\jsdom\living\generated\EventListener.js:26:30)
+    at innerInvokeEventListeners (C:\Users\taini\.gemini\antigravity\MnR2\node_modules\jsdom\lib\jsdom\living\events\EventTarget-impl.js:360:16)
+    at invokeEventListeners (C:\Users\taini\.gemini\antigravity\MnR2\node_modules\jsdom\lib\jsdom\living\events\EventTarget-impl.js:296:3)
+    at HTMLUnknownElementImpl._dispatch (C:\Users\taini\.gemini\antigravity\MnR2\node_modules\jsdom\lib\jsdom\living\events\EventTarget-impl.js:243:9)
+Error: useWorkflow must be used within a WorkflowProvider
+    at useWorkflow (C:/Users/taini/.gemini/antigravity/MnR2/src/context/WorkflowContext.jsx:245:15)
+    at WorkflowPanel (C:/Users/taini/.gemini/antigravity/MnR2/src/components/Workflow/WorkflowPanel.jsx:31:9)
+    at renderWithHooks (C:\Users\taini\.gemini\antigravity\MnR2\node_modules\react-dom\cjs\react-dom.development.js:15486:18)
+    at mountIndeterminateComponent (C:\Users\taini\.gemini\antigravity\MnR2\node_modules\react-dom\cjs\react-dom.development.js:20103:13)
+    at beginWork (C:\Users\taini\.gemini\antigravity\MnR2\node_modules\react-dom\cjs\react-dom.development.js:21626:16)
+    at HTMLUnknownElement.callCallback (C:\Users\taini\.gemini\antigravity\MnR2\node_modules\react-dom\cjs\react-dom.development.js:4164:14)
+    at HTMLUnknownElement.callTheUserObjectsOperation (C:\Users\taini\.gemini\antigravity\MnR2\node_modules\jsdom\lib\jsdom\living\generated\EventListener.js:26:30)
+    at innerInvokeEventListeners (C:\Users\taini\.gemini\antigravity\MnR2\node_modules\jsdom\lib\jsdom\living\events\EventTarget-impl.js:360:16)
+    at invokeEventListeners (C:\Users\taini\.gemini\antigravity\MnR2\node_modules\jsdom\lib\jsdom\living\events\EventTarget-impl.js:296:3)
+    at HTMLUnknownElementImpl._dispatch (C:\Users\taini\.gemini\antigravity\MnR2\node_modules\jsdom\lib\jsdom\living\events\EventTarget-impl.js:243:9)
+Error: useWorkflow must be used within a WorkflowProvider
+    at useWorkflow (C:/Users/taini/.gemini/antigravity/MnR2/src/context/WorkflowContext.jsx:245:15)
+    at Header (C:/Users/taini/.gemini/antigravity/MnR2/src/components/Layout/Header.jsx:28:59)
+    at renderWithHooks (C:\Users\taini\.gemini\antigravity\MnR2\node_modules\react-dom\cjs\react-dom.development.js:15486:18)
+    at mountIndeterminateComponent (C:\Users\taini\.gemini\antigravity\MnR2\node_modules\react-dom\cjs\react-dom.development.js:20103:13)
+    at beginWork (C:\Users\taini\.gemini\antigravity\MnR2\node_modules\react-dom\cjs\react-dom.development.js:21626:16)
+    at HTMLUnknownElement.callCallback (C:\Users\taini\.gemini\antigravity\MnR2\node_modules\react-dom\cjs\react-dom.development.js:4164:14)
+    at HTMLUnknownElement.callTheUserObjectsOperation (C:\Users\taini\.gemini\antigravity\MnR2\node_modules\jsdom\lib\jsdom\living\generated\EventListener.js:26:30)
+    at innerInvokeEventListeners (C:\Users\taini\.gemini\antigravity\MnR2\node_modules\jsdom\lib\jsdom\living\events\EventTarget-impl.js:360:16)
+    at invokeEventListeners (C:\Users\taini\.gemini\antigravity\MnR2\node_modules\jsdom\lib\jsdom\living\events\EventTarget-impl.js:296:3)
+    at HTMLUnknownElementImpl._dispatch (C:\Users\taini\.gemini\antigravity\MnR2\node_modules\jsdom\lib\jsdom\living\events\EventTarget-impl.js:243:9)
+Error: useTabs must be used within a TabProvider
+    at useTabs (C:/Users/taini/.gemini/antigravity/MnR2/src/context/TabContext.jsx:223:15)
+    at TabBar (C:/Users/taini/.gemini/antigravity/MnR2/src/components/Layout/TabBar.jsx:8:95)
+    at renderWithHooks (C:\Users\taini\.gemini\antigravity\MnR2\node_modules\react-dom\cjs\react-dom.development.js:15486:18)
+    at mountIndeterminateComponent (C:\Users\taini\.gemini\antigravity\MnR2\node_modules\react-dom\cjs\react-dom.development.js:20103:13)
+    at beginWork (C:\Users\taini\.gemini\antigravity\MnR2\node_modules\react-dom\cjs\react-dom.development.js:21626:16)
+    at HTMLUnknownElement.callCallback (C:\Users\taini\.gemini\antigravity\MnR2\node_modules\react-dom\cjs\react-dom.development.js:4164:14)
+    at HTMLUnknownElement.callTheUserObjectsOperation (C:\Users\taini\.gemini\antigravity\MnR2\node_modules\jsdom\lib\jsdom\living\generated\EventListener.js:26:30)
+    at innerInvokeEventListeners (C:\Users\taini\.gemini\antigravity\MnR2\node_modules\jsdom\lib\jsdom\living\events\EventTarget-impl.js:360:16)
+    at invokeEventListeners (C:\Users\taini\.gemini\antigravity\MnR2\node_modules\jsdom\lib\jsdom\living\events\EventTarget-impl.js:296:3)
+    at HTMLUnknownElementImpl._dispatch (C:\Users\taini\.gemini\antigravity\MnR2\node_modules\jsdom\lib\jsdom\living\events\EventTarget-impl.js:243:9)
+Error: useWorkflow must be used within a WorkflowProvider
+    at useWorkflow (C:/Users/taini/.gemini/antigravity/MnR2/src/context/WorkflowContext.jsx:245:15)
+    at WorkflowPanel (C:/Users/taini/.gemini/antigravity/MnR2/src/components/Workflow/WorkflowPanel.jsx:31:9)
+    at renderWithHooks (C:\Users\taini\.gemini\antigravity\MnR2\node_modules\react-dom\cjs\react-dom.development.js:15486:18)
+    at mountIndeterminateComponent (C:\Users\taini\.gemini\antigravity\MnR2\node_modules\react-dom\cjs\react-dom.development.js:20103:13)
+    at beginWork (C:\Users\taini\.gemini\antigravity\MnR2\node_modules\react-dom\cjs\react-dom.development.js:21626:16)
+    at HTMLUnknownElement.callCallback (C:\Users\taini\.gemini\antigravity\MnR2\node_modules\react-dom\cjs\react-dom.development.js:4164:14)
+    at HTMLUnknownElement.callTheUserObjectsOperation (C:\Users\taini\.gemini\antigravity\MnR2\node_modules\jsdom\lib\jsdom\living\generated\EventListener.js:26:30)
+    at innerInvokeEventListeners (C:\Users\taini\.gemini\antigravity\MnR2\node_modules\jsdom\lib\jsdom\living\events\EventTarget-impl.js:360:16)
+    at invokeEventListeners (C:\Users\taini\.gemini\antigravity\MnR2\node_modules\jsdom\lib\jsdom\living\events\EventTarget-impl.js:296:3)
+    at HTMLUnknownElementImpl._dispatch (C:\Users\taini\.gemini\antigravity\MnR2\node_modules\jsdom\lib\jsdom\living\events\EventTarget-impl.js:243:9)
+stderr | src/test/SystemTests.test.jsx > System Tests > ST-02: Internal User Authority (System Access)
+The above error occurred in the <Header> component:
+
+    at Header (C:/Users/taini/.gemini/antigravity/MnR2/src/components/Layout/Header.jsx:22:19)
+    at div
+    at div
+    at MainLayout (C:/Users/taini/.gemini/antigravity/MnR2/src/components/Layout/MainLayout.jsx:17:85)
+    at DataProvider (C:/Users/taini/.gemini/antigravity/MnR2/src/context/DataContext.jsx:32:25)
+    at AuthProvider (C:/Users/taini/.gemini/antigravity/MnR2/src/context/AuthContext.jsx:14:25)
+    at ToastProvider (C:/Users/taini/.gemini/antigravity/MnR2/src/components/common/Toast.jsx:8:26)
+    at ConfigProvider (C:/Users/taini/.gemini/antigravity/MnR2/src/context/ConfigContext.jsx:234:27)
+    at LanguageProvider (C:/Users/taini/.gemini/antigravity/MnR2/src/context/LanguageContext.jsx:15:29)
+    at Router (file:///C:/Users/taini/.gemini/antigravity/MnR2/node_modules/react-router/dist/development/chunk-FGUA77HG.mjs:6410:13)
+    at BrowserRouter (file:///C:/Users/taini/.gemini/antigravity/MnR2/node_modules/react-router/dist/development/chunk-FGUA77HG.mjs:9567:3)
+
+Consider adding an error boundary to your tree to customize error handling behavior.
+Visit https://reactjs.org/link/error-boundaries to learn more about error boundaries.
+The above error occurred in the <TabBar> component:
+
+    at TabBar (C:/Users/taini/.gemini/antigravity/MnR2/src/components/Layout/TabBar.jsx:9:126)
+    at div
+    at div
+    at MainLayout (C:/Users/taini/.gemini/antigravity/MnR2/src/components/Layout/MainLayout.jsx:17:85)
+    at DataProvider (C:/Users/taini/.gemini/antigravity/MnR2/src/context/DataContext.jsx:32:25)
+    at AuthProvider (C:/Users/taini/.gemini/antigravity/MnR2/src/context/AuthContext.jsx:14:25)
+    at ToastProvider (C:/Users/taini/.gemini/antigravity/MnR2/src/components/common/Toast.jsx:8:26)
+    at ConfigProvider (C:/Users/taini/.gemini/antigravity/MnR2/src/context/ConfigContext.jsx:234:27)
+    at LanguageProvider (C:/Users/taini/.gemini/antigravity/MnR2/src/context/LanguageContext.jsx:15:29)
+    at Router (file:///C:/Users/taini/.gemini/antigravity/MnR2/node_modules/react-router/dist/development/chunk-FGUA77HG.mjs:6410:13)
+    at BrowserRouter (file:///C:/Users/taini/.gemini/antigravity/MnR2/node_modules/react-router/dist/development/chunk-FGUA77HG.mjs:9567:3)
+
+Consider adding an error boundary to your tree to customize error handling behavior.
+Visit https://reactjs.org/link/error-boundaries to learn more about error boundaries.
+The above error occurred in the <WorkflowPanel> component:
+
+    at WorkflowPanel (C:/Users/taini/.gemini/antigravity/MnR2/src/components/Workflow/WorkflowPanel.jsx:26:57)
+    at div
+    at MainLayout (C:/Users/taini/.gemini/antigravity/MnR2/src/components/Layout/MainLayout.jsx:17:85)
+    at DataProvider (C:/Users/taini/.gemini/antigravity/MnR2/src/context/DataContext.jsx:32:25)
+    at AuthProvider (C:/Users/taini/.gemini/antigravity/MnR2/src/context/AuthContext.jsx:14:25)
+    at ToastProvider (C:/Users/taini/.gemini/antigravity/MnR2/src/components/common/Toast.jsx:8:26)
+    at ConfigProvider (C:/Users/taini/.gemini/antigravity/MnR2/src/context/ConfigContext.jsx:234:27)
+    at LanguageProvider (C:/Users/taini/.gemini/antigravity/MnR2/src/context/LanguageContext.jsx:15:29)
+    at Router (file:///C:/Users/taini/.gemini/antigravity/MnR2/node_modules/react-router/dist/development/chunk-FGUA77HG.mjs:6410:13)
+    at BrowserRouter (file:///C:/Users/taini/.gemini/antigravity/MnR2/node_modules/react-router/dist/development/chunk-FGUA77HG.mjs:9567:3)
+
+Consider adding an error boundary to your tree to customize error handling behavior.
+Visit https://reactjs.org/link/error-boundaries to learn more about error boundaries.
+
+Error: useWorkflow must be used within a WorkflowProvider
+    at useWorkflow (C:/Users/taini/.gemini/antigravity/MnR2/src/context/WorkflowContext.jsx:245:15)
+    at Header (C:/Users/taini/.gemini/antigravity/MnR2/src/components/Layout/Header.jsx:28:59)
+    at renderWithHooks (C:\Users\taini\.gemini\antigravity\MnR2\node_modules\react-dom\cjs\react-dom.development.js:15486:18)
+    at mountIndeterminateComponent (C:\Users\taini\.gemini\antigravity\MnR2\node_modules\react-dom\cjs\react-dom.development.js:20103:13)
+    at beginWork (C:\Users\taini\.gemini\antigravity\MnR2\node_modules\react-dom\cjs\react-dom.development.js:21626:16)
+    at HTMLUnknownElement.callCallback (C:\Users\taini\.gemini\antigravity\MnR2\node_modules\react-dom\cjs\react-dom.development.js:4164:14)
+    at HTMLUnknownElement.callTheUserObjectsOperation (C:\Users\taini\.gemini\antigravity\MnR2\node_modules\jsdom\lib\jsdom\living\generated\EventListener.js:26:30)
+    at innerInvokeEventListeners (C:\Users\taini\.gemini\antigravity\MnR2\node_modules\jsdom\lib\jsdom\living\events\EventTarget-impl.js:360:16)
+    at invokeEventListeners (C:\Users\taini\.gemini\antigravity\MnR2\node_modules\jsdom\lib\jsdom\living\events\EventTarget-impl.js:296:3)
+    at HTMLUnknownElementImpl._dispatch (C:\Users\taini\.gemini\antigravity\MnR2\node_modules\jsdom\lib\jsdom\living\events\EventTarget-impl.js:243:9)
+Error: useTabs must be used within a TabProvider
+    at useTabs (C:/Users/taini/.gemini/antigravity/MnR2/src/context/TabContext.jsx:223:15)
+    at TabBar (C:/Users/taini/.gemini/antigravity/MnR2/src/components/Layout/TabBar.jsx:8:95)
+    at renderWithHooks (C:\Users\taini\.gemini\antigravity\MnR2\node_modules\react-dom\cjs\react-dom.development.js:15486:18)
+    at mountIndeterminateComponent (C:\Users\taini\.gemini\antigravity\MnR2\node_modules\react-dom\cjs\react-dom.development.js:20103:13)
+    at beginWork (C:\Users\taini\.gemini\antigravity\MnR2\node_modules\react-dom\cjs\react-dom.development.js:21626:16)
+    at HTMLUnknownElement.callCallback (C:\Users\taini\.gemini\antigravity\MnR2\node_modules\react-dom\cjs\react-dom.development.js:4164:14)
+    at HTMLUnknownElement.callTheUserObjectsOperation (C:\Users\taini\.gemini\antigravity\MnR2\node_modules\jsdom\lib\jsdom\living\generated\EventListener.js:26:30)
+    at innerInvokeEventListeners (C:\Users\taini\.gemini\antigravity\MnR2\node_modules\jsdom\lib\jsdom\living\events\EventTarget-impl.js:360:16)
+    at invokeEventListeners (C:\Users\taini\.gemini\antigravity\MnR2\node_modules\jsdom\lib\jsdom\living\events\EventTarget-impl.js:296:3)
+    at HTMLUnknownElementImpl._dispatch (C:\Users\taini\.gemini\antigravity\MnR2\node_modules\jsdom\lib\jsdom\living\events\EventTarget-impl.js:243:9)
+Error: useWorkflow must be used within a WorkflowProvider
+    at useWorkflow (C:/Users/taini/.gemini/antigravity/MnR2/src/context/WorkflowContext.jsx:245:15)
+    at WorkflowPanel (C:/Users/taini/.gemini/antigravity/MnR2/src/components/Workflow/WorkflowPanel.jsx:31:9)
+    at renderWithHooks (C:\Users\taini\.gemini\antigravity\MnR2\node_modules\react-dom\cjs\react-dom.development.js:15486:18)
+    at mountIndeterminateComponent (C:\Users\taini\.gemini\antigravity\MnR2\node_modules\react-dom\cjs\react-dom.development.js:20103:13)
+    at beginWork (C:\Users\taini\.gemini\antigravity\MnR2\node_modules\react-dom\cjs\react-dom.development.js:21626:16)
+    at HTMLUnknownElement.callCallback (C:\Users\taini\.gemini\antigravity\MnR2\node_modules\react-dom\cjs\react-dom.development.js:4164:14)
+    at HTMLUnknownElement.callTheUserObjectsOperation (C:\Users\taini\.gemini\antigravity\MnR2\node_modules\jsdom\lib\jsdom\living\generated\EventListener.js:26:30)
+    at innerInvokeEventListeners (C:\Users\taini\.gemini\antigravity\MnR2\node_modules\jsdom\lib\jsdom\living\events\EventTarget-impl.js:360:16)
+    at invokeEventListeners (C:\Users\taini\.gemini\antigravity\MnR2\node_modules\jsdom\lib\jsdom\living\events\EventTarget-impl.js:296:3)
+    at HTMLUnknownElementImpl._dispatch (C:\Users\taini\.gemini\antigravity\MnR2\node_modules\jsdom\lib\jsdom\living\events\EventTarget-impl.js:243:9)
+Error: useWorkflow must be used within a WorkflowProvider
+    at useWorkflow (C:/Users/taini/.gemini/antigravity/MnR2/src/context/WorkflowContext.jsx:245:15)
+    at Header (C:/Users/taini/.gemini/antigravity/MnR2/src/components/Layout/Header.jsx:28:59)
+    at renderWithHooks (C:\Users\taini\.gemini\antigravity\MnR2\node_modules\react-dom\cjs\react-dom.development.js:15486:18)
+    at mountIndeterminateComponent (C:\Users\taini\.gemini\antigravity\MnR2\node_modules\react-dom\cjs\react-dom.development.js:20103:13)
+    at beginWork (C:\Users\taini\.gemini\antigravity\MnR2\node_modules\react-dom\cjs\react-dom.development.js:21626:16)
+    at HTMLUnknownElement.callCallback (C:\Users\taini\.gemini\antigravity\MnR2\node_modules\react-dom\cjs\react-dom.development.js:4164:14)
+    at HTMLUnknownElement.callTheUserObjectsOperation (C:\Users\taini\.gemini\antigravity\MnR2\node_modules\jsdom\lib\jsdom\living\generated\EventListener.js:26:30)
+    at innerInvokeEventListeners (C:\Users\taini\.gemini\antigravity\MnR2\node_modules\jsdom\lib\jsdom\living\events\EventTarget-impl.js:360:16)
+    at invokeEventListeners (C:\Users\taini\.gemini\antigravity\MnR2\node_modules\jsdom\lib\jsdom\living\events\EventTarget-impl.js:296:3)
+    at HTMLUnknownElementImpl._dispatch (C:\Users\taini\.gemini\antigravity\MnR2\node_modules\jsdom\lib\jsdom\living\events\EventTarget-impl.js:243:9)
+Error: useTabs must be used within a TabProvider
+    at useTabs (C:/Users/taini/.gemini/antigravity/MnR2/src/context/TabContext.jsx:223:15)
+    at TabBar (C:/Users/taini/.gemini/antigravity/MnR2/src/components/Layout/TabBar.jsx:8:95)
+    at renderWithHooks (C:\Users\taini\.gemini\antigravity\MnR2\node_modules\react-dom\cjs\react-dom.development.js:15486:18)
+    at mountIndeterminateComponent (C:\Users\taini\.gemini\antigravity\MnR2\node_modules\react-dom\cjs\react-dom.development.js:20103:13)
+    at beginWork (C:\Users\taini\.gemini\antigravity\MnR2\node_modules\react-dom\cjs\react-dom.development.js:21626:16)
+    at HTMLUnknownElement.callCallback (C:\Users\taini\.gemini\antigravity\MnR2\node_modules\react-dom\cjs\react-dom.development.js:4164:14)
+    at HTMLUnknownElement.callTheUserObjectsOperation (C:\Users\taini\.gemini\antigravity\MnR2\node_modules\jsdom\lib\jsdom\living\generated\EventListener.js:26:30)
+    at innerInvokeEventListeners (C:\Users\taini\.gemini\antigravity\MnR2\node_modules\jsdom\lib\jsdom\living\events\EventTarget-impl.js:360:16)
+    at invokeEventListeners (C:\Users\taini\.gemini\antigravity\MnR2\node_modules\jsdom\lib\jsdom\living\events\EventTarget-impl.js:296:3)
+    at HTMLUnknownElementImpl._dispatch (C:\Users\taini\.gemini\antigravity\MnR2\node_modules\jsdom\lib\jsdom\living\events\EventTarget-impl.js:243:9)
+Error: useWorkflow must be used within a WorkflowProvider
+    at useWorkflow (C:/Users/taini/.gemini/antigravity/MnR2/src/context/WorkflowContext.jsx:245:15)
+    at WorkflowPanel (C:/Users/taini/.gemini/antigravity/MnR2/src/components/Workflow/WorkflowPanel.jsx:31:9)
+    at renderWithHooks (C:\Users\taini\.gemini\antigravity\MnR2\node_modules\react-dom\cjs\react-dom.development.js:15486:18)
+    at mountIndeterminateComponent (C:\Users\taini\.gemini\antigravity\MnR2\node_modules\react-dom\cjs\react-dom.development.js:20103:13)
+    at beginWork (C:\Users\taini\.gemini\antigravity\MnR2\node_modules\react-dom\cjs\react-dom.development.js:21626:16)
+    at HTMLUnknownElement.callCallback (C:\Users\taini\.gemini\antigravity\MnR2\node_modules\react-dom\cjs\react-dom.development.js:4164:14)
+    at HTMLUnknownElement.callTheUserObjectsOperation (C:\Users\taini\.gemini\antigravity\MnR2\node_modules\jsdom\lib\jsdom\living\generated\EventListener.js:26:30)
+    at innerInvokeEventListeners (C:\Users\taini\.gemini\antigravity\MnR2\node_modules\jsdom\lib\jsdom\living\events\EventTarget-impl.js:360:16)
+    at invokeEventListeners (C:\Users\taini\.gemini\antigravity\MnR2\node_modules\jsdom\lib\jsdom\living\events\EventTarget-impl.js:296:3)
+    at HTMLUnknownElementImpl._dispatch (C:\Users\taini\.gemini\antigravity\MnR2\node_modules\jsdom\lib\jsdom\living\events\EventTarget-impl.js:243:9)
+stderr | src/test/SystemTests.test.jsx > System Tests > ST-03: External User Authority (System Access)
+The above error occurred in the <Header> component:
+
+    at Header (C:/Users/taini/.gemini/antigravity/MnR2/src/components/Layout/Header.jsx:22:19)
+    at div
+    at div
+    at MainLayout (C:/Users/taini/.gemini/antigravity/MnR2/src/components/Layout/MainLayout.jsx:17:85)
+    at DataProvider (C:/Users/taini/.gemini/antigravity/MnR2/src/context/DataContext.jsx:32:25)
+    at AuthProvider (C:/Users/taini/.gemini/antigravity/MnR2/src/context/AuthContext.jsx:14:25)
+    at ToastProvider (C:/Users/taini/.gemini/antigravity/MnR2/src/components/common/Toast.jsx:8:26)
+    at ConfigProvider (C:/Users/taini/.gemini/antigravity/MnR2/src/context/ConfigContext.jsx:234:27)
+    at LanguageProvider (C:/Users/taini/.gemini/antigravity/MnR2/src/context/LanguageContext.jsx:15:29)
+    at Router (file:///C:/Users/taini/.gemini/antigravity/MnR2/node_modules/react-router/dist/development/chunk-FGUA77HG.mjs:6410:13)
+    at BrowserRouter (file:///C:/Users/taini/.gemini/antigravity/MnR2/node_modules/react-router/dist/development/chunk-FGUA77HG.mjs:9567:3)
+
+Consider adding an error boundary to your tree to customize error handling behavior.
+Visit https://reactjs.org/link/error-boundaries to learn more about error boundaries.
+The above error occurred in the <TabBar> component:
+
+    at TabBar (C:/Users/taini/.gemini/antigravity/MnR2/src/components/Layout/TabBar.jsx:9:126)
+    at div
+    at div
+    at MainLayout (C:/Users/taini/.gemini/antigravity/MnR2/src/components/Layout/MainLayout.jsx:17:85)
+    at DataProvider (C:/Users/taini/.gemini/antigravity/MnR2/src/context/DataContext.jsx:32:25)
+    at AuthProvider (C:/Users/taini/.gemini/antigravity/MnR2/src/context/AuthContext.jsx:14:25)
+    at ToastProvider (C:/Users/taini/.gemini/antigravity/MnR2/src/components/common/Toast.jsx:8:26)
+    at ConfigProvider (C:/Users/taini/.gemini/antigravity/MnR2/src/context/ConfigContext.jsx:234:27)
+    at LanguageProvider (C:/Users/taini/.gemini/antigravity/MnR2/src/context/LanguageContext.jsx:15:29)
+    at Router (file:///C:/Users/taini/.gemini/antigravity/MnR2/node_modules/react-router/dist/development/chunk-FGUA77HG.mjs:6410:13)
+    at BrowserRouter (file:///C:/Users/taini/.gemini/antigravity/MnR2/node_modules/react-router/dist/development/chunk-FGUA77HG.mjs:9567:3)
+
+Consider adding an error boundary to your tree to customize error handling behavior.
+Visit https://reactjs.org/link/error-boundaries to learn more about error boundaries.
+The above error occurred in the <WorkflowPanel> component:
+
+    at WorkflowPanel (C:/Users/taini/.gemini/antigravity/MnR2/src/components/Workflow/WorkflowPanel.jsx:26:57)
+    at div
+    at MainLayout (C:/Users/taini/.gemini/antigravity/MnR2/src/components/Layout/MainLayout.jsx:17:85)
+    at DataProvider (C:/Users/taini/.gemini/antigravity/MnR2/src/context/DataContext.jsx:32:25)
+    at AuthProvider (C:/Users/taini/.gemini/antigravity/MnR2/src/context/AuthContext.jsx:14:25)
+    at ToastProvider (C:/Users/taini/.gemini/antigravity/MnR2/src/components/common/Toast.jsx:8:26)
+    at ConfigProvider (C:/Users/taini/.gemini/antigravity/MnR2/src/context/ConfigContext.jsx:234:27)
+    at LanguageProvider (C:/Users/taini/.gemini/antigravity/MnR2/src/context/LanguageContext.jsx:15:29)
+    at Router (file:///C:/Users/taini/.gemini/antigravity/MnR2/node_modules/react-router/dist/development/chunk-FGUA77HG.mjs:6410:13)
+    at BrowserRouter (file:///C:/Users/taini/.gemini/antigravity/MnR2/node_modules/react-router/dist/development/chunk-FGUA77HG.mjs:9567:3)
+
+Consider adding an error boundary to your tree to customize error handling behavior.
+Visit https://reactjs.org/link/error-boundaries to learn more about error boundaries.
+
+ [31mÔØ»[39m src/test/SystemTests.test.jsx [2m([22m[2m4 tests[22m[2m | [22m[31m2 failed[39m[2m)[22m[33m 1481[2mms[22m[39m
+     [33m[2mÔ£ô[22m[39m ST-01: User Authentication Flow [33m 1308[2mms[22m[39m
+     [32mÔ£ô[39m SIT-01: Container Repair Lifecycle (Happy Path)[32m 117[2mms[22m[39m
+[31m     [31m├ù[31m ST-02: Internal User Authority (System Access)[39m[32m 33[2mms[22m[39m
+[31m     [31m├ù[31m ST-03: External User Authority (System Access)[39m[32m 20[2mms[22m[39m
+
+ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ» Failed Tests 2 ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»
+
+ FAIL  src/test/SystemTests.test.jsx > System Tests > ST-02: Internal User Authority (System Access)
+ FAIL  src/test/SystemTests.test.jsx > System Tests > ST-03: External User Authority (System Access)
+Error: useWorkflow must be used within a WorkflowProvider
+ ÔØ» useWorkflow src/context/WorkflowContext.jsx:245:15
+    243|     const context = useContext(WorkflowContext);
+    244|     if (!context) {
+    245|         throw new Error('useWorkflow must be used within a WorkflowProÔÇª
+       |               ^
+    246|     }
+    247|     return context;
+ ÔØ» Header src/components/Layout/Header.jsx:28:59
+ ÔØ» renderWithHooks node_modules/react-dom/cjs/react-dom.development.js:15486:18
+ ÔØ» mountIndeterminateComponent node_modules/react-dom/cjs/react-dom.development.js:20103:13
+ ÔØ» beginWork node_modules/react-dom/cjs/react-dom.development.js:21626:16
+ ÔØ» beginWork$1 node_modules/react-dom/cjs/react-dom.development.js:27465:14
+ ÔØ» performUnitOfWork node_modules/react-dom/cjs/react-dom.development.js:26599:12
+ ÔØ» workLoopSync node_modules/react-dom/cjs/react-dom.development.js:26505:5
+ ÔØ» renderRootSync node_modules/react-dom/cjs/react-dom.development.js:26473:7
+ ÔØ» recoverFromConcurrentError node_modules/react-dom/cjs/react-dom.development.js:25889:20
+
+ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»[1/2]ÔÄ»
+
+
+[2m Test Files [22m [1m[31m1 failed[39m[22m[90m (1)[39m
+[2m      Tests [22m [1m[31m2 failed[39m[22m[2m | [22m[1m[32m2 passed[39m[22m[90m (4)[39m
+[2m   Start at [22m 19:50:48
+[2m   Duration [22m 8.31s[2m (transform 721ms, setup 1.10s, import 1.55s, tests 1.48s, environment 3.65s)[22m
+

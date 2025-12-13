@@ -1,0 +1,156 @@
+/**
+ * Fix Container Status Script
+ * This script updates container MSCU1234567 status to COMPLETED
+ * so it can appear in Pre-Inspection
+ * 
+ * Usage: node fix_container_status.cjs
+ */
+
+const fs = require('fs');
+const path = require('path');
+
+// Since localStorage is in browser, we need to create a script that runs in browser
+// Let's create an HTML file that can be opened in browser to fix the data
+
+const htmlContent = `<!DOCTYPE html>
+<html>
+<head>
+    <title>Fix Container Status</title>
+    <style>
+        body { font-family: Arial, sans-serif; padding: 40px; background: #1a1f2e; color: white; }
+        .container { max-width: 600px; margin: 0 auto; }
+        h1 { color: #3b82f6; }
+        button { 
+            background: #3b82f6; color: white; border: none; 
+            padding: 15px 30px; font-size: 16px; cursor: pointer;
+            border-radius: 8px; margin: 10px 5px 10px 0;
+        }
+        button:hover { background: #2563eb; }
+        button.danger { background: #ef4444; }
+        button.danger:hover { background: #dc2626; }
+        .result { margin-top: 20px; padding: 15px; border-radius: 8px; }
+        .success { background: #166534; }
+        .error { background: #991b1b; }
+        .info { background: #1e40af; }
+        pre { background: #0f172a; padding: 15px; border-radius: 8px; overflow-x: auto; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🔧 Fix Container Status</h1>
+        <p>This tool fixes container status issues in the M&R System.</p>
+        
+        <h3>Current Status of MSCU1234567:</h3>
+        <div id="currentStatus">Loading...</div>
+        
+        <h3>Actions:</h3>
+        <button onclick="fixContainer()">Fix MSCU1234567 to COMPLETED</button>
+        <button onclick="showAllContainers()">Show All Containers</button>
+        <button class="danger" onclick="if(confirm('Are you sure?')) clearInspections()">Clear All Inspections</button>
+        
+        <div id="result"></div>
+    </div>
+
+    <script>
+        function getContainers() {
+            try {
+                return JSON.parse(localStorage.getItem('mnr_containers')) || [];
+            } catch {
+                return [];
+            }
+        }
+
+        function getInspections() {
+            try {
+                return JSON.parse(localStorage.getItem('mnr_preinspections')) || [];
+            } catch {
+                return [];
+            }
+        }
+
+        function showCurrentStatus() {
+            const containers = getContainers();
+            const container = containers.find(c => c.containerNumber === 'MSCU1234567');
+            const statusDiv = document.getElementById('currentStatus');
+            
+            if (container) {
+                statusDiv.innerHTML = '<pre>' + JSON.stringify({
+                    id: container.id,
+                    containerNumber: container.containerNumber,
+                    status: container.status,
+                    liner: container.liner
+                }, null, 2) + '</pre>';
+            } else {
+                statusDiv.innerHTML = '<div class="result error">Container MSCU1234567 not found!</div>';
+            }
+        }
+
+        function fixContainer() {
+            let containers = getContainers();
+            let found = false;
+            
+            containers = containers.map(c => {
+                if (c.containerNumber === 'MSCU1234567') {
+                    found = true;
+                    return { ...c, status: 'COMPLETED', repairEndTime: new Date().toISOString() };
+                }
+                return c;
+            });
+
+            if (found) {
+                localStorage.setItem('mnr_containers', JSON.stringify(containers));
+                document.getElementById('result').innerHTML = 
+                    '<div class="result success">✅ Container MSCU1234567 status updated to COMPLETED!<br>Please refresh your M&R System page.</div>';
+                showCurrentStatus();
+            } else {
+                document.getElementById('result').innerHTML = 
+                    '<div class="result error">❌ Container MSCU1234567 not found!</div>';
+            }
+        }
+
+        function showAllContainers() {
+            const containers = getContainers();
+            const inspections = getInspections();
+            
+            // Show containers with COMPLETED status
+            const completedContainers = containers.filter(c => c.status === 'COMPLETED');
+            
+            // Show containers that already have inspections
+            const containersWithInspections = inspections.map(i => i.containerNumber);
+            
+            let html = '<h4>Containers with COMPLETED status (' + completedContainers.length + '):</h4>';
+            html += '<pre>' + JSON.stringify(completedContainers.map(c => ({
+                containerNumber: c.containerNumber,
+                status: c.status,
+                liner: c.liner
+            })), null, 2) + '</pre>';
+            
+            html += '<h4>Containers with existing inspections (' + containersWithInspections.length + '):</h4>';
+            html += '<pre>' + JSON.stringify(containersWithInspections, null, 2) + '</pre>';
+            
+            document.getElementById('result').innerHTML = '<div class="result info">' + html + '</div>';
+        }
+
+        function clearInspections() {
+            localStorage.setItem('mnr_preinspections', '[]');
+            document.getElementById('result').innerHTML = 
+                '<div class="result success">✅ All inspections cleared!<br>Please refresh your M&R System page.</div>';
+        }
+
+        // Show current status on load
+        showCurrentStatus();
+    </script>
+</body>
+</html>`;
+
+// Write to file
+const outputPath = path.join(__dirname, 'fix_container_status.html');
+fs.writeFileSync(outputPath, htmlContent);
+
+console.log('✅ Created fix_container_status.html');
+console.log('');
+console.log('To use:');
+console.log('1. Open your browser with M&R System (localhost:5173)');
+console.log('2. Open file: ' + outputPath);
+console.log('3. Click "Fix MSCU1234567 to COMPLETED" button');
+console.log('4. Refresh your M&R System page');

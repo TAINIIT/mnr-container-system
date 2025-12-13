@@ -1,0 +1,11 @@
+
+[1m[46m RUN [49m[22m [36mv4.0.15 [39m[90mC:/Users/taini/.gemini/antigravity/MnR2[39m
+
+ [32mÔ£ô[39m src/test/SystemTests.test.jsx [2m([22m[2m4 tests[22m[2m)[22m[33m 1551[2mms[22m[39m
+     [33m[2mÔ£ô[22m[39m ST-01: User Authentication Flow [33m 1260[2mms[22m[39m
+
+[2m Test Files [22m [1m[32m1 passed[39m[22m[90m (1)[39m
+[2m      Tests [22m [1m[32m4 passed[39m[22m[90m (4)[39m
+[2m   Start at [22m 19:51:44
+[2m   Duration [22m 8.67s[2m (transform 667ms, setup 1.03s, import 1.47s, tests 1.55s, environment 4.05s)[22m
+

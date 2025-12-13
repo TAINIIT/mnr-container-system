@@ -1,0 +1,227 @@
+/* ContainerVisualSelector Styles */
+
+.container-visual-selector {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-3);
+}
+
+/* Mode Toggle */
+.cvs-mode-toggle {
+    display: flex;
+    gap: var(--space-1);
+    padding: 3px;
+    background: var(--bg-tertiary);
+    border-radius: var(--radius-lg);
+    width: fit-content;
+}
+
+.cvs-toggle-btn {
+    display: flex;
+    align-items: center;
+    gap: var(--space-1);
+    padding: var(--space-1) var(--space-3);
+    border: none;
+    background: transparent;
+    color: var(--text-secondary);
+    font-size: var(--font-size-sm);
+    font-weight: 500;
+    border-radius: var(--radius-md);
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.cvs-toggle-btn:hover {
+    color: var(--text-primary);
+    background: var(--bg-secondary);
+}
+
+.cvs-toggle-btn.active {
+    background: var(--primary);
+    color: white;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+/* Dropdown */
+.cvs-dropdown {
+    width: 100%;
+}
+
+/* Visual Container */
+.cvs-visual-container {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-3);
+    padding: var(--space-4);
+    background: linear-gradient(135deg, var(--bg-secondary), var(--bg-tertiary));
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-xl);
+}
+
+.cvs-diagram-wrapper {
+    position: relative;
+    width: 100%;
+    max-width: 500px;
+    margin: 0 auto;
+}
+
+.cvs-diagram {
+    width: 100%;
+    height: auto;
+    filter: drop-shadow(0 4px 6px rgba(0, 0, 0, 0.1));
+}
+
+/* SVG Part Styles */
+.cvs-part {
+    transition: all 0.2s ease;
+}
+
+.cvs-part:hover {
+    filter: brightness(1.2);
+    transform: translateY(-1px);
+}
+
+.cvs-label {
+    font-size: 9px;
+    font-weight: 600;
+    fill: var(--text-secondary);
+    pointer-events: none;
+    user-select: none;
+}
+
+.cvs-label-vertical {
+    font-size: 8px;
+    writing-mode: vertical-rl;
+    text-orientation: mixed;
+}
+
+.cvs-label-small {
+    font-size: 7px;
+}
+
+.cvs-interior-label {
+    font-size: 12px;
+    font-weight: 500;
+    fill: var(--text-muted);
+    opacity: 0.5;
+    pointer-events: none;
+}
+
+/* Tooltip */
+.cvs-tooltip {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    padding: var(--space-2) var(--space-3);
+    background: var(--bg-primary);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-md);
+    box-shadow: var(--shadow-lg);
+    font-size: var(--font-size-sm);
+    z-index: 10;
+}
+
+.cvs-tooltip strong {
+    color: var(--primary);
+}
+
+.cvs-tooltip span {
+    color: var(--text-secondary);
+}
+
+.cvs-damage-count {
+    color: var(--danger) !important;
+    font-weight: 500;
+}
+
+/* Info Panel */
+.cvs-info-panel {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: center;
+    gap: var(--space-3);
+    padding-top: var(--space-3);
+    border-top: 1px solid var(--border-color);
+}
+
+.cvs-selected {
+    display: flex;
+    align-items: center;
+    gap: var(--space-2);
+}
+
+.cvs-selected-label {
+    font-size: var(--font-size-sm);
+    color: var(--text-muted);
+}
+
+.cvs-selected-value {
+    font-weight: 600;
+    color: var(--success);
+}
+
+.cvs-selected-none {
+    font-style: italic;
+    color: var(--text-muted);
+    font-size: var(--font-size-sm);
+}
+
+.cvs-clear-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 20px;
+    height: 20px;
+    border: none;
+    background: var(--bg-tertiary);
+    color: var(--text-muted);
+    border-radius: 50%;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.cvs-clear-btn:hover {
+    background: var(--danger);
+    color: white;
+}
+
+/* Legend */
+.cvs-legend {
+    display: flex;
+    gap: var(--space-4);
+}
+
+.cvs-legend-item {
+    display: flex;
+    align-items: center;
+    gap: var(--space-1);
+    font-size: var(--font-size-xs);
+    color: var(--text-secondary);
+}
+
+.cvs-legend-dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+}
+
+/* Responsive */
+@media (max-width: 640px) {
+    .cvs-visual-container {
+        padding: var(--space-3);
+    }
+
+    .cvs-info-panel {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .cvs-legend {
+        flex-wrap: wrap;
+        gap: var(--space-2);
+    }
+}

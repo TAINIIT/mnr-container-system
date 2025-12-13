@@ -1,0 +1,572 @@
+
+[1m[46m RUN [49m[22m [36mv4.0.15 [39m[90mC:/Users/taini/.gemini/antigravity/MnR2[39m
+
+ [31mÔØ»[39m src/test/SystemTests.test.jsx [2m([22m[2m2 tests[22m[2m | [22m[31m2 failed[39m[2m)[22m[32m 135[2mms[22m[39m
+[31m     [31m├ù[31m ST-01: User Authentication Flow[39m[32m 108[2mms[22m[39m
+[31m     [31m├ù[31m SIT-01: Container Repair Lifecycle (Happy Path)[39m[32m 24[2mms[22m[39m
+
+ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ» Failed Tests 2 ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»
+
+ FAIL  src/test/SystemTests.test.jsx > System Tests > ST-01: User Authentication Flow
+TestingLibraryElementError: Unable to find a label with the text of: /username/i
+
+Ignored nodes: comments, script, style
+<body>
+  <div>
+    <div
+      class="alt-portal"
+    >
+      <header
+        class="alt-header"
+        role="banner"
+      >
+        <div
+          class="alt-header-left"
+        >
+          <button
+            aria-label="Toggle navigation"
+            class="alt-menu-btn"
+          >
+            <svg
+              class="lucide lucide-menu"
+              fill="none"
+              height="24"
+              stroke="currentColor"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              viewBox="0 0 24 24"
+              width="24"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <line
+                x1="4"
+                x2="20"
+                y1="12"
+                y2="12"
+              />
+              <line
+                x1="4"
+                x2="20"
+                y1="6"
+                y2="6"
+              />
+              <line
+                x1="4"
+                x2="20"
+                y1="18"
+                y2="18"
+              />
+            </svg>
+          </button>
+          <div
+            class="alt-logo"
+          >
+            <div
+              class="alt-logo-icon"
+            >
+              <svg
+                class="lucide lucide-anchor"
+                fill="none"
+                height="22"
+                stroke="currentColor"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                viewBox="0 0 24 24"
+                width="22"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M12 22V8"
+                />
+                <path
+                  d="M5 12H2a10 10 0 0 0 20 0h-3"
+                />
+                <circle
+                  cx="12"
+                  cy="5"
+                  r="3"
+                />
+              </svg>
+            </div>
+            <div
+              class="alt-logo-text"
+            >
+              <span
+                class="alt-brand"
+              >
+                Johor Port
+              </span>
+              <span
+                class="alt-subtitle"
+              >
+                Container Portal
+              </span>
+            </div>
+          </div>
+        </div>
+        <div
+          class="alt-header-right"
+        >
+          <div
+            aria-label="Select Language"
+            class="alt-lang"
+          >
+            <svg
+              class="lucide lucide-globe"
+              fill="none"
+              height="16"
+              stroke="currentColor"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              viewBox="0 0 24 24"
+              width="16"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <circle
+                cx="12"
+                cy="12"
+                r="10"
+              />
+              <path
+                d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20"
+              />
+              <path
+                d="M2 12h20"
+              />
+            </svg>
+            <select>
+              <option
+                value="en"
+              >
+                ­ƒç║­ƒç©
+                 
+                English
+              </option>
+              <option
+                value="vi"
+              >
+                ­ƒç╗­ƒç│
+                 
+                Tiß║┐ng Viß╗çt
+              </option>
+              <option
+                value="ms"
+              >
+                ­ƒç▓­ƒç¥
+                 
+                Bahasa Melayu
+              </option>
+              <option
+                value="ko"
+              >
+                ­ƒç░­ƒçÀ
+                 
+                Ýò£ÛÁ¡ýû┤
+              </option>
+              <option
+                value="zh"
+              >
+                ­ƒç¿­ƒç│
+                 
+                õ©¡µûç
+              </option>
+              <option
+                value="pt"
+              >
+                ­ƒçº­ƒçÀ
+                 
+                Portugu├¬s
+              </option>
+            </select>
+          </div>
+          <button
+            aria-label="Help Desk"
+            class="alt-help-outline"
+          >
+            <svg
+              class="lucide lucide-life-buoy"
+              fill="none"
+              height="16"
+              stroke="currentColor"
+              stroke-linecap="round"
+              stroke-linejoin=...
+ ÔØ» Object.getElementError node_modules/@testing-library/dom/dist/config.js:37:19
+ ÔØ» getAllByLabelText node_modules/@testing-library/dom/dist/queries/label-text.js:111:38
+ ÔØ» node_modules/@testing-library/dom/dist/query-helpers.js:52:17
+ ÔØ» node_modules/@testing-library/dom/dist/query-helpers.js:95:19
+ ÔØ» src/test/SystemTests.test.jsx:45:23
+     43| 
+     44|         // Check initial state
+     45|         expect(screen.getByLabelText(/username/i)).toBeInTheDocument();
+       |                       ^
+     46| 
+     47|         // Enter credentials
+
+ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»[1/2]ÔÄ»
+
+ FAIL  src/test/SystemTests.test.jsx > System Tests > SIT-01: Container Repair Lifecycle (Happy Path)
+TestingLibraryElementError: Found a label with the text of: /Container Number/i, however no form control was found associated to that label. Make sure you're using the "for" attribute or "aria-labelledby" attribute correctly.
+
+Ignored nodes: comments, script, style
+<body>
+  <div>
+    <div
+      class="page"
+    >
+      <div
+        class="page-header"
+      >
+        <div>
+          <h2>
+            Container Registration
+          </h2>
+          <p
+            class="text-muted"
+          >
+            Register new containers for survey
+          </p>
+        </div>
+      </div>
+      <div
+        class="registration-tabs"
+      >
+        <button
+          class="registration-tab active"
+        >
+          <svg
+            class="lucide lucide-plus"
+            fill="none"
+            height="18"
+            stroke="currentColor"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            viewBox="0 0 24 24"
+            width="18"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M5 12h14"
+            />
+            <path
+              d="M12 5v14"
+            />
+          </svg>
+           Manual Entry
+        </button>
+        <button
+          class="registration-tab "
+        >
+          <svg
+            class="lucide lucide-file-spreadsheet"
+            fill="none"
+            height="18"
+            stroke="currentColor"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            viewBox="0 0 24 24"
+            width="18"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7Z"
+            />
+            <path
+              d="M14 2v4a2 2 0 0 0 2 2h4"
+            />
+            <path
+              d="M8 13h2"
+            />
+            <path
+              d="M14 13h2"
+            />
+            <path
+              d="M8 17h2"
+            />
+            <path
+              d="M14 17h2"
+            />
+          </svg>
+           Excel Upload
+        </button>
+      </div>
+      <div
+        class="card"
+      >
+        <form>
+          <div
+            class="grid grid-cols-2"
+            style="gap: var(--space-4);"
+          >
+            <div
+              class="form-group"
+            >
+              <label
+                class="form-label required"
+              >
+                Container Number
+              </label>
+              <input
+                class="form-input "
+                maxlength="11"
+                placeholder="MSCU1234567"
+                type="text"
+                value=""
+              />
+              <span
+                class="form-hint"
+              >
+                Format: 4 letters + 7 digits
+              </span>
+            </div>
+            <div
+              class="form-group"
+            >
+              <label
+                class="form-label required"
+              >
+                Liner
+              </label>
+              <select
+                class="form-input "
+              >
+                <option
+                  value=""
+                >
+                  Select liner...
+                </option>
+                <option
+                  value="MSC"
+                >
+                  MSC
+                   - 
+                  Mediterranean Shipping Company
+                </option>
+                <option
+                  value="MSK"
+                >
+                  MSK
+                   - 
+                  Maersk Line
+                </option>
+                <option
+                  value="CMA"
+                >
+                  CMA
+                   - 
+                  CMA CGM
+                </option>
+                <option
+                  value="CSL"
+                >
+                  CSL
+                   - 
+                  COSCO Shipping
+                </option>
+                <option
+                  value="HPL"
+                >
+                  HPL
+                   - 
+                  Hapag-Lloyd
+                </option>
+                <option
+                  value="ONE"
+                >
+                  ONE
+                   - 
+                  Ocean Network Express
+                </option>
+                <option
+                  value="EVG"
+                >
+                  EVG
+                   - 
+                  Evergreen Marine
+                </option>
+                <option
+                  value="YML"
+                >
+                  YML
+                   - 
+                  Yang Ming Line
+                </option>
+                <option
+                  value="PIL"
+                >
+                  PIL
+                   - 
+                  Pacific International Lines
+                </option>
+                <option
+                  value="ZIM"
+                >
+                  ZIM
+                   - 
+                  ZIM Integrated Shipping
+                </option>
+              </select>
+            </div>
+            <div
+              class="form-group"
+            >
+              <label
+                class="form-label"
+              >
+                Size
+              </label>
+              <select
+                class="form-input"
+              >
+                <option
+                  value="20"
+                >
+                  20
+                  ft
+                </option>
+                <option
+                  value="40"
+                >
+                  40
+                  ft
+                </option>
+                <option
+                  value="45"
+                >
+                  45
+                  ft
+                </option>
+              </select>
+            </div>
+            <div
+              class="form-group"
+            >
+              <label
+                class="form-label"
+              >
+                Type
+              </label>
+              <select
+                class="form-input"
+              >
+                <option
+                  value="DRY"
+                >
+                  Dry Container
+                </option>
+                <option
+                  value="REEFER"
+                >
+                  Refrigerated
+                </option>
+                <option
+                  value="TANK"
+                >
+                  Tank Container
+                </option>
+                <option
+                  value="FLAT"
+                >
+                  Flat Rack
+                </option>
+                <option
+                  value="OPEN"
+                >
+                  Open Top
+                </option>
+              </select>
+            </div>
+            <div
+              class="form-group"
+            >
+              <label
+                class="form-label"
+              >
+                Initial Status
+              </label>
+              <select
+                class="form-input"
+              >
+                <option
+                  value="STACKING"
+                >
+                  STACKING - In Storage
+                </option>
+                <option
+                  value="DM"
+                >
+                  DM - Damaged
+                </option>
+              </select>
+            </div>
+          </div>
+          <div
+            class="form-actions mt-4"
+          >
+            <button
+              class="btn btn-primary btn-lg"
+              type="submit"
+            >
+              <svg
+                class="lucide lucide-container"
+                fill="none"
+                height="18"
+                stroke="currentColor"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                viewBox="0 0 24 24"
+                width="18"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M22 7.7c0-.6-.4-1.2-.8-1.5l-6.3-3.9a1.72 1.72 0 0 0-1.7 0l-10.3 6c-.5.2-.9.8-.9 1.4v6.6c0 .5.4 1.2.8 1.5l6.3 3.9a1.72 1.72 0 0 0 1.7 0l10.3-6c.5-.3.9-1 .9-1.5Z"
+                />
+                <path
+                  d="M10 21.9V14L2.1 9.1"
+                />
+                <path
+                  d="m10 14 11.9-6.9"
+                />
+                <path
+                  d="M14 19.8v-8.1"
+                />
+                <path
+                  d="M18 17.5V9.4"
+                />
+              </svg>
+               Register Container
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+    <div
+      class="toast-container"
+    />
+  </div>
+</body>
+ ÔØ» Object.getElementError node_modules/@testing-library/dom/dist/config.js:37:19
+ ÔØ» getAllByLabelText node_modules/@testing-library/dom/dist/queries/label-text.js:108:40
+ ÔØ» node_modules/@testing-library/dom/dist/query-helpers.js:52:17
+ ÔØ» node_modules/@testing-library/dom/dist/query-helpers.js:95:19
+ ÔØ» src/test/SystemTests.test.jsx:68:33
+     66|         const { unmount } = renderWithProviders(<ContainerRegistrationÔÇª
+     67| 
+     68|         fireEvent.change(screen.getByLabelText(/Container Number/i), {ÔÇª
+       |                                 ^
+     69|         fireEvent.change(screen.getByLabelText(/Liner/i), { target: { ÔÇª
+     70| 
+
+ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»[2/2]ÔÄ»
+
+
+[2m Test Files [22m [1m[31m1 failed[39m[22m[90m (1)[39m
+[2m      Tests [22m [1m[31m2 failed[39m[22m[90m (2)[39m
+[2m   Start at [22m 19:17:41
+[2m   Duration [22m 7.45s[2m (transform 463ms, setup 1.09s, import 1.11s, tests 135ms, environment 4.59s)[22m
+

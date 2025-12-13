@@ -1,0 +1,599 @@
+
+[1m[46m RUN [49m[22m [36mv4.0.15 [39m[90mC:/Users/taini/.gemini/antigravity/MnR2[39m
+
+ [31mÔØ»[39m src/test/SystemTests.test.jsx [2m([22m[2m4 tests[22m[2m | [22m[31m2 failed[39m[2m)[22m[33m 2346[2mms[22m[39m
+     [33m[2mÔ£ô[22m[39m ST-01: User Authentication Flow [33m 1146[2mms[22m[39m
+     [32mÔ£ô[39m SIT-01: Container Repair Lifecycle (Happy Path)[32m 106[2mms[22m[39m
+[31m     [31m├ù[31m ST-02: Internal User Authority (Admin)[39m[32m 55[2mms[22m[39m
+[31m     [31m├ù[31m ST-03: External User Authority (Restricted)[39m[33m 1036[2mms[22m[39m
+
+ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ» Failed Tests 2 ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»
+
+ FAIL  src/test/SystemTests.test.jsx > System Tests > ST-02: Internal User Authority (Admin)
+TestingLibraryElementError: Unable to find an element with the text: /User Management/i. This could be because the text is broken up by multiple elements. In this case, you can provide a function for your text matcher to make your matcher more flexible.
+
+Ignored nodes: comments, script, style
+<body>
+  <div>
+    <div
+      class="alt-portal"
+    >
+      <header
+        class="alt-header"
+        role="banner"
+      >
+        <div
+          class="alt-header-left"
+        >
+          <button
+            aria-label="Toggle navigation"
+            class="alt-menu-btn"
+          >
+            <svg
+              class="lucide lucide-menu"
+              fill="none"
+              height="24"
+              stroke="currentColor"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              viewBox="0 0 24 24"
+              width="24"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <line
+                x1="4"
+                x2="20"
+                y1="12"
+                y2="12"
+              />
+              <line
+                x1="4"
+                x2="20"
+                y1="6"
+                y2="6"
+              />
+              <line
+                x1="4"
+                x2="20"
+                y1="18"
+                y2="18"
+              />
+            </svg>
+          </button>
+          <div
+            class="alt-logo"
+          >
+            <div
+              class="alt-logo-icon"
+            >
+              <svg
+                class="lucide lucide-anchor"
+                fill="none"
+                height="22"
+                stroke="currentColor"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                viewBox="0 0 24 24"
+                width="22"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M12 22V8"
+                />
+                <path
+                  d="M5 12H2a10 10 0 0 0 20 0h-3"
+                />
+                <circle
+                  cx="12"
+                  cy="5"
+                  r="3"
+                />
+              </svg>
+            </div>
+            <div
+              class="alt-logo-text"
+            >
+              <span
+                class="alt-brand"
+              >
+                Johor Port
+              </span>
+              <span
+                class="alt-subtitle"
+              >
+                Container Portal
+              </span>
+            </div>
+          </div>
+        </div>
+        <div
+          class="alt-header-right"
+        >
+          <div
+            class="alt-user-greeting"
+          >
+            <span
+              class="alt-greeting-text"
+            >
+              Good Evening
+              , 
+              User
+            </span>
+            <span
+              class="alt-user-type-badge internal"
+            >
+              Internal
+            </span>
+          </div>
+          <div
+            aria-label="Select Language"
+            class="alt-lang"
+          >
+            <svg
+              class="lucide lucide-globe"
+              fill="none"
+              height="16"
+              stroke="currentColor"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              viewBox="0 0 24 24"
+              width="16"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <circle
+                cx="12"
+                cy="12"
+                r="10"
+              />
+              <path
+                d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20"
+              />
+              <path
+                d="M2 12h20"
+              />
+            </svg>
+            <select>
+              <option
+                value="en"
+              >
+                ­ƒç║­ƒç©
+                 
+                English
+              </option>
+              <option
+                value="vi"
+              >
+                ­ƒç╗­ƒç│
+                 
+                Tiß║┐ng Viß╗çt
+              </option>
+              <option
+                value="ms"
+              >
+                ­ƒç▓­ƒç¥
+                 
+                Bahasa Melayu
+              </option>
+              <option
+                value="ko"
+              >
+                ­ƒç░­ƒçÀ
+                 
+                Ýò£ÛÁ¡ýû┤
+              </option>
+              <option
+                value="zh"
+              >
+                ­ƒç¿­ƒç│
+                 
+                õ©¡µûç
+              </option>
+              <option
+                value="pt"
+              >
+                ­ƒçº­ƒçÀ
+                 
+                Portugu├¬s
+              </option>
+            [3...
+ ÔØ» Object.getElementError node_modules/@testing-library/dom/dist/config.js:37:19
+ ÔØ» node_modules/@testing-library/dom/dist/query-helpers.js:76:38
+ ÔØ» node_modules/@testing-library/dom/dist/query-helpers.js:52:17
+ ÔØ» node_modules/@testing-library/dom/dist/query-helpers.js:95:19
+ ÔØ» src/test/SystemTests.test.jsx:231:23
+    229|         // Check for Admin Sidebar Items (might need expansion, but weÔÇª
+    230|         // User Management is an admin-only link
+    231|         expect(screen.getByText(/User Management/i)).toBeInTheDocumentÔÇª
+       |                       ^
+    232|         expect(screen.getByText(/Permission Groups/i)).toBeInTheDocumeÔÇª
+    233| 
+
+ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»[1/2]ÔÄ»
+
+ FAIL  src/test/SystemTests.test.jsx > System Tests > ST-03: External User Authority (Restricted)
+TestingLibraryElementError: Unable to find an element with the text: MSC. This could be because the text is broken up by multiple elements. In this case, you can provide a function for your text matcher to make your matcher more flexible.
+
+Ignored nodes: comments, script, style
+<body>
+  <div>
+    <div
+      class="alt-portal"
+    >
+      <header
+        class="alt-header"
+        role="banner"
+      >
+        <div
+          class="alt-header-left"
+        >
+          <button
+            aria-label="Toggle navigation"
+            class="alt-menu-btn"
+          >
+            <svg
+              class="lucide lucide-menu"
+              fill="none"
+              height="24"
+              stroke="currentColor"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              viewBox="0 0 24 24"
+              width="24"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <line
+                x1="4"
+                x2="20"
+                y1="12"
+                y2="12"
+              />
+              <line
+                x1="4"
+                x2="20"
+                y1="6"
+                y2="6"
+              />
+              <line
+                x1="4"
+                x2="20"
+                y1="18"
+                y2="18"
+              />
+            </svg>
+          </button>
+          <div
+            class="alt-logo"
+          >
+            <div
+              class="alt-logo-icon"
+            >
+              <svg
+                class="lucide lucide-anchor"
+                fill="none"
+                height="22"
+                stroke="currentColor"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                viewBox="0 0 24 24"
+                width="22"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M12 22V8"
+                />
+                <path
+                  d="M5 12H2a10 10 0 0 0 20 0h-3"
+                />
+                <circle
+                  cx="12"
+                  cy="5"
+                  r="3"
+                />
+              </svg>
+            </div>
+            <div
+              class="alt-logo-text"
+            >
+              <span
+                class="alt-brand"
+              >
+                Johor Port
+              </span>
+              <span
+                class="alt-subtitle"
+              >
+                Container Portal
+              </span>
+            </div>
+          </div>
+        </div>
+        <div
+          class="alt-header-right"
+        >
+          <div
+            class="alt-user-greeting"
+          >
+            <span
+              class="alt-greeting-text"
+            >
+              Good Evening
+              , 
+              Mediterranean Shipping Company
+            </span>
+            <span
+              class="alt-user-type-badge external"
+            >
+              External
+            </span>
+          </div>
+          <div
+            aria-label="Select Language"
+            class="alt-lang"
+          >
+            <svg
+              class="lucide lucide-globe"
+              fill="none"
+              height="16"
+              stroke="currentColor"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              viewBox="0 0 24 24"
+              width="16"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <circle
+                cx="12"
+                cy="12"
+                r="10"
+              />
+              <path
+                d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20"
+              />
+              <path
+                d="M2 12h20"
+              />
+            </svg>
+            <select>
+              <option
+                value="en"
+              >
+                ­ƒç║­ƒç©
+                 
+                English
+              </option>
+              <option
+                value="vi"
+              >
+                ­ƒç╗­ƒç│
+                 
+                Tiß║┐ng Viß╗çt
+              </option>
+              <option
+                value="ms"
+              >
+                ­ƒç▓­ƒç¥
+                 
+                Bahasa Melayu
+              </option>
+              <option
+                value="ko"
+              >
+                ­ƒç░­ƒçÀ
+                 
+                Ýò£ÛÁ¡ýû┤
+              </option>
+              <option
+                value="zh"
+              >
+                ­ƒç¿­ƒç│
+                 
+                õ©¡µûç
+              </option>
+              <option
+                value="pt"
+              >
+                ­ƒçº­ƒçÀ
+                 
+                Portugu├¬s
+              </op...
+
+Ignored nodes: comments, script, style
+<html
+  lang="en"
+>
+  <head />
+  <body>
+    <div>
+      <div
+        class="alt-portal"
+      >
+        <header
+          class="alt-header"
+          role="banner"
+        >
+          <div
+            class="alt-header-left"
+          >
+            <button
+              aria-label="Toggle navigation"
+              class="alt-menu-btn"
+            >
+              <svg
+                class="lucide lucide-menu"
+                fill="none"
+                height="24"
+                stroke="currentColor"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                viewBox="0 0 24 24"
+                width="24"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <line
+                  x1="4"
+                  x2="20"
+                  y1="12"
+                  y2="12"
+                />
+                <line
+                  x1="4"
+                  x2="20"
+                  y1="6"
+                  y2="6"
+                />
+                <line
+                  x1="4"
+                  x2="20"
+                  y1="18"
+                  y2="18"
+                />
+              </svg>
+            </button>
+            <div
+              class="alt-logo"
+            >
+              <div
+                class="alt-logo-icon"
+              >
+                <svg
+                  class="lucide lucide-anchor"
+                  fill="none"
+                  height="22"
+                  stroke="currentColor"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  viewBox="0 0 24 24"
+                  width="22"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    d="M12 22V8"
+                  />
+                  <path
+                    d="M5 12H2a10 10 0 0 0 20 0h-3"
+                  />
+                  <circle
+                    cx="12"
+                    cy="5"
+                    r="3"
+                  />
+                </svg>
+              </div>
+              <div
+                class="alt-logo-text"
+              >
+                <span
+                  class="alt-brand"
+                >
+                  Johor Port
+                </span>
+                <span
+                  class="alt-subtitle"
+                >
+                  Container Portal
+                </span>
+              </div>
+            </div>
+          </div>
+          <div
+            class="alt-header-right"
+          >
+            <div
+              class="alt-user-greeting"
+            >
+              <span
+                class="alt-greeting-text"
+              >
+                Good Evening
+                , 
+                Mediterranean Shipping Company
+              </span>
+              <span
+                class="alt-user-type-badge external"
+              >
+                External
+              </span>
+            </div>
+            <div
+              aria-label="Select Language"
+              class="alt-lang"
+            >
+              <svg
+                class="lucide lucide-globe"
+                fill="none"
+                height="16"
+                stroke="currentColor"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                viewBox="0 0 24 24"
+                width="16"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <circle
+                  cx="12"
+                  cy="12"
+                  r="10"
+                />
+                <path
+                  d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20"
+                />
+                <path
+                  d="M2 12h20"
+                />
+              </svg>
+              <select>
+                <option
+                  value="en"
+                >
+                  ­ƒç║­ƒç©
+                   
+                  English
+                </option>
+                <option
+                  value="vi"
+                >
+                  ­ƒç╗­ƒç│
+                   
+                  Tiß║┐ng Viß╗çt
+                </option>
+                <option
+                  value="ms"
+                >
+                  ­ƒç▓­ƒç¥
+                   
+                  Bahasa Melayu
+                </option>
+                <option
+                  value="ko"
+                >
+                  ­ƒç░­ƒçÀ
+                   
+                  Ýò£ÛÁ¡ýû┤
+                </option>
+               ...
+ ÔØ» waitForWrapper node_modules/@testing-library/dom/dist/wait-for.js:163:27
+ ÔØ» src/test/SystemTests.test.jsx:254:15
+    252| 
+    253|         // Verify External Badge
+    254|         await waitFor(() => {
+       |               ^
+    255|             // In Header.jsx: {user.userType === 'INTERNAL' ? 'InternaÔÇª
+    256|             // So if shippingLineCode is 'MSC', it shows 'MSC'. 
+
+ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»[2/2]ÔÄ»
+
+
+[2m Test Files [22m [1m[31m1 failed[39m[22m[90m (1)[39m
+[2m      Tests [22m [1m[31m2 failed[39m[22m[2m | [22m[1m[32m2 passed[39m[22m[90m (4)[39m
+[2m   Start at [22m 19:44:38
+[2m   Duration [22m 9.39s[2m (transform 437ms, setup 1.26s, import 1.02s, tests 2.35s, environment 4.16s)[22m
+

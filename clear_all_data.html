@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Clear All M&R Data</title>
+    <style>
+        body { font-family: Arial, sans-serif; padding: 40px; background: #1a1f2e; color: white; text-align: center; }
+        h1 { color: #ef4444; }
+        button { 
+            background: #ef4444; color: white; border: none; 
+            padding: 20px 40px; font-size: 18px; cursor: pointer;
+            border-radius: 8px; margin: 20px;
+        }
+        button:hover { background: #dc2626; }
+        .result { margin-top: 20px; padding: 20px; border-radius: 8px; background: #166534; }
+    </style>
+</head>
+<body>
+    <h1>⚠️ Clear All M&R Data</h1>
+    <p>This will delete ALL data in the M&R System (containers, surveys, EORs, repair orders, inspections, etc.)</p>
+    
+    <button onclick="clearAllData()">🗑️ DELETE ALL DATA</button>
+    
+    <div id="result"></div>
+
+    <script>
+        function clearAllData() {
+            if (!confirm('Are you SURE you want to delete ALL data? This cannot be undone!')) {
+                return;
+            }
+            
+            // Clear all MnR related localStorage keys
+            const keys = [
+                'mnr_containers',
+                'mnr_surveys', 
+                'mnr_eors',
+                'mnr_repair_orders',
+                'mnr_washing_orders',
+                'mnr_audit_logs',
+                'mnr_preinspections',
+                'mnr_shunting',
+                'mnr_stacking'
+            ];
+            
+            keys.forEach(key => localStorage.removeItem(key));
+            
+            document.getElementById('result').innerHTML = 
+                '<div class="result">✅ All data has been deleted!<br><br>Please refresh your M&R System page to load fresh mock data.</div>';
+        }
+    </script>
+</body>
+</html>

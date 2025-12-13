@@ -1,0 +1,817 @@
+
+[1m[46m RUN [49m[22m [36mv4.0.15 [39m[90mC:/Users/taini/.gemini/antigravity/MnR2[39m
+
+TypeError: Cannot read properties of null (reading 'username')
+    at handleSubmit (C:/Users/taini/.gemini/antigravity/MnR2/src/pages/Container/ContainerRegistration.jsx:85:17)
+    at HTMLUnknownElement.callCallback (C:\Users\taini\.gemini\antigravity\MnR2\node_modules\react-dom\cjs\react-dom.development.js:4164:14)
+    at HTMLUnknownElement.callTheUserObjectsOperation (C:\Users\taini\.gemini\antigravity\MnR2\node_modules\jsdom\lib\jsdom\living\generated\EventListener.js:26:30)
+    at innerInvokeEventListeners (C:\Users\taini\.gemini\antigravity\MnR2\node_modules\jsdom\lib\jsdom\living\events\EventTarget-impl.js:360:16)
+    at invokeEventListeners (C:\Users\taini\.gemini\antigravity\MnR2\node_modules\jsdom\lib\jsdom\living\events\EventTarget-impl.js:296:3)
+    at HTMLUnknownElementImpl._dispatch (C:\Users\taini\.gemini\antigravity\MnR2\node_modules\jsdom\lib\jsdom\living\events\EventTarget-impl.js:243:9)
+    at HTMLUnknownElementImpl.dispatchEvent (C:\Users\taini\.gemini\antigravity\MnR2\node_modules\jsdom\lib\jsdom\living\events\EventTarget-impl.js:114:17)
+    at HTMLUnknownElement.dispatchEvent (C:\Users\taini\.gemini\antigravity\MnR2\node_modules\jsdom\lib\jsdom\living\generated\EventTarget.js:241:34)
+    at Object.invokeGuardedCallbackDev (C:\Users\taini\.gemini\antigravity\MnR2\node_modules\react-dom\cjs\react-dom.development.js:4213:16)
+    at invokeGuardedCallback (C:\Users\taini\.gemini\antigravity\MnR2\node_modules\react-dom\cjs\react-dom.development.js:4277:31)
+ [31mÔØ»[39m src/test/SystemTests.test.jsx [2m([22m[2m2 tests[22m[2m | [22m[31m2 failed[39m[2m)[22m[33m 2227[2mms[22m[39m
+[31m     [31m├ù[31m ST-01: User Authentication Flow[39m[33m 1166[2mms[22m[39m
+[31m     [31m├ù[31m SIT-01: Container Repair Lifecycle (Happy Path)[39m[33m 1058[2mms[22m[39m
+
+ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ» Failed Tests 2 ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»
+
+ FAIL  src/test/SystemTests.test.jsx > System Tests > ST-01: User Authentication Flow
+TestingLibraryElementError: Found multiple elements with the text: /Good Morning|Good Afternoon|Good Evening/i
+
+Here are the matching elements:
+
+Ignored nodes: comments, script, style
+<p>
+  Good Evening, Tan Tai!
+  <br />
+  You have logged in successfully.
+</p>
+
+Ignored nodes: comments, script, style
+<span
+  class="alt-greeting-text"
+>
+  Good Evening
+  , 
+  Tan Tai
+</span>
+
+(If this is intentional, then use the `*AllBy*` variant of the query (like `queryAllByText`, `getAllByText`, or `findAllByText`)).
+
+Ignored nodes: comments, script, style
+<body>
+  <div>
+    <div
+      class="alt-portal"
+    >
+      <div
+        class="alt-modal-overlay"
+      >
+        <div
+          class="alt-success-modal"
+        >
+          <div
+            class="alt-success-icon"
+          >
+            <svg
+              class="lucide lucide-circle-check-big"
+              fill="none"
+              height="48"
+              stroke="currentColor"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              viewBox="0 0 24 24"
+              width="48"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                d="M21.801 10A10 10 0 1 1 17 3.335"
+              />
+              <path
+                d="m9 11 3 3L22 4"
+              />
+            </svg>
+          </div>
+          <h2>
+            Login Successful
+          </h2>
+          <p>
+            Good Evening, Tan Tai!
+            <br />
+            You have logged in successfully.
+          </p>
+          <button
+            class="alt-modal-btn"
+          >
+            OK
+          </button>
+        </div>
+      </div>
+      <header
+        class="alt-header"
+        role="banner"
+      >
+        <div
+          class="alt-header-left"
+        >
+          <button
+            aria-label="Toggle navigation"
+            class="alt-menu-btn"
+          >
+            <svg
+              class="lucide lucide-menu"
+              fill="none"
+              height="24"
+              stroke="currentColor"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              viewBox="0 0 24 24"
+              width="24"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <line
+                x1="4"
+                x2="20"
+                y1="12"
+                y2="12"
+              />
+              <line
+                x1="4"
+                x2="20"
+                y1="6"
+                y2="6"
+              />
+              <line
+                x1="4"
+                x2="20"
+                y1="18"
+                y2="18"
+              />
+            </svg>
+          </button>
+          <div
+            class="alt-logo"
+          >
+            <div
+              class="alt-logo-icon"
+            >
+              <svg
+                class="lucide lucide-anchor"
+                fill="none"
+                height="22"
+                stroke="currentColor"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                viewBox="0 0 24 24"
+                width="22"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M12 22V8"
+                />
+                <path
+                  d="M5 12H2a10 10 0 0 0 20 0h-3"
+                />
+                <circle
+                  cx="12"
+                  cy="5"
+                  r="3"
+                />
+              </svg>
+            </div>
+            <div
+              class="alt-logo-text"
+            >
+              <span
+                class="alt-brand"
+              >
+                Johor Port
+              </span>
+              <span
+                class="alt-subtitle"
+              >
+                Container Portal
+              </span>
+            </div>
+          </div>
+        </div>
+        <div
+          class="alt-header-right"
+        >
+          <div
+            class="alt-user-greeting"
+          >
+            <span
+              class="alt-greeting-text"
+            >
+              Good Evening
+              , 
+              Tan Tai
+            </span>
+            <span
+              class="alt-user-type-badge internal"
+            >
+              Internal
+            </span>
+          </div>
+          <div
+            aria-label="Select Language"
+            class="alt-lang"
+          >
+            <svg
+              class="lucide lucide-globe"
+              fill="none"
+              height="16"
+              stroke="currentColor"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              viewBox="0 0 24 24"
+              width="16"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <circle
+                cx="12"
+                cy="12"
+                r="10"
+              />
+              ...
+ ÔØ» Object.getElementError node_modules/@testing-library/dom/dist/config.js:37:19
+ ÔØ» getElementError node_modules/@testing-library/dom/dist/query-helpers.js:20:35
+ ÔØ» getMultipleElementsFoundError node_modules/@testing-library/dom/dist/query-helpers.js:23:10
+ ÔØ» node_modules/@testing-library/dom/dist/query-helpers.js:55:13
+ ÔØ» node_modules/@testing-library/dom/dist/query-helpers.js:95:19
+ ÔØ» src/test/SystemTests.test.jsx:60:23
+     58| 
+     59|         // Check for welcome message
+     60|         expect(screen.getByText(/Good Morning|Good Afternoon|Good EvenÔÇª
+       |                       ^
+     61|     });
+     62| 
+
+ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»[1/2]ÔÄ»
+
+ FAIL  src/test/SystemTests.test.jsx > System Tests > SIT-01: Container Repair Lifecycle (Happy Path)
+TestingLibraryElementError: Unable to find an element with the text: /MSCU9999999/. This could be because the text is broken up by multiple elements. In this case, you can provide a function for your text matcher to make your matcher more flexible.
+
+Ignored nodes: comments, script, style
+<body>
+  <div>
+    <div
+      class="page"
+    >
+      <div
+        class="page-header"
+      >
+        <div>
+          <h2>
+            Container Registration
+          </h2>
+          <p
+            class="text-muted"
+          >
+            Register new containers for survey
+          </p>
+        </div>
+      </div>
+      <div
+        class="registration-tabs"
+      >
+        <button
+          class="registration-tab active"
+        >
+          <svg
+            class="lucide lucide-plus"
+            fill="none"
+            height="18"
+            stroke="currentColor"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            viewBox="0 0 24 24"
+            width="18"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M5 12h14"
+            />
+            <path
+              d="M12 5v14"
+            />
+          </svg>
+           Manual Entry
+        </button>
+        <button
+          class="registration-tab "
+        >
+          <svg
+            class="lucide lucide-file-spreadsheet"
+            fill="none"
+            height="18"
+            stroke="currentColor"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            viewBox="0 0 24 24"
+            width="18"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7Z"
+            />
+            <path
+              d="M14 2v4a2 2 0 0 0 2 2h4"
+            />
+            <path
+              d="M8 13h2"
+            />
+            <path
+              d="M14 13h2"
+            />
+            <path
+              d="M8 17h2"
+            />
+            <path
+              d="M14 17h2"
+            />
+          </svg>
+           Excel Upload
+        </button>
+      </div>
+      <div
+        class="card"
+      >
+        <form>
+          <div
+            class="grid grid-cols-2"
+            style="gap: var(--space-4);"
+          >
+            <div
+              class="form-group"
+            >
+              <label
+                class="form-label required"
+                for="containerNumber"
+              >
+                Container Number
+              </label>
+              <input
+                class="form-input "
+                id="containerNumber"
+                maxlength="11"
+                placeholder="MSCU1234567"
+                type="text"
+                value="MSCU9999999"
+              />
+              <span
+                class="form-hint"
+              >
+                Format: 4 letters + 7 digits
+              </span>
+            </div>
+            <div
+              class="form-group"
+            >
+              <label
+                class="form-label required"
+                for="liner"
+              >
+                Liner
+              </label>
+              <select
+                class="form-input "
+                id="liner"
+              >
+                <option
+                  value=""
+                >
+                  Select liner...
+                </option>
+                <option
+                  value="MSC"
+                >
+                  MSC
+                   - 
+                  Mediterranean Shipping Company
+                </option>
+                <option
+                  value="MSK"
+                >
+                  MSK
+                   - 
+                  Maersk Line
+                </option>
+                <option
+                  value="CMA"
+                >
+                  CMA
+                   - 
+                  CMA CGM
+                </option>
+                <option
+                  value="CSL"
+                >
+                  CSL
+                   - 
+                  COSCO Shipping
+                </option>
+                <option
+                  value="HPL"
+                >
+                  HPL
+                   - 
+                  Hapag-Lloyd
+                </option>
+                <option
+                  value="ONE"
+                >
+                  ONE
+                   - 
+                  Ocean Network Express
+                </option>
+                <option
+                  value="EVG"
+                >
+                  EVG
+                   - 
+                  Evergreen Marine
+                </option>
+                <option
+                  value="YML"
+                >
+                  YML
+                   - 
+                  Yang Ming Line
+                </option>
+                <option
+                  value="PIL"
+                >
+                  PIL
+                   - 
+                  Pacific International Lines
+                </option>
+                <option
+                  value="ZIM"
+                >
+                  ZIM
+                   - 
+                  ZIM Integrated Shipping
+                </option>
+              </select>
+            </div>
+            <div
+              class="form-group"
+            >
+              <label
+                class="form-label"
+              >
+                Size
+              </label>
+              <select
+                class="form-input"
+              >
+                <option
+                  value="20"
+                >
+                  20
+                  ft
+                </option>
+                <option
+                  value="40"
+                >
+                  40
+                  ft
+                </option>
+                <option
+                  value="45"
+                >
+                  45
+                  ft
+                </option>
+              </select>
+            </div>
+            <div
+              class="form-group"
+            >
+              <label
+                class="form-label"
+              >
+                Type
+              </label>
+              <select
+                class="form-input"
+              >
+                <option
+                  value="DRY"
+                >
+                  Dry Container
+                </option>
+                <option
+                  value="REEFER"
+                >
+                  Refrigerated
+                </option>
+                <option
+                  value="TANK"
+                >
+                  Tank Container
+                </option>
+                <option
+                  value="FLAT"
+                >
+                  Flat Rack
+                </option>
+                <option
+                  value="OPEN"
+                >
+                  Open Top
+                </option>
+              </select>
+            </div>
+            <div
+              class="form-group"
+            >
+              <label
+                class="form-label"
+              >
+                Initial Status
+              </label>
+              <select
+                class="form-input"
+              >
+                <option
+                  value="STACKING"
+                >
+                  STACKING - In Storage
+                </option>
+                <option
+                  value="DM"
+                >
+                  DM - Damaged
+                </option>
+              </select>
+            </div>
+          </div>
+          <div
+            class="form-actions mt-4"
+          >
+            <button
+              class="btn btn-primary btn-lg"
+              type="submit"
+            >
+              <svg
+                class="lucide lucide-container"
+                fill="none"
+                height="18"
+                stroke="currentColor"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                viewBox="0 0 24 24"
+                width="18"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M22 7.7c0-.6-.4-1.2-.8-1.5l-6.3-3.9a1.72 1.72 0 0 0-1.7 0l-10.3 6c-.5.2-.9.8-.9 1.4v6.6c0 .5.4 1.2.8 1.5l6.3 3.9a1.72 1.72 0 0 0 1.7 0l10.3-6c.5-.3.9-1 .9-1.5Z"
+                />
+                <path
+                  d="M10 21.9V14L2.1 9.1"
+                />
+                <path
+                  d="m10 14 11.9-6.9"
+                />
+                <path
+                  d="M14 19.8v-8.1"
+                />
+                <path
+                  d="M18 17.5V9.4"
+                />
+              </svg>
+               Register Container
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+    <div
+      class="toast-container"
+    />
+  </div>
+</body>
+
+Ignored nodes: comments, script, style
+<html
+  lang="en"
+>
+  <head />
+  <body>
+    <div>
+      <div
+        class="page"
+      >
+        <div
+          class="page-header"
+        >
+          <div>
+            <h2>
+              Container Registration
+            </h2>
+            <p
+              class="text-muted"
+            >
+              Register new containers for survey
+            </p>
+          </div>
+        </div>
+        <div
+          class="registration-tabs"
+        >
+          <button
+            class="registration-tab active"
+          >
+            <svg
+              class="lucide lucide-plus"
+              fill="none"
+              height="18"
+              stroke="currentColor"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              viewBox="0 0 24 24"
+              width="18"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                d="M5 12h14"
+              />
+              <path
+                d="M12 5v14"
+              />
+            </svg>
+             Manual Entry
+          </button>
+          <button
+            class="registration-tab "
+          >
+            <svg
+              class="lucide lucide-file-spreadsheet"
+              fill="none"
+              height="18"
+              stroke="currentColor"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              viewBox="0 0 24 24"
+              width="18"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                d="M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7Z"
+              />
+              <path
+                d="M14 2v4a2 2 0 0 0 2 2h4"
+              />
+              <path
+                d="M8 13h2"
+              />
+              <path
+                d="M14 13h2"
+              />
+              <path
+                d="M8 17h2"
+              />
+              <path
+                d="M14 17h2"
+              />
+            </svg>
+             Excel Upload
+          </button>
+        </div>
+        <div
+          class="card"
+        >
+          <form>
+            <div
+              class="grid grid-cols-2"
+              style="gap: var(--space-4);"
+            >
+              <div
+                class="form-group"
+              >
+                <label
+                  class="form-label required"
+                  for="containerNumber"
+                >
+                  Container Number
+                </label>
+                <input
+                  class="form-input "
+                  id="containerNumber"
+                  maxlength="11"
+                  placeholder="MSCU1234567"
+                  type="text"
+                  value="MSCU9999999"
+                />
+                <span
+                  class="form-hint"
+                >
+                  Format: 4 letters + 7 digits
+                </span>
+              </div>
+              <div
+                class="form-group"
+              >
+                <label
+                  class="form-label required"
+                  for="liner"
+                >
+                  Liner
+                </label>
+                <select
+                  class="form-input "
+                  id="liner"
+                >
+                  <option
+                    value=""
+                  >
+                    Select liner...
+                  </option>
+                  <option
+                    value="MSC"
+                  >
+                    MSC
+                     - 
+                    Mediterranean Shipping Company
+                  </option>
+                  <option
+                    value="MSK"
+                  >
+                    MSK
+                     - 
+                    Maersk Line
+                  </option>
+                  <option
+                    value="CMA"
+                  >
+                    CMA
+                     - 
+                    CMA CGM
+                  </option>
+                  <option
+                    value="CSL"
+                  >
+                    CSL
+                     - 
+                    COSCO Shipping
+                  </option>
+                  <option
+                    value="HPL"
+                  >
+                    HPL
+                     - 
+                    Hapag-Lloyd
+                  </option>
+                  <option
+                    value="ONE"
+                  >
+                    ONE
+                     - 
+                    Ocean Network Express
+                  </option>
+                  <option
+                    value="EVG"
+   ...
+ ÔØ» waitForWrapper node_modules/@testing-library/dom/dist/wait-for.js:163:27
+ ÔØ» src/test/SystemTests.test.jsx:74:15
+     72| 
+     73|         // Wait for toast message (relaxed check)
+     74|         await waitFor(() => {
+       |               ^
+     75|             expect(screen.getByText(/MSCU9999999/)).toBeInTheDocument(ÔÇª
+     76|         });
+
+ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»[2/2]ÔÄ»
+
+ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ» Unhandled Errors ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»
+
+Vitest caught 1 unhandled error during the test run.
+This might cause false positive tests. Resolve unhandled errors to make sure your tests are not affected.
+
+ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ» Uncaught Exception ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»
+TypeError: Cannot read properties of null (reading 'username')
+ ÔØ» handleSubmit src/pages/Container/ContainerRegistration.jsx:85:17
+
+     83|             status: formData.status,
+     84|             gateInTime: new Date().toISOString()
+     85|         }, user.username);
+       |                 ^
+     86| 
+     87|         toast.success(`Container ${container.containerNumber} registerÔÇª
+ ÔØ» HTMLUnknownElement.callCallback node_modules/react-dom/cjs/react-dom.development.js:4164:14
+ ÔØ» HTMLUnknownElement.callTheUserObjectsOperation node_modules/jsdom/lib/jsdom/living/generated/EventListener.js:26:30
+ ÔØ» innerInvokeEventListeners node_modules/jsdom/lib/jsdom/living/events/EventTarget-impl.js:360:16
+ ÔØ» invokeEventListeners node_modules/jsdom/lib/jsdom/living/events/EventTarget-impl.js:296:3
+ ÔØ» HTMLUnknownElementImpl._dispatch node_modules/jsdom/lib/jsdom/living/events/EventTarget-impl.js:243:9
+ ÔØ» HTMLUnknownElementImpl.dispatchEvent node_modules/jsdom/lib/jsdom/living/events/EventTarget-impl.js:114:17
+ ÔØ» HTMLUnknownElement.dispatchEvent node_modules/jsdom/lib/jsdom/living/generated/EventTarget.js:241:34
+ ÔØ» Object.invokeGuardedCallbackDev node_modules/react-dom/cjs/react-dom.development.js:4213:16
+ ÔØ» invokeGuardedCallback node_modules/react-dom/cjs/react-dom.development.js:4277:31
+
+This error originated in "src/test/SystemTests.test.jsx" test file. It doesn't mean the error was thrown inside the file itself, but while it was running.
+The latest test that might've caused the error is "SIT-01: Container Repair Lifecycle (Happy Path)". It might mean one of the following:
+- The error was thrown, while Vitest was running this test.
+- If the error occurred after the test had been completed, this was the last documented test before it was thrown.
+ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»
+
+[2m Test Files [22m [1m[31m1 failed[39m[22m[90m (1)[39m
+[2m      Tests [22m [1m[31m2 failed[39m[22m[90m (2)[39m
+[2m     Errors [22m [1m[31m1 error[39m[22m
+[2m   Start at [22m 19:21:01
+[2m   Duration [22m 9.36s[2m (transform 549ms, setup 1.27s, import 1.28s, tests 2.23s, environment 4.03s)[22m
+
