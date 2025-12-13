@@ -11,15 +11,45 @@ import { getCodeLabel, LOCATION_CODES, DAMAGE_CODES, REPAIR_CODES, COMPONENT_COD
 export default function EORDetail() {
     const { id } = useParams();
     const navigate = useNavigate();
-    const { getEOR, sendEOR, approveEOR, createRepairOrder, getContainer } = useData();
+    const { getEOR, sendEOR, approveEOR, createRepairOrder, getContainer, shunting } = useData();
     const { user, hasScreenPermission, canPerform } = useAuth();
     const { getSetting } = useConfig();
     const toast = useToast();
 
     const autoApprovalThreshold = getSetting('autoApprovalThreshold');
 
+    // State for shunting status - MUST be before any early returns
+    const [hasShuntingRequest, setHasShuntingRequest] = useState(false);
+
     const eor = getEOR(id);
 
+    // Check shunting status - use data from context if available, else localStorage
+    const checkShuntingStatus = () => {
+        const shuntingData = Array.isArray(shunting) && shunting.length > 0
+            ? shunting
+            : JSON.parse(localStorage.getItem('mnr_shunting') || '[]');
+        const hasRequest = shuntingData.some(s =>
+            (s.containerId === eor?.containerId || s.containerNumber === eor?.containerNumber)
+        );
+        setHasShuntingRequest(hasRequest);
+    };
+
+    // useEffect MUST be before any early returns
+    useEffect(() => {
+        if (eor) {
+            checkShuntingStatus();
+        }
+
+        // Refresh shunting status when window regains focus
+        const handleFocus = () => {
+            if (eor) checkShuntingStatus();
+        };
+        window.addEventListener('focus', handleFocus);
+
+        return () => window.removeEventListener('focus', handleFocus);
+    }, [eor?.containerId, eor?.containerNumber, shunting]);
+
+    // NOW we can do early return - after all hooks are called
     if (!eor) {
         return (
             <div className="page">
@@ -60,28 +90,6 @@ export default function EORDetail() {
 
     // Can Reject if: Status is PENDING/SENT AND Has Permission
     const canReject = (eor.status === 'PENDING' || eor.status === 'SENT') && hasRejectPerm;
-
-    // State for shunting status - refreshes on focus
-    const [hasShuntingRequest, setHasShuntingRequest] = useState(false);
-
-    // Check shunting status and refresh on window focus
-    const checkShuntingStatus = () => {
-        const shuntingData = JSON.parse(localStorage.getItem('mnr_shunting') || '[]');
-        const hasRequest = shuntingData.some(s =>
-            (s.containerId === eor.containerId || s.containerNumber === eor.containerNumber)
-        );
-        setHasShuntingRequest(hasRequest);
-    };
-
-    useEffect(() => {
-        checkShuntingStatus();
-
-        // Refresh shunting status when window regains focus
-        const handleFocus = () => checkShuntingStatus();
-        window.addEventListener('focus', handleFocus);
-
-        return () => window.removeEventListener('focus', handleFocus);
-    }, [eor.containerId, eor.containerNumber]);
 
     // Can only create RO if EOR is approved AND has shunting request (any status)
     const canCreateRO = eor.status.includes('APPROVED') && hasShuntingRequest;
