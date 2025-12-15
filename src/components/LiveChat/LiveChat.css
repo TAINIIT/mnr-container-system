@@ -3,41 +3,65 @@
 /* Floating Button */
 .live-chat-button {
     position: fixed;
-    bottom: 24px;
-    right: 24px;
+    right: 0;
+    top: 50%;
+    transform: translateY(-50%);
     z-index: 99999;
     display: flex;
     align-items: center;
-    gap: 8px;
-    padding: 12px 20px;
+    gap: 0;
+    padding: 14px;
     background: linear-gradient(135deg, #6366F1 0%, #8B5CF6 100%);
     border: none;
-    border-radius: 50px;
+    border-radius: 50px 0 0 50px;
     color: white;
     font-weight: 600;
     font-size: 14px;
     cursor: pointer;
     box-shadow: 0 4px 20px rgba(99, 102, 241, 0.4);
     transition: all 0.3s ease;
+    overflow: hidden;
 }
 
 .live-chat-button:hover {
-    transform: translateY(-2px);
+    transform: translateY(-50%) translateX(-2px);
     box-shadow: 0 6px 25px rgba(99, 102, 241, 0.5);
+    gap: 8px;
+    padding: 12px 20px;
 }
 
 .live-chat-button:active {
-    transform: translateY(0);
+    transform: translateY(-50%);
+}
+
+.live-chat-button.dragging {
+    cursor: grabbing;
+    transition: none;
+}
+
+.live-chat-button.dragging:hover {
+    gap: 0;
+    padding: 14px;
 }
 
 .live-chat-button .chat-icon {
     display: flex;
     align-items: center;
     justify-content: center;
+    flex-shrink: 0;
 }
 
 .live-chat-button .chat-text {
     white-space: nowrap;
+    max-width: 0;
+    opacity: 0;
+    overflow: hidden;
+    transition: all 0.3s ease;
+}
+
+.live-chat-button:hover .chat-text {
+    max-width: 100px;
+    opacity: 1;
 }
 
 .live-chat-button .unread-badge {
@@ -74,6 +98,14 @@
     .live-chat-button {
         padding: 14px;
         border-radius: 50%;
+        right: 16px;
+        top: 50%;
+        left: auto;
+        transform: translateY(-50%);
+    }
+
+    .live-chat-button:hover {
+        transform: translateY(-50%) translateX(-2px);
     }
 
     .live-chat-button .chat-text {
@@ -375,13 +407,17 @@
     display: grid;
     grid-template-columns: 320px 1fr;
     gap: 20px;
-    height: calc(100vh - 140px);
+    height: calc(100vh - 180px);
+    max-height: calc(100vh - 180px);
+    overflow: hidden;
 }
 
 @media (max-width: 768px) {
     .chat-management {
         grid-template-columns: 1fr;
         height: auto;
+        max-height: none;
+        overflow: visible;
     }
 }
 
@@ -391,6 +427,7 @@
     overflow: hidden;
     display: flex;
     flex-direction: column;
+    max-height: 100%;
 }
 
 .chat-list-header {
@@ -476,6 +513,8 @@
     display: flex;
     flex-direction: column;
     overflow: hidden;
+    height: 100%;
+    max-height: 100%;
 }
 
 .chat-conversation-header {
@@ -484,6 +523,8 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
+    background: var(--surface);
+    flex-shrink: 0;
 }
 
 .chat-conversation-info h3 {
@@ -516,6 +557,8 @@
     border-top: 1px solid var(--border);
     display: flex;
     gap: 12px;
+    flex-shrink: 0;
+    background: var(--surface);
 }
 
 .chat-conversation-input input {

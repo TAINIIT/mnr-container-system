@@ -1,4 +1,6 @@
 import { createContext, useContext, useState, useEffect, useCallback } from 'react';
+import { database, ref, onValue, set, get, DEMO_MODE } from '../config/firebase';
+import FirebaseDataService from '../services/firebaseDataService';
 
 const ConfigContext = createContext(null);
 
@@ -438,40 +440,238 @@ const DEFAULT_SETTINGS = {
     containersPerPage: 200
 };
 
-export function ConfigProvider({ children }) {
-    // Initialize with stored or default values synchronously
-    const [screens, setScreens] = useState(() => {
-        const saved = localStorage.getItem('mnr_screens');
-        return saved ? JSON.parse(saved) : DEFAULT_SCREENS;
-    });
-    const [groups, setGroups] = useState(() => {
-        const saved = localStorage.getItem('mnr_groups');
-        return saved ? JSON.parse(saved) : DEFAULT_GROUPS;
-    });
-    const [codes, setCodes] = useState(() => {
-        const saved = localStorage.getItem('mnr_codes');
-        return saved ? JSON.parse(saved) : DEFAULT_CODES;
-    });
-    const [users, setUsers] = useState(() => {
-        const saved = localStorage.getItem('mnr_users');
-        return saved ? JSON.parse(saved) : DEFAULT_USERS;
-    });
-    const [settings, setSettings] = useState(() => {
-        const saved = localStorage.getItem('mnr_settings');
-        return saved ? JSON.parse(saved) : DEFAULT_SETTINGS;
-    });
-    const [isLoading, setIsLoading] = useState(false);
 
-    // Persist to localStorage
+export function ConfigProvider({ children }) {
+    // Initialize with default values, will be replaced by Firebase data
+    const [screens, setScreens] = useState(DEFAULT_SCREENS);
+    const [groups, setGroups] = useState(DEFAULT_GROUPS);
+    const [codes, setCodes] = useState(DEFAULT_CODES);
+    const [users, setUsers] = useState(DEFAULT_USERS);
+    const [settings, setSettings] = useState(DEFAULT_SETTINGS);
+    const [isLoading, setIsLoading] = useState(true);
+    const [isInitialized, setIsInitialized] = useState(false);
+
+    // Load initial data from Firebase
     useEffect(() => {
-        if (!isLoading) {
-            localStorage.setItem('mnr_screens', JSON.stringify(screens));
-            localStorage.setItem('mnr_groups', JSON.stringify(groups));
-            localStorage.setItem('mnr_codes', JSON.stringify(codes));
-            localStorage.setItem('mnr_users', JSON.stringify(users));
-            localStorage.setItem('mnr_settings', JSON.stringify(settings));
+        const loadFromFirebase = async () => {
+            if (DEMO_MODE) {
+                // Demo mode: use localStorage
+                const savedScreens = localStorage.getItem('mnr_screens');
+                const savedGroups = localStorage.getItem('mnr_groups');
+                const savedCodes = localStorage.getItem('mnr_codes');
+                const savedUsers = localStorage.getItem('mnr_users');
+                const savedSettings = localStorage.getItem('mnr_settings');
+
+                if (savedScreens) setScreens(JSON.parse(savedScreens));
+                if (savedGroups) setGroups(JSON.parse(savedGroups));
+                if (savedCodes) setCodes(JSON.parse(savedCodes));
+                if (savedUsers) setUsers(JSON.parse(savedUsers));
+                if (savedSettings) setSettings(JSON.parse(savedSettings));
+
+                setIsLoading(false);
+                setIsInitialized(true);
+                return;
+            }
+
+            try {
+                console.log('🔥 Loading config data from Firebase...');
+
+                // Load all config data from Firebase
+                const [fbScreens, fbGroups, fbCodes, fbUsers, fbSettings] = await Promise.all([
+                    FirebaseDataService.getAll('config/screens'),
+                    FirebaseDataService.getAll('config/groups'),
+                    get(ref(database, 'config/codes')).then(s => s.exists() ? s.val() : null),
+                    FirebaseDataService.getAll('config/users'),
+                    get(ref(database, 'config/settings')).then(s => s.exists() ? s.val() : null)
+                ]);
+
+                // Use Firebase data if available, otherwise use defaults and save to Firebase
+                if (fbScreens && fbScreens.length > 0) {
+                    setScreens(fbScreens);
+                } else {
+                    // Save default screens to Firebase
+                    await FirebaseDataService.saveAll('config/screens', DEFAULT_SCREENS);
+                }
+
+                if (fbGroups && fbGroups.length > 0) {
+                    setGroups(fbGroups);
+                } else {
+                    // Save default groups to Firebase
+                    await FirebaseDataService.saveAll('config/groups', DEFAULT_GROUPS);
+                }
+
+                if (fbCodes && Object.keys(fbCodes).length > 0) {
+                    setCodes(fbCodes);
+                } else {
+                    // Save default codes to Firebase
+                    await set(ref(database, 'config/codes'), DEFAULT_CODES);
+                }
+
+                if (fbUsers && fbUsers.length > 0) {
+                    setUsers(fbUsers);
+                } else {
+                    // Save default users to Firebase
+                    await FirebaseDataService.saveAll('config/users', DEFAULT_USERS);
+                }
+
+                if (fbSettings) {
+                    setSettings(fbSettings);
+                } else {
+                    // Save default settings to Firebase
+                    await set(ref(database, 'config/settings'), DEFAULT_SETTINGS);
+                }
+
+                console.log('🔥 Config data loaded successfully');
+            } catch (error) {
+                console.error('Firebase config load error:', error);
+                // Fallback to localStorage
+                const savedScreens = localStorage.getItem('mnr_screens');
+                const savedGroups = localStorage.getItem('mnr_groups');
+                const savedCodes = localStorage.getItem('mnr_codes');
+                const savedUsers = localStorage.getItem('mnr_users');
+                const savedSettings = localStorage.getItem('mnr_settings');
+
+                if (savedScreens) setScreens(JSON.parse(savedScreens));
+                if (savedGroups) setGroups(JSON.parse(savedGroups));
+                if (savedCodes) setCodes(JSON.parse(savedCodes));
+                if (savedUsers) setUsers(JSON.parse(savedUsers));
+                if (savedSettings) setSettings(JSON.parse(savedSettings));
+            }
+
+            setIsLoading(false);
+            setIsInitialized(true);
+        };
+
+        loadFromFirebase();
+    }, []);
+
+    // Subscribe to real-time updates from Firebase
+    useEffect(() => {
+        if (DEMO_MODE || !isInitialized) return;
+
+        console.log('🔥 Setting up real-time subscriptions for config...');
+
+        // Subscribe to screens
+        const unsubScreens = FirebaseDataService.subscribe('config/screens', (data) => {
+            if (data && data.length > 0) {
+                setScreens(data);
+            }
+        });
+
+        // Subscribe to groups
+        const unsubGroups = FirebaseDataService.subscribe('config/groups', (data) => {
+            if (data && data.length > 0) {
+                setGroups(data);
+            }
+        });
+
+        // Subscribe to codes (special handling as it's an object, not array)
+        const codesRef = ref(database, 'config/codes');
+        const unsubCodes = onValue(codesRef, (snapshot) => {
+            if (snapshot.exists()) {
+                setCodes(snapshot.val());
+            }
+        });
+
+        // Subscribe to users
+        const unsubUsers = FirebaseDataService.subscribe('config/users', (data) => {
+            if (data && data.length > 0) {
+                setUsers(data);
+            }
+        });
+
+        // Subscribe to settings
+        const settingsRef = ref(database, 'config/settings');
+        const unsubSettings = onValue(settingsRef, (snapshot) => {
+            if (snapshot.exists()) {
+                setSettings(snapshot.val());
+            }
+        });
+
+        return () => {
+            unsubScreens();
+            unsubGroups();
+            unsubCodes();
+            unsubUsers();
+            unsubSettings();
+        };
+    }, [isInitialized]);
+
+    // Migration: Ensure admin group has all screens from DEFAULT_SCREENS
+    useEffect(() => {
+        if (!isInitialized) return;
+
+        const allScreenIds = DEFAULT_SCREENS.map(s => s.id);
+        let needsUpdate = false;
+
+        const updatedGroups = groups.map(group => {
+            if (group.id === 'admin') {
+                const missingScreens = allScreenIds.filter(id => !group.screens.includes(id));
+                if (missingScreens.length > 0) {
+                    needsUpdate = true;
+                    return {
+                        ...group,
+                        screens: [...group.screens, ...missingScreens]
+                    };
+                }
+            }
+            return group;
+        });
+
+        if (needsUpdate) {
+            setGroups(updatedGroups);
+            // Save to Firebase
+            if (!DEMO_MODE) {
+                FirebaseDataService.saveAll('config/groups', updatedGroups);
+            }
         }
-    }, [screens, groups, codes, users, settings, isLoading]);
+    }, [isInitialized]);
+
+    // Save functions - save to Firebase instead of localStorage
+    const saveScreens = useCallback(async (newScreens) => {
+        setScreens(newScreens);
+        if (DEMO_MODE) {
+            localStorage.setItem('mnr_screens', JSON.stringify(newScreens));
+        } else {
+            await FirebaseDataService.saveAll('config/screens', newScreens);
+        }
+    }, []);
+
+    const saveGroups = useCallback(async (newGroups) => {
+        setGroups(newGroups);
+        if (DEMO_MODE) {
+            localStorage.setItem('mnr_groups', JSON.stringify(newGroups));
+        } else {
+            await FirebaseDataService.saveAll('config/groups', newGroups);
+        }
+    }, []);
+
+    const saveCodes = useCallback(async (newCodes) => {
+        setCodes(newCodes);
+        if (DEMO_MODE) {
+            localStorage.setItem('mnr_codes', JSON.stringify(newCodes));
+        } else {
+            await set(ref(database, 'config/codes'), newCodes);
+        }
+    }, []);
+
+    const saveUsers = useCallback(async (newUsers) => {
+        setUsers(newUsers);
+        if (DEMO_MODE) {
+            localStorage.setItem('mnr_users', JSON.stringify(newUsers));
+        } else {
+            await FirebaseDataService.saveAll('config/users', newUsers);
+        }
+    }, []);
+
+    const saveSettings = useCallback(async (newSettings) => {
+        setSettings(newSettings);
+        if (DEMO_MODE) {
+            localStorage.setItem('mnr_settings', JSON.stringify(newSettings));
+        } else {
+            await set(ref(database, 'config/settings'), newSettings);
+        }
+    }, []);
 
     // Code operations
     const getCodeList = useCallback((codeType) => {
@@ -481,33 +681,37 @@ export function ConfigProvider({ children }) {
     }, [codes]);
 
     const updateCodeList = useCallback((codeType, newList) => {
-        setCodes(prev => ({ ...prev, [codeType]: newList }));
-    }, []);
+        const newCodes = { ...codes, [codeType]: newList };
+        saveCodes(newCodes);
+    }, [codes, saveCodes]);
 
     const addCode = useCallback((codeType, newCode) => {
-        setCodes(prev => ({
-            ...prev,
-            [codeType]: [...(prev[codeType] || []), { ...newCode, active: true }]
-        }));
-    }, []);
+        const newCodes = {
+            ...codes,
+            [codeType]: [...(codes[codeType] || []), { ...newCode, active: true }]
+        };
+        saveCodes(newCodes);
+    }, [codes, saveCodes]);
 
     const updateCode = useCallback((codeType, code, updates) => {
-        setCodes(prev => ({
-            ...prev,
-            [codeType]: prev[codeType].map(c =>
+        const newCodes = {
+            ...codes,
+            [codeType]: codes[codeType].map(c =>
                 c.code === code ? { ...c, ...updates } : c
             )
-        }));
-    }, []);
+        };
+        saveCodes(newCodes);
+    }, [codes, saveCodes]);
 
     const deleteCode = useCallback((codeType, code) => {
-        setCodes(prev => ({
-            ...prev,
-            [codeType]: prev[codeType].map(c =>
+        const newCodes = {
+            ...codes,
+            [codeType]: codes[codeType].map(c =>
                 c.code === code ? { ...c, active: false } : c
             )
-        }));
-    }, []);
+        };
+        saveCodes(newCodes);
+    }, [codes, saveCodes]);
 
     // Group operations
     const getGroup = useCallback((groupId) => {
@@ -517,21 +721,24 @@ export function ConfigProvider({ children }) {
     const createGroup = useCallback((groupData) => {
         const id = `grp_${Date.now()}`;
         const newGroup = { ...groupData, id };
-        setGroups(prev => [...prev, newGroup]);
+        const newGroups = [...groups, newGroup];
+        saveGroups(newGroups);
         return newGroup;
-    }, []);
+    }, [groups, saveGroups]);
 
     const updateGroup = useCallback((groupId, updates) => {
-        setGroups(prev => prev.map(g =>
+        const newGroups = groups.map(g =>
             g.id === groupId ? { ...g, ...updates } : g
-        ));
-    }, []);
+        );
+        saveGroups(newGroups);
+    }, [groups, saveGroups]);
 
     const deleteGroup = useCallback((groupId) => {
         if (['admin', 'viewer'].includes(groupId)) return false; // Protect core groups
-        setGroups(prev => prev.filter(g => g.id !== groupId));
+        const newGroups = groups.filter(g => g.id !== groupId);
+        saveGroups(newGroups);
         return true;
-    }, []);
+    }, [groups, saveGroups]);
 
     // Settings operations
     const getSetting = useCallback((key) => {
@@ -539,12 +746,14 @@ export function ConfigProvider({ children }) {
     }, [settings]);
 
     const updateSetting = useCallback((key, value) => {
-        setSettings(prev => ({ ...prev, [key]: value }));
-    }, []);
+        const newSettings = { ...settings, [key]: value };
+        saveSettings(newSettings);
+    }, [settings, saveSettings]);
 
     const updateSettings = useCallback((updates) => {
-        setSettings(prev => ({ ...prev, ...updates }));
-    }, []);
+        const newSettings = { ...settings, ...updates };
+        saveSettings(newSettings);
+    }, [settings, saveSettings]);
 
     // User operations
     const getUser = useCallback((userId) => {
@@ -563,21 +772,24 @@ export function ConfigProvider({ children }) {
             active: true,
             createdAt: new Date().toISOString()
         };
-        setUsers(prev => [...prev, newUser]);
+        const newUsers = [...users, newUser];
+        saveUsers(newUsers);
         return newUser;
-    }, []);
+    }, [users, saveUsers]);
 
     const updateUser = useCallback((userId, updates) => {
-        setUsers(prev => prev.map(u =>
+        const newUsers = users.map(u =>
             u.id === userId ? { ...u, ...updates, updatedAt: new Date().toISOString() } : u
-        ));
-    }, []);
+        );
+        saveUsers(newUsers);
+    }, [users, saveUsers]);
 
     const deactivateUser = useCallback((userId) => {
-        setUsers(prev => prev.map(u =>
+        const newUsers = users.map(u =>
             u.id === userId ? { ...u, active: false } : u
-        ));
-    }, []);
+        );
+        saveUsers(newUsers);
+    }, [users, saveUsers]);
 
     // Update user password
     const updateUserPassword = useCallback((userId, currentPassword, newPassword) => {
@@ -592,12 +804,13 @@ export function ConfigProvider({ children }) {
             return { success: false, error: 'New password must be at least 6 characters' };
         }
 
-        setUsers(prev => prev.map(u =>
+        const newUsers = users.map(u =>
             u.id === userId ? { ...u, password: newPassword, updatedAt: new Date().toISOString() } : u
-        ));
+        );
+        saveUsers(newUsers);
 
         return { success: true };
-    }, [users]);
+    }, [users, saveUsers]);
 
     // Permission checks
     const getUserPermissions = useCallback((userId) => {
@@ -669,30 +882,33 @@ export function ConfigProvider({ children }) {
             createdAt: new Date().toISOString(),
             active: true
         };
-        setCodes(prev => ({
-            ...prev,
-            ANNOUNCEMENTS: [newAnn, ...(prev.ANNOUNCEMENTS || [])]
-        }));
+        const newCodes = {
+            ...codes,
+            ANNOUNCEMENTS: [newAnn, ...(codes.ANNOUNCEMENTS || [])]
+        };
+        saveCodes(newCodes);
         return newAnn;
-    }, []);
+    }, [codes, saveCodes]);
 
     const updateAnnouncement = useCallback((id, updates) => {
-        setCodes(prev => ({
-            ...prev,
-            ANNOUNCEMENTS: (prev.ANNOUNCEMENTS || []).map(a =>
+        const newCodes = {
+            ...codes,
+            ANNOUNCEMENTS: (codes.ANNOUNCEMENTS || []).map(a =>
                 a.id === id ? { ...a, ...updates, updatedAt: new Date().toISOString() } : a
             )
-        }));
-    }, []);
+        };
+        saveCodes(newCodes);
+    }, [codes, saveCodes]);
 
     const deleteAnnouncement = useCallback((id) => {
-        setCodes(prev => ({
-            ...prev,
-            ANNOUNCEMENTS: (prev.ANNOUNCEMENTS || []).map(a =>
+        const newCodes = {
+            ...codes,
+            ANNOUNCEMENTS: (codes.ANNOUNCEMENTS || []).map(a =>
                 a.id === id ? { ...a, active: false } : a
             )
-        }));
-    }, []);
+        };
+        saveCodes(newCodes);
+    }, [codes, saveCodes]);
 
     // Link operations
     const getLinks = useCallback(() => {
@@ -714,30 +930,33 @@ export function ConfigProvider({ children }) {
             createdAt: new Date().toISOString(),
             active: true
         };
-        setCodes(prev => ({
-            ...prev,
-            LINKS: [newLink, ...(prev.LINKS || [])]
-        }));
+        const newCodes = {
+            ...codes,
+            LINKS: [newLink, ...(codes.LINKS || [])]
+        };
+        saveCodes(newCodes);
         return newLink;
-    }, []);
+    }, [codes, saveCodes]);
 
     const updateLink = useCallback((id, updates) => {
-        setCodes(prev => ({
-            ...prev,
-            LINKS: (prev.LINKS || []).map(l =>
+        const newCodes = {
+            ...codes,
+            LINKS: (codes.LINKS || []).map(l =>
                 l.id === id ? { ...l, ...updates, updatedAt: new Date().toISOString() } : l
             )
-        }));
-    }, []);
+        };
+        saveCodes(newCodes);
+    }, [codes, saveCodes]);
 
     const deleteLink = useCallback((id) => {
-        setCodes(prev => ({
-            ...prev,
-            LINKS: (prev.LINKS || []).map(l =>
+        const newCodes = {
+            ...codes,
+            LINKS: (codes.LINKS || []).map(l =>
                 l.id === id ? { ...l, active: false } : l
             )
-        }));
-    }, []);
+        };
+        saveCodes(newCodes);
+    }, [codes, saveCodes]);
 
     // Benefit operations
     const getBenefits = useCallback(() => {
@@ -751,30 +970,33 @@ export function ConfigProvider({ children }) {
             createdAt: new Date().toISOString(),
             active: true
         };
-        setCodes(prev => ({
-            ...prev,
-            BENEFITS: [newBenefit, ...(prev.BENEFITS || [])]
-        }));
+        const newCodes = {
+            ...codes,
+            BENEFITS: [newBenefit, ...(codes.BENEFITS || [])]
+        };
+        saveCodes(newCodes);
         return newBenefit;
-    }, []);
+    }, [codes, saveCodes]);
 
     const updateBenefit = useCallback((id, updates) => {
-        setCodes(prev => ({
-            ...prev,
-            BENEFITS: (prev.BENEFITS || []).map(b =>
+        const newCodes = {
+            ...codes,
+            BENEFITS: (codes.BENEFITS || []).map(b =>
                 b.id === id ? { ...b, ...updates, updatedAt: new Date().toISOString() } : b
             )
-        }));
-    }, []);
+        };
+        saveCodes(newCodes);
+    }, [codes, saveCodes]);
 
     const deleteBenefit = useCallback((id) => {
-        setCodes(prev => ({
-            ...prev,
-            BENEFITS: (prev.BENEFITS || []).map(b =>
+        const newCodes = {
+            ...codes,
+            BENEFITS: (codes.BENEFITS || []).map(b =>
                 b.id === id ? { ...b, active: false } : b
             )
-        }));
-    }, []);
+        };
+        saveCodes(newCodes);
+    }, [codes, saveCodes]);
 
     // Welcome Text operations
     const getWelcomeText = useCallback(() => {
@@ -783,22 +1005,23 @@ export function ConfigProvider({ children }) {
     }, [codes]);
 
     const updateWelcomeText = useCallback((updates) => {
-        setCodes(prev => {
-            const welcomeList = prev.WELCOME_TEXT || [];
-            if (welcomeList.length === 0) {
-                return {
-                    ...prev,
-                    WELCOME_TEXT: [{ id: 'welcome_1', ...updates, createdAt: new Date().toISOString(), active: true }]
-                };
-            }
-            return {
-                ...prev,
+        const welcomeList = codes.WELCOME_TEXT || [];
+        let newCodes;
+        if (welcomeList.length === 0) {
+            newCodes = {
+                ...codes,
+                WELCOME_TEXT: [{ id: 'welcome_1', ...updates, createdAt: new Date().toISOString(), active: true }]
+            };
+        } else {
+            newCodes = {
+                ...codes,
                 WELCOME_TEXT: welcomeList.map((w, idx) =>
                     idx === 0 ? { ...w, ...updates, updatedAt: new Date().toISOString() } : w
                 )
             };
-        });
-    }, []);
+        }
+        saveCodes(newCodes);
+    }, [codes, saveCodes]);
 
     const value = {
         // Data

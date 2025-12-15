@@ -6,7 +6,7 @@ import { useLanguage } from '../context/LanguageContext';
 import {
     Container, Shield, AlertCircle, Globe, Megaphone,
     HelpCircle, ShoppingCart, ChevronRight, CheckCircle,
-    Headphones, Menu, X, LifeBuoy, ExternalLink, Anchor, Lock
+    Headphones, Menu, X, LifeBuoy, ExternalLink, Anchor, Lock, LogOut
 } from 'lucide-react';
 import { useToast } from '../components/common/Toast';
 import { LiveChatButton, LiveChatWidget } from '../components/LiveChat';
@@ -23,7 +23,7 @@ export default function Login() {
     const [showLoginModal, setShowLoginModal] = useState(false);
     const [loggedInUser, setLoggedInUser] = useState(null);
     const [justLoggedIn, setJustLoggedIn] = useState(false);
-    const { login, isAuthenticated, user } = useAuth();
+    const { login, logout, isAuthenticated, user } = useAuth();
     const { getAnnouncements, getLinks, getBenefits, getWelcomeText, getCodeList } = useConfig();
     const { t, language, languages, changeLanguage } = useLanguage();
     const navigate = useNavigate();
@@ -94,6 +94,13 @@ export default function Login() {
     const handleLoginClick = (e) => {
         e?.preventDefault();
         setShowLoginModal(true);
+    };
+
+    // Handle Logout click
+    const handleLogoutClick = (e) => {
+        e?.preventDefault();
+        logout();
+        toast.success(t('auth.logoutSuccess') || 'You have been logged out successfully.');
     };
 
     // Navigation items with translation keys
@@ -356,10 +363,19 @@ export default function Login() {
                                         <span>{t('portal.support247') || '24/7 Support'}</span>
                                     </div>
                                 </div>
-                                <button className="alt-login-btn" onClick={handleLoginClick}>
-                                    <Lock size={16} />
-                                    {t('auth.login') || 'Login'}
-                                </button>
+                                <div className="alt-login-buttons">
+                                    {!isAuthenticated ? (
+                                        <button className="alt-login-btn" onClick={handleLoginClick}>
+                                            <Lock size={16} />
+                                            {t('auth.login') || 'Login'}
+                                        </button>
+                                    ) : (
+                                        <button className="alt-logout-btn" onClick={handleLogoutClick}>
+                                            <LogOut size={16} />
+                                            {t('auth.logout') || 'Log Out'}
+                                        </button>
+                                    )}
+                                </div>
                             </div>
                         </div>
                     </div>

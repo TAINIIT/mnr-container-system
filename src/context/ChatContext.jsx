@@ -152,11 +152,13 @@ export function ChatProvider({ children }) {
         };
 
         setChats(prev => {
-            const newChats = prev.map(chat => {
+            const safePrev = Array.isArray(prev) ? prev : [];
+            const newChats = safePrev.map(chat => {
                 if (chat.id === chatId) {
+                    const safeMessages = Array.isArray(chat.messages) ? chat.messages : [];
                     return {
                         ...chat,
-                        messages: [...chat.messages, message],
+                        messages: [...safeMessages, message],
                         updatedAt: new Date().toISOString(),
                         unreadAdmin: sender !== 'agent' ? (chat.unreadAdmin || 0) + 1 : chat.unreadAdmin
                     };
@@ -173,11 +175,13 @@ export function ChatProvider({ children }) {
     // Mark messages as read
     const markAsRead = useCallback((chatId) => {
         setChats(prev => {
-            const newChats = prev.map(chat => {
+            const safePrev = Array.isArray(prev) ? prev : [];
+            const newChats = safePrev.map(chat => {
                 if (chat.id === chatId) {
+                    const safeMessages = Array.isArray(chat.messages) ? chat.messages : [];
                     return {
                         ...chat,
-                        messages: chat.messages.map(m => ({ ...m, read: true })),
+                        messages: safeMessages.map(m => ({ ...m, read: true })),
                         unreadAdmin: 0
                     };
                 }
@@ -191,7 +195,8 @@ export function ChatProvider({ children }) {
     // Close chat
     const closeChat = useCallback((chatId) => {
         setChats(prev => {
-            const newChats = prev.map(chat => {
+            const safePrev = Array.isArray(prev) ? prev : [];
+            const newChats = safePrev.map(chat => {
                 if (chat.id === chatId) {
                     return { ...chat, status: 'closed' };
                 }
@@ -208,7 +213,8 @@ export function ChatProvider({ children }) {
     // Delete chat permanently
     const deleteChat = useCallback((chatId) => {
         setChats(prev => {
-            const newChats = prev.filter(chat => chat.id !== chatId);
+            const safePrev = Array.isArray(prev) ? prev : [];
+            const newChats = safePrev.filter(chat => chat.id !== chatId);
             saveChats(newChats);
             return newChats;
         });
@@ -220,7 +226,8 @@ export function ChatProvider({ children }) {
     // Assign chat to agent
     const assignChat = useCallback((chatId, agentId, agentName) => {
         setChats(prev => {
-            const newChats = prev.map(chat => {
+            const safePrev = Array.isArray(prev) ? prev : [];
+            const newChats = safePrev.map(chat => {
                 if (chat.id === chatId) {
                     return { ...chat, assignedAgent: { id: agentId, name: agentName } };
                 }

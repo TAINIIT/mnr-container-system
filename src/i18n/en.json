@@ -277,7 +277,9 @@
         "pleaseLoginFirst": "Please login first to access the system.",
         "enterCredentials": "Enter your credentials to access the system",
         "enterUsername": "Enter username",
-        "enterPassword": "Enter password"
+        "enterPassword": "Enter password",
+        "logout": "Log Out",
+        "logoutSuccess": "You have been logged out successfully."
     },
     "portal": {
         "johorPort": "Johor Port",

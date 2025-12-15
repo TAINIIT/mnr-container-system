@@ -933,6 +933,42 @@
     box-shadow: 0 8px 24px rgba(249, 168, 38, 0.3);
 }
 
+/* Login/Logout Buttons Container */
+.alt-login-buttons {
+    display: flex;
+    gap: 10px;
+    margin-top: 8px;
+    width: 100%;
+}
+
+.alt-login-buttons .alt-login-btn,
+.alt-login-buttons .alt-logout-btn {
+    margin-top: 0;
+}
+
+/* Logout Button */
+.alt-logout-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    width: 100%;
+    padding: 10px 20px;
+    background: linear-gradient(135deg, #EF4444 0%, #DC2626 100%);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.alt-logout-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 24px rgba(239, 68, 68, 0.3);
+}
+
 /* =================== LOGIN MODAL =================== */
 .alt-login-modal {
     background: linear-gradient(135deg, #0C2145 0%, #0F2349 100%);

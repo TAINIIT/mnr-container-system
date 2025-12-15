@@ -272,7 +272,9 @@
         "portalTitle": "M&R门户",
         "enterCredentials": "输入您的凭据以访问系统",
         "enterUsername": "输入用户名",
-        "enterPassword": "输入密码"
+        "enterPassword": "输入密码",
+        "logout": "退出登录",
+        "logoutSuccess": "您已成功退出登录。"
     },
     "greetings": {
         "goodMorning": "早上好",

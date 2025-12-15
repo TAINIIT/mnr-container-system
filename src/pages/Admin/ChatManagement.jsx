@@ -129,14 +129,26 @@ export default function ChatManagement() {
     };
 
     const getLastMessage = (chat) => {
-        if (!chat.messages.length) return 'No messages yet';
-        const last = chat.messages[chat.messages.length - 1];
+        if (!chat || !chat.messages) return 'No messages yet';
+        // Handle both array and object formats
+        let messages = chat.messages;
+        if (!Array.isArray(messages)) {
+            messages = Object.values(messages);
+        }
+        if (!messages.length) return 'No messages yet';
+        const last = messages[messages.length - 1];
         const prefix = last.sender === 'agent' ? 'You: ' : '';
         return prefix + (last.text.length > 40 ? last.text.substring(0, 40) + '...' : last.text);
     };
 
     const getUnreadCount = (chat) => {
-        return chat.messages.filter(m =>
+        if (!chat || !chat.messages) return 0;
+        // Handle both array and object formats
+        let messages = chat.messages;
+        if (!Array.isArray(messages)) {
+            messages = Object.values(messages);
+        }
+        return messages.filter(m =>
             (m.sender === 'user' || m.sender === 'guest') && !m.read
         ).length;
     };
@@ -146,8 +158,8 @@ export default function ChatManagement() {
     };
 
     const totalUnread = getTotalUnreadAdmin();
-    const activeCount = chats.filter(c => c.status === 'active').length;
-    const closedCount = chats.filter(c => c.status === 'closed').length;
+    const activeCount = chats && Array.isArray(chats) ? chats.filter(c => c.status === 'active').length : 0;
+    const closedCount = chats && Array.isArray(chats) ? chats.filter(c => c.status === 'closed').length : 0;
 
     return (
         <div className="page-list-layout">
@@ -215,7 +227,7 @@ export default function ChatManagement() {
                                     color: filterStatus === 'all' ? 'white' : 'var(--text-secondary)'
                                 }}
                             >
-                                All ({chats.length})
+                                All ({chats && Array.isArray(chats) ? chats.length : 0})
                             </button>
                             <button
                                 className={`chat-filter-btn ${filterStatus === 'active' ? 'active' : ''}`}
@@ -375,17 +387,26 @@ export default function ChatManagement() {
                                 </div>
 
                                 <div className="chat-conversation-messages">
-                                    {selectedChat.messages.map(msg => (
-                                        <div
-                                            key={msg.id}
-                                            className={`chat-message ${msg.sender}`}
-                                        >
-                                            {msg.text}
-                                            <span className="chat-message-time">
-                                                {formatMessageTime(msg.timestamp)}
-                                            </span>
-                                        </div>
-                                    ))}
+                                    {(() => {
+                                        // Handle both array and object formats (Firebase sometimes returns objects)
+                                        let messages = selectedChat.messages;
+                                        if (!messages) return null;
+                                        if (!Array.isArray(messages)) {
+                                            // Convert object to array
+                                            messages = Object.values(messages);
+                                        }
+                                        return messages.map(msg => (
+                                            <div
+                                                key={msg.id || msg.timestamp}
+                                                className={`chat-message ${msg.sender}`}
+                                            >
+                                                {msg.text}
+                                                <span className="chat-message-time">
+                                                    {formatMessageTime(msg.timestamp)}
+                                                </span>
+                                            </div>
+                                        ));
+                                    })()}
                                     <div ref={messagesEndRef} />
                                 </div>
 

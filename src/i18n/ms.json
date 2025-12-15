@@ -272,7 +272,9 @@
         "portalTitle": "Portal M&R",
         "enterCredentials": "Masukkan kelayakan anda untuk mengakses sistem",
         "enterUsername": "Masukkan nama pengguna",
-        "enterPassword": "Masukkan kata laluan"
+        "enterPassword": "Masukkan kata laluan",
+        "logout": "Log Keluar",
+        "logoutSuccess": "Anda telah berjaya log keluar."
     },
     "greetings": {
         "goodMorning": "Selamat Pagi",

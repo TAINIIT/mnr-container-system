@@ -143,8 +143,8 @@ function AppRoutes() {
 function App() {
     return (
         <ConfigProvider>
-            <LanguageProvider>
-                <AuthProvider>
+            <AuthProvider>
+                <LanguageProvider>
                     <DataProvider>
                         <WorkflowProvider>
                             <ToastProvider>
@@ -154,8 +154,8 @@ function App() {
                             </ToastProvider>
                         </WorkflowProvider>
                     </DataProvider>
-                </AuthProvider>
-            </LanguageProvider>
+                </LanguageProvider>
+            </AuthProvider>
         </ConfigProvider>
     );
 }

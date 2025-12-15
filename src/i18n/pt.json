@@ -272,7 +272,9 @@
         "portalTitle": "Portal M&R",
         "enterCredentials": "Digite suas credenciais para acessar o sistema",
         "enterUsername": "Digite o usuário",
-        "enterPassword": "Digite a senha"
+        "enterPassword": "Digite a senha",
+        "logout": "Sair",
+        "logoutSuccess": "Você foi desconectado com sucesso."
     },
     "greetings": {
         "goodMorning": "Bom Dia",

@@ -1,4 +1,4 @@
-import { useState, useRef, useEffect } from 'react';
+import { useState, useRef, useEffect, useMemo } from 'react';
 import { X, Send, MessageCircle } from 'lucide-react';
 import { useChat } from '../../context/ChatContext';
 import { useAuth } from '../../context/AuthContext';
@@ -10,34 +10,38 @@ export default function LiveChatWidget() {
         isWidgetOpen,
         setIsWidgetOpen,
         activeChat,
+        setActiveChat,
         getOrCreateChat,
         sendMessage,
-        getChat,
         getGreeting,
-        markAsRead
+        markAsRead,
+        chats
     } = useChat();
     const { user, isAuthenticated } = useAuth();
 
     const [message, setMessage] = useState('');
     const [showGuestForm, setShowGuestForm] = useState(false);
-    const [currentChat, setCurrentChat] = useState(null);
     const messagesEndRef = useRef(null);
+
+    // Derive currentChat directly from chats context (reactive)
+    const currentChat = useMemo(() => {
+        if (!activeChat || !chats || !Array.isArray(chats)) return null;
+        return chats.find(c => c.id === activeChat) || null;
+    }, [activeChat, chats]);
 
     // Scroll to bottom when messages change
     useEffect(() => {
         if (messagesEndRef.current) {
             messagesEndRef.current.scrollIntoView({ behavior: 'smooth' });
         }
-    }, [currentChat?.messages]);
+    }, [currentChat?.messages?.length]);
 
-    // Update current chat when activeChat changes
+    // Mark as read when chat opens or changes
     useEffect(() => {
-        if (activeChat) {
-            const chat = getChat(activeChat);
-            setCurrentChat(chat);
+        if (activeChat && currentChat) {
             markAsRead(activeChat);
         }
-    }, [activeChat, getChat]);
+    }, [activeChat]);
 
     // Handle widget open - check if user is logged in
     useEffect(() => {
@@ -45,7 +49,7 @@ export default function LiveChatWidget() {
             if (isAuthenticated && user) {
                 // Logged in user - create/get chat immediately
                 const chat = getOrCreateChat(null, user);
-                setCurrentChat(chat);
+                setActiveChat(chat.id);
                 setShowGuestForm(false);
             } else {
                 // Guest - show form
@@ -54,21 +58,9 @@ export default function LiveChatWidget() {
         }
     }, [isWidgetOpen, isAuthenticated, user, activeChat]);
 
-    // Refresh chat data periodically
-    useEffect(() => {
-        if (!activeChat) return;
-
-        const interval = setInterval(() => {
-            const chat = getChat(activeChat);
-            setCurrentChat(chat);
-        }, 2000);
-
-        return () => clearInterval(interval);
-    }, [activeChat, getChat]);
-
     const handleGuestSubmit = (guestInfo) => {
         const chat = getOrCreateChat(guestInfo, null);
-        setCurrentChat(chat);
+        setActiveChat(chat.id);
         setShowGuestForm(false);
 
         // Send welcome message
@@ -82,10 +74,6 @@ export default function LiveChatWidget() {
         const sender = isAuthenticated ? 'user' : 'guest';
         sendMessage(currentChat.id, message.trim(), sender);
         setMessage('');
-
-        // Refresh chat
-        const updatedChat = getChat(currentChat.id);
-        setCurrentChat(updatedChat);
     };
 
     const formatTime = (timestamp) => {
@@ -144,25 +132,35 @@ export default function LiveChatWidget() {
                     {/* Messages */}
                     <div className="chat-messages">
                         {/* Greeting */}
-                        {currentChat?.messages.length === 0 && (
-                            <div className="chat-greeting">
-                                <h3>{getGreeting()}, {getDisplayName()}! 👋</h3>
-                                <p>How can we help you today?</p>
-                            </div>
-                        )}
-
-                        {/* Messages list */}
-                        {currentChat?.messages.map((msg) => (
-                            <div
-                                key={msg.id}
-                                className={`chat-message ${msg.sender}`}
-                            >
-                                {msg.text}
-                                <span className="chat-message-time">
-                                    {formatTime(msg.timestamp)}
-                                </span>
-                            </div>
-                        ))}
+                        {(() => {
+                            let messages = currentChat?.messages;
+                            if (!messages) return (
+                                <div className="chat-greeting">
+                                    <h3>{getGreeting()}, {getDisplayName()}! 👋</h3>
+                                    <p>How can we help you today?</p>
+                                </div>
+                            );
+                            if (!Array.isArray(messages)) {
+                                messages = Object.values(messages);
+                            }
+                            if (messages.length === 0) return (
+                                <div className="chat-greeting">
+                                    <h3>{getGreeting()}, {getDisplayName()}! 👋</h3>
+                                    <p>How can we help you today?</p>
+                                </div>
+                            );
+                            return messages.map((msg) => (
+                                <div
+                                    key={msg.id || msg.timestamp}
+                                    className={`chat-message ${msg.sender}`}
+                                >
+                                    {msg.text}
+                                    <span className="chat-message-time">
+                                        {formatTime(msg.timestamp)}
+                                    </span>
+                                </div>
+                            ));
+                        })()}
                         <div ref={messagesEndRef} />
                     </div>
 

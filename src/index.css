@@ -73,16 +73,16 @@
   --status-completed: #13c2c2;
   --status-pending: #722ed1;
 
-  /* Typography */
+  /* Typography - Compact */
   --font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
-  --font-size-xs: 0.75rem;
-  --font-size-sm: 0.875rem;
-  --font-size-base: 1rem;
-  --font-size-lg: 1.125rem;
-  --font-size-xl: 1.25rem;
-  --font-size-2xl: 1.5rem;
-  --font-size-3xl: 1.875rem;
-  --font-size-4xl: 2.25rem;
+  --font-size-xs: 0.65rem;
+  --font-size-sm: 0.75rem;
+  --font-size-base: 0.8125rem;
+  --font-size-lg: 0.875rem;
+  --font-size-xl: 1rem;
+  --font-size-2xl: 1.125rem;
+  --font-size-3xl: 1.25rem;
+  --font-size-4xl: 1.5rem;
 
   /* Spacing */
   --space-1: 0.25rem;
@@ -123,9 +123,9 @@
   --z-modal: 300;
   --z-toast: 400;
 
-  /* Layout */
-  --sidebar-width: 260px;
-  --header-height: 64px;
+  /* Layout - Compact */
+  --sidebar-width: 220px;
+  --header-height: 48px;
 }
 
 /* Dark Mode */
@@ -170,7 +170,7 @@
 }
 
 html {
-  font-size: 16px;
+  font-size: 13px;
   scroll-behavior: smooth;
 }
 
@@ -346,14 +346,14 @@ button {
   color: var(--error-600);
 }
 
-/* Buttons */
+/* Buttons - Compact */
 .btn {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  gap: var(--space-2);
-  padding: var(--space-2) var(--space-4);
-  border-radius: var(--radius-md);
+  gap: var(--space-1);
+  padding: 4px 10px;
+  border-radius: var(--radius-sm);
   font-weight: 500;
   font-size: var(--font-size-sm);
   cursor: pointer;
@@ -412,19 +412,19 @@ button {
 }
 
 .btn-sm {
-  padding: var(--space-1) var(--space-2);
+  padding: 2px 6px;
   font-size: var(--font-size-xs);
 }
 
 .btn-lg {
-  padding: var(--space-3) var(--space-6);
+  padding: 6px 14px;
   font-size: var(--font-size-base);
 }
 
 .btn-icon {
-  padding: var(--space-2);
-  width: 36px;
-  height: 36px;
+  padding: 4px;
+  width: 28px;
+  height: 28px;
 }
 
 /* Form Controls */
@@ -447,12 +447,12 @@ button {
 
 .form-input {
   width: 100%;
-  padding: var(--space-2) var(--space-3);
+  padding: 4px 8px;
   border: 1px solid var(--border-color);
-  border-radius: var(--radius-md);
+  border-radius: var(--radius-sm);
   background: var(--bg-secondary);
   color: var(--text-primary);
-  font-size: var(--font-size-base);
+  font-size: var(--font-size-sm);
   transition: all var(--transition-fast);
 }
 
@@ -503,7 +503,7 @@ button {
 
 .table th,
 .table td {
-  padding: var(--space-3) var(--space-4);
+  padding: 6px 10px;
   text-align: left;
   border-bottom: 1px solid var(--border-color);
 }
@@ -513,7 +513,7 @@ button {
   font-weight: 600;
   color: var(--text-secondary);
   text-transform: uppercase;
-  font-size: var(--font-size-xs);
+  font-size: 10px;
   letter-spacing: 0.5px;
 }
 

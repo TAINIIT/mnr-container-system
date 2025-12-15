@@ -272,7 +272,9 @@
         "portalTitle": "Cổng M&R",
         "enterCredentials": "Nhập thông tin đăng nhập để truy cập hệ thống",
         "enterUsername": "Nhập tên đăng nhập",
-        "enterPassword": "Nhập mật khẩu"
+        "enterPassword": "Nhập mật khẩu",
+        "logout": "Đăng xuất",
+        "logoutSuccess": "Bạn đã đăng xuất thành công."
     },
     "greetings": {
         "goodMorning": "Chào buổi sáng",

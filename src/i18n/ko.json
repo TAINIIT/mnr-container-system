@@ -272,7 +272,9 @@
         "portalTitle": "M&R 포털",
         "enterCredentials": "시스템에 접속하려면 자격 증명을 입력하세요",
         "enterUsername": "사용자명 입력",
-        "enterPassword": "비밀번호 입력"
+        "enterPassword": "비밀번호 입력",
+        "logout": "로그아웃",
+        "logoutSuccess": "성공적으로 로그아웃되었습니다."
     },
     "greetings": {
         "goodMorning": "좋은 아침입니다",
