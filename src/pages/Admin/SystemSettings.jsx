@@ -1,17 +1,20 @@
 import { useState } from 'react';
 import { useConfig } from '../../context/ConfigContext';
 import { useLanguage } from '../../context/LanguageContext';
+import { useData } from '../../context/DataContext';
 import { useToast } from '../../components/common/Toast';
 import {
     Settings, Save, RotateCcw, DollarSign, Package, FileText,
-    Bell, Globe, Clock, Database, AlertTriangle, CheckCircle, Info
+    Bell, Globe, Clock, Database, AlertTriangle, CheckCircle, Info, Trash2
 } from 'lucide-react';
 import './Admin.css';
 
 export default function SystemSettings() {
     const { settings, updateSettings, DEFAULT_SETTINGS } = useConfig();
     const { t, language, setLanguage } = useLanguage();
+    const { clearAllData, containers, surveys, eors, repairOrders, washingOrders } = useData();
     const toast = useToast();
+    const [showClearConfirm, setShowClearConfirm] = useState(false);
 
     const [formData, setFormData] = useState({
         autoApprovalThreshold: settings.autoApprovalThreshold ?? 100,
@@ -37,8 +40,16 @@ export default function SystemSettings() {
         { id: 'display', label: t('admin.displaySettings') || 'Display', icon: Package },
         { id: 'notifications', label: t('admin.notifications') || 'Notifications', icon: Bell },
         { id: 'localization', label: t('admin.localization') || 'Localization', icon: Globe },
-        { id: 'workflow', label: t('admin.workflowSettings') || 'Workflow', icon: Clock }
+        { id: 'workflow', label: t('admin.workflowSettings') || 'Workflow', icon: Clock },
+        { id: 'data', label: t('admin.dataManagement') || 'Data Management', icon: Database }
     ];
+
+    const handleClearAllData = () => {
+        clearAllData();
+        setShowClearConfirm(false);
+        toast.success('All data cleared! Page will reload...');
+        setTimeout(() => window.location.reload(), 1000);
+    };
 
     const handleChange = (field, value) => {
         setFormData(prev => ({ ...prev, [field]: value }));
@@ -407,6 +418,61 @@ export default function SystemSettings() {
                                         />
                                         <span className="toggle-slider"></span>
                                     </label>
+                                </div>
+                            </div>
+                        </div>
+                    )}
+
+                    {/* Data Management */}
+                    {activeSection === 'data' && (
+                        <div className="settings-section-content">
+                            <h3><Database size={20} /> {t('admin.dataManagement') || 'Data Management'}</h3>
+
+                            <div className="setting-item">
+                                <div className="setting-info">
+                                    <label className="setting-label">{t('admin.currentData') || 'Current Data'}</label>
+                                    <p className="setting-description">
+                                        {t('admin.dataOverview') || 'Overview of data stored in the system.'}
+                                    </p>
+                                </div>
+                                <div className="setting-control" style={{ display: 'flex', gap: 'var(--space-3)', flexWrap: 'wrap' }}>
+                                    <span className="badge badge-info">{containers.length} Containers</span>
+                                    <span className="badge badge-primary">{surveys.length} Surveys</span>
+                                    <span className="badge badge-warning">{eors.length} EORs</span>
+                                    <span className="badge badge-secondary">{repairOrders.length} Repairs</span>
+                                    <span className="badge badge-success">{washingOrders.length} Washing</span>
+                                </div>
+                            </div>
+
+                            <div className="setting-item" style={{ borderColor: 'var(--error-200)', background: 'rgba(255,77,79,0.05)' }}>
+                                <div className="setting-info">
+                                    <label className="setting-label" style={{ color: 'var(--error-600)' }}>
+                                        <AlertTriangle size={16} style={{ marginRight: '8px' }} />
+                                        {t('admin.clearAllData') || 'Clear All Data'}
+                                    </label>
+                                    <p className="setting-description">
+                                        {t('admin.clearDataDesc') || 'Permanently delete all containers, surveys, EORs, repair orders, and washing data. This action cannot be undone.'}
+                                    </p>
+                                </div>
+                                <div className="setting-control">
+                                    {!showClearConfirm ? (
+                                        <button
+                                            className="btn btn-danger"
+                                            onClick={() => setShowClearConfirm(true)}
+                                        >
+                                            <Trash2 size={16} /> {t('admin.clearData') || 'Clear All Data'}
+                                        </button>
+                                    ) : (
+                                        <div style={{ display: 'flex', gap: 'var(--space-2)', alignItems: 'center' }}>
+                                            <span style={{ color: 'var(--error-600)', fontWeight: 500, fontSize: '13px' }}>Are you sure?</span>
+                                            <button className="btn btn-danger btn-sm" onClick={handleClearAllData}>
+                                                Yes, Delete All
+                                            </button>
+                                            <button className="btn btn-secondary btn-sm" onClick={() => setShowClearConfirm(false)}>
+                                                Cancel
+                                            </button>
+                                        </div>
+                                    )}
                                 </div>
                             </div>
                         </div>
