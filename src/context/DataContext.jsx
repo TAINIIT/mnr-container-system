@@ -151,9 +151,14 @@ export function DataProvider({ children }) {
         }
     }, []);
 
-    // Reload data from localStorage (called after external modifications like Job Monitoring deletes)
+    // Reload data - only used in DEMO_MODE since Firebase auto-syncs
     const reloadFromStorage = () => {
-        loadDataFromStorage();
+        if (DEMO_MODE) {
+            // Demo mode: reload from localStorage
+            loadDataFromStorage();
+        }
+        // Firebase mode: data is already synced automatically via onValue listeners
+        // No action needed - just return
     };
 
     // Persist data to storage (localStorage for demo, Firebase for production)
@@ -399,8 +404,10 @@ export function DataProvider({ children }) {
     const createEOR = (eorData, userId) => {
         const id = generateTransactionId(eorData.containerNumber);
 
-        // Calculate total cost
-        const totalCost = (eorData.repairItems || []).reduce((sum, item) => sum + (item.lineTotal || 0), 0);
+        // Calculate subtotal first, then apply discount
+        const subtotal = (eorData.repairItems || []).reduce((sum, item) => sum + (item.lineTotal || 0), 0);
+        const discount = eorData.discount || 0;
+        const totalCost = Math.max(0, subtotal - discount);
 
         // Determine if auto-approval applies (using configurable threshold)
         const threshold = getAutoApprovalThreshold();
@@ -450,10 +457,15 @@ export function DataProvider({ children }) {
     const updateEOR = (id, updates, userId) => {
         setEORs(prev => prev.map(e => {
             if (e.id === id) {
-                let newTotalCost = e.totalCost;
+                // Calculate new subtotal if repairItems changed
+                let subtotal = e.repairItems?.reduce((sum, item) => sum + (item.lineTotal || 0), 0) || 0;
                 if (updates.repairItems) {
-                    newTotalCost = updates.repairItems.reduce((sum, item) => sum + (item.lineTotal || 0), 0);
+                    subtotal = updates.repairItems.reduce((sum, item) => sum + (item.lineTotal || 0), 0);
                 }
+
+                // Use updated discount if provided, otherwise use existing
+                const discount = updates.discount !== undefined ? updates.discount : (e.discount || 0);
+                const newTotalCost = Math.max(0, subtotal - discount);
 
                 const threshold = getAutoApprovalThreshold();
                 const needApproval = newTotalCost > threshold;
@@ -461,6 +473,7 @@ export function DataProvider({ children }) {
                 const updated = {
                     ...e,
                     ...updates,
+                    discount, // Ensure discount is saved
                     totalCost: newTotalCost,
                     needApproval,
                     updatedAt: new Date().toISOString(),
