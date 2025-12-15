@@ -12,7 +12,7 @@ export default function SurveyForm() {
     const { id, containerId } = useParams();
     const navigate = useNavigate();
     const { user } = useAuth();
-    const { getContainer, getSurvey, getSurveysByContainer, createSurvey, updateSurvey, completeSurvey } = useData();
+    const { getContainer, getSurvey, getSurveysByContainer, createSurvey, updateSurvey, completeSurvey, eors } = useData();
     const { getCodeList } = useConfig();
     const toast = useToast();
 
@@ -350,11 +350,23 @@ export default function SurveyForm() {
                             </button>
                         </>
                     )}
-                    {/* Only internal users can create EORs */}
+                    {/* Only internal users can create EORs, and only if no EOR exists yet */}
                     {!isExternal && isCompleted && existingSurvey && (
-                        <Link to={`/eor/new/${existingSurvey.id}`} className="btn btn-primary">
-                            <FileText size={16} /> Create EOR
-                        </Link>
+                        (() => {
+                            const existingEOR = eors.find(e => e.surveyId === existingSurvey.id || e.containerId === existingSurvey.containerId);
+                            if (existingEOR) {
+                                return (
+                                    <span className="badge badge-completed" style={{ padding: '8px 16px', fontSize: '13px' }}>
+                                        EOR: {existingEOR.status}
+                                    </span>
+                                );
+                            }
+                            return (
+                                <Link to={`/eor/new/${existingSurvey.id}`} className="btn btn-primary">
+                                    <FileText size={16} /> Create EOR
+                                </Link>
+                            );
+                        })()
                     )}
                 </div>
             </div>

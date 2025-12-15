@@ -9,7 +9,7 @@ import { SURVEY_STATUS_LABELS, SURVEY_TYPE_LABELS, CONFIG } from '../../config/c
 import { LINERS } from '../../data/masterCodes';
 
 export default function SurveyList() {
-    const { surveys } = useData();
+    const { surveys, eors } = useData();
     const { user } = useAuth();
     const { t } = useLanguage();
     const navigate = useNavigate();
@@ -236,15 +236,27 @@ export default function SurveyList() {
                                             <Link to={`/surveys/${survey.id}`} className="btn btn-ghost btn-sm">
                                                 <Eye size={16} /> {t('common.view') || 'View'}
                                             </Link>
-                                            {/* Only internal users can create EORs */}
+                                            {/* Only internal users can create EORs, and only if no EOR exists yet */}
                                             {!isExternal && survey.status === 'COMPLETED' && survey.initialCondition === 'DAMAGED' && (
-                                                <Link
-                                                    to={`/eor/new/${survey.id}`}
-                                                    className="btn btn-primary btn-sm"
-                                                    title={t('survey.createEOR') || 'Create EOR'}
-                                                >
-                                                    <FileText size={14} /> {t('survey.createEOR') || 'Create EOR'}
-                                                </Link>
+                                                (() => {
+                                                    const existingEOR = eors.find(e => e.surveyId === survey.id || e.containerId === survey.containerId);
+                                                    if (existingEOR) {
+                                                        return (
+                                                            <span className="badge badge-completed" style={{ fontSize: '11px' }}>
+                                                                EOR: {existingEOR.status}
+                                                            </span>
+                                                        );
+                                                    }
+                                                    return (
+                                                        <Link
+                                                            to={`/eor/new/${survey.id}`}
+                                                            className="btn btn-primary btn-sm"
+                                                            title={t('survey.createEOR') || 'Create EOR'}
+                                                        >
+                                                            <FileText size={14} /> {t('survey.createEOR') || 'Create EOR'}
+                                                        </Link>
+                                                    );
+                                                })()
                                             )}
                                         </div>
                                     </td>
