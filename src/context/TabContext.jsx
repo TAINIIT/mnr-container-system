@@ -20,6 +20,8 @@ const pathToTitle = (path) => {
         '/shunting': 'Shunting',
         '/pre-inspection': 'Pre-Inspection',
         '/stacking': 'Stacking & Release',
+        '/washing': 'Washing Station',
+        '/washing/new': 'New Washing Order',
         '/monitoring/jobs': 'Job Monitoring',
         '/admin/codes': 'Master Codes',
         '/admin/groups': 'Permission Groups',
@@ -29,25 +31,35 @@ const pathToTitle = (path) => {
 
     if (pathMappings[path]) return pathMappings[path];
 
+    // Handle path with query params - strip them for matching
+    const basePath = path.split('?')[0];
+    if (pathMappings[basePath]) return pathMappings[basePath];
+
     // Detail pages
-    if (path.startsWith('/containers/') && path !== '/containers/register' && path !== '/containers/ar') {
+    if (basePath.startsWith('/containers/') && basePath !== '/containers/register' && basePath !== '/containers/ar') {
         return 'Container Detail';
     }
-    if (path.startsWith('/surveys/') && path !== '/surveys/search') {
-        if (path.includes('/new/')) return 'New Survey';
+    if (basePath.startsWith('/surveys/') && basePath !== '/surveys/search') {
+        if (basePath.includes('/new/')) return 'New Survey';
         return 'Survey Detail';
     }
-    if (path.startsWith('/eor/')) {
-        if (path.includes('/new')) return 'New EOR';
-        if (path.includes('/edit')) return 'Edit EOR';
+    if (basePath.startsWith('/eor/')) {
+        if (basePath.includes('/new')) return 'New EOR';
+        if (basePath.includes('/edit')) return 'Edit EOR';
         return 'EOR Detail';
     }
-    if (path.startsWith('/repair-orders/')) {
+    if (basePath.startsWith('/repair-orders/')) {
         return 'Repair Order Detail';
+    }
+    // All washing detail pages (schedule, work, qc, certificate, detail) -> single tab name
+    if (basePath.startsWith('/washing/')) {
+        if (basePath === '/washing/new' || basePath.startsWith('/washing/new?')) return 'New Washing Order';
+        return 'Washing Detail';
     }
 
     return 'Page';
 };
+
 
 export function TabProvider({ children }) {
     // On refresh (F5), start with empty tabs - go back to welcome screen
