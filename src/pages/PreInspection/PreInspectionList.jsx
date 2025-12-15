@@ -935,8 +935,8 @@ export default function PreInspectionList() {
                                 className="btn btn-primary"
                                 onClick={completeInspection}
                                 disabled={
-                                    Object.values(checklistResults).some(v => v === null) ||
-                                    (surveyDamageItems.length > 0 && Object.values(damageItemResults).some(v => v === null))
+                                    // Only require damage items to be verified (optional checklist is not required)
+                                    surveyDamageItems.length > 0 && Object.values(damageItemResults).some(v => v === null)
                                 }
                             >
                                 <ClipboardCheck size={16} /> {t('inspection.completeInspection') || 'Complete Inspection'}
