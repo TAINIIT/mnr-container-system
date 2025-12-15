@@ -6,7 +6,7 @@ import { useConfig } from '../../context/ConfigContext';
 import { useLanguage } from '../../context/LanguageContext';
 import { useToast } from '../../components/common/Toast';
 import RetrieveButton from '../../components/common/RetrieveButton';
-import { Truck, Plus, Search, Play, CheckCircle, MapPin, Clock, AlertTriangle, ChevronLeft, ChevronRight, Users, ArrowRight, Flag } from 'lucide-react';
+import { Truck, Plus, Search, Play, CheckCircle, MapPin, Clock, AlertTriangle, ChevronLeft, ChevronRight, Users, ArrowRight, Flag, ChevronDown, ChevronUp } from 'lucide-react';
 import { SHUNTING_STATUS } from '../../config/constants';
 import { YARD_BLOCKS, LINERS } from '../../data/masterCodes';
 
@@ -41,6 +41,9 @@ export default function ShuntingList() {
     const [showDispatchModal, setShowDispatchModal] = useState(false);
     const [dispatchRequest, setDispatchRequest] = useState(null);
     const [selectedDriver, setSelectedDriver] = useState('');
+
+    // Driver workload visibility toggle
+    const [driverWorkloadVisible, setDriverWorkloadVisible] = useState(true);
 
     // Containers that need shunting (AR status with approved EOR)
     const eligibleContainers = containers.filter(c =>
@@ -294,20 +297,37 @@ export default function ShuntingList() {
                 {/* Driver Workload */}
                 {stats.new + stats.dispatched + stats.inProgress > 0 && (
                     <div className="card mb-4 driver-workload">
-                        <h4 className="card-title mb-3">
-                            <Users size={18} /> {t('shunting.driverWorkload') || 'Driver Workload'}
-                        </h4>
-                        <div className="driver-grid">
-                            {DRIVERS.map(driver => (
-                                <div key={driver.code} className="driver-card">
-                                    <div className="driver-name">{driver.name}</div>
-                                    <div className="driver-tasks">
-                                        <span className="task-count">{driverWorkload[driver.code]}</span>
-                                        <span className="task-label">{t('driver.activeTasks') || 'công việc đang làm'}</span>
-                                    </div>
-                                </div>
-                            ))}
+                        <div
+                            className="card-header"
+                            style={{ cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}
+                            onClick={() => setDriverWorkloadVisible(!driverWorkloadVisible)}
+                        >
+                            <h4 className="card-title" style={{ margin: 0, display: 'flex', alignItems: 'center', gap: '8px' }}>
+                                <Users size={18} /> {t('shunting.driverWorkload') || 'Driver Workload'}
+                            </h4>
+                            <button className="btn btn-ghost btn-sm">
+                                {driverWorkloadVisible ? <ChevronUp size={16} /> : <ChevronDown size={16} />}
+                            </button>
                         </div>
+                        {driverWorkloadVisible && (
+                            <div className="driver-grid" style={{ padding: 'var(--space-3)' }}>
+                                {DRIVERS.filter(driver => driverWorkload[driver.code] > 0).length === 0 ? (
+                                    <div style={{ color: 'var(--text-secondary)', fontStyle: 'italic', padding: 'var(--space-2)' }}>
+                                        {t('shunting.noActiveDrivers') || 'No drivers with active jobs'}
+                                    </div>
+                                ) : (
+                                    DRIVERS.filter(driver => driverWorkload[driver.code] > 0).map(driver => (
+                                        <div key={driver.code} className="driver-card">
+                                            <div className="driver-name">{driver.name}</div>
+                                            <div className="driver-tasks">
+                                                <span className="task-count">{driverWorkload[driver.code]}</span>
+                                                <span className="task-label">{t('driver.activeTasks') || 'active tasks'}</span>
+                                            </div>
+                                        </div>
+                                    ))
+                                )}
+                            </div>
+                        )}
                     </div>
                 )}
 
