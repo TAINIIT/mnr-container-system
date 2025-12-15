@@ -50,22 +50,9 @@ const pathToTitle = (path) => {
 };
 
 export function TabProvider({ children }) {
-    // Initialize from sessionStorage to survive page refresh
-    const [tabs, setTabs] = useState(() => {
-        try {
-            const saved = sessionStorage.getItem('mnr_tabs');
-            return saved ? JSON.parse(saved) : [];
-        } catch {
-            return [];
-        }
-    });
-    const [activeTabId, setActiveTabId] = useState(() => {
-        try {
-            return sessionStorage.getItem('mnr_activeTabId') || null;
-        } catch {
-            return null;
-        }
-    });
+    // On refresh (F5), start with empty tabs - go back to welcome screen
+    const [tabs, setTabs] = useState([]);
+    const [activeTabId, setActiveTabId] = useState(null);
     const navigate = useNavigate();
 
     const tabsRef = useRef([]);
@@ -74,27 +61,7 @@ export function TabProvider({ children }) {
     const activeTabIdRef = useRef(null);
     activeTabIdRef.current = activeTabId;
 
-    // Persist tabs to sessionStorage
-    useEffect(() => {
-        try {
-            sessionStorage.setItem('mnr_tabs', JSON.stringify(tabs));
-        } catch (e) {
-            console.error('Failed to save tabs to sessionStorage:', e);
-        }
-    }, [tabs]);
-
-    // Persist activeTabId to sessionStorage
-    useEffect(() => {
-        try {
-            if (activeTabId) {
-                sessionStorage.setItem('mnr_activeTabId', activeTabId);
-            } else {
-                sessionStorage.removeItem('mnr_activeTabId');
-            }
-        } catch (e) {
-            console.error('Failed to save activeTabId to sessionStorage:', e);
-        }
-    }, [activeTabId]);
+    // No sessionStorage persistence - F5 resets to welcome screen
 
     // Open or focus a tab
     const openTab = useCallback((path, customTitle = null) => {

@@ -167,21 +167,77 @@ export default function RepairOrderDetail() {
 
             {/* Work Items from EOR */}
             <div className="card mt-4">
-                <h3 className="card-title" style={{ marginBottom: 'var(--space-4)' }}>
-                    <Wrench size={18} /> Repair Tasks
-                </h3>
+                <div className="card-header" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 'var(--space-3)' }}>
+                    <h3 className="card-title" style={{ margin: 0 }}>
+                        <Wrench size={18} /> Repair Tasks ({eor?.repairItems?.length || 0})
+                    </h3>
+                    {eor && (
+                        <div style={{ display: 'flex', gap: 'var(--space-4)', fontSize: 'var(--font-size-sm)' }}>
+                            <span>Subtotal: <strong>RM {eor.repairItems?.reduce((sum, i) => sum + (i.lineTotal || 0), 0) || 0}</strong></span>
+                            {eor.discount > 0 && <span>Discount: <strong style={{ color: 'var(--success-500)' }}>-RM {eor.discount}</strong></span>}
+                            <span style={{ color: 'var(--primary-500)' }}>Total: <strong>RM {eor.totalCost}</strong></span>
+                        </div>
+                    )}
+                </div>
 
                 {eor?.repairItems?.length > 0 ? (
-                    <div className="repair-tasks">
+                    <div className="repair-tasks-detailed">
                         {eor.repairItems.map((item, index) => (
-                            <div key={item.id} className="repair-task">
-                                <div className="repair-task-header">
-                                    <span className="repair-task-num">#{index + 1}</span>
-                                    <span className="repair-task-loc">{item.location}</span>
-                                    <span className="repair-task-type">{item.repairCode}</span>
+                            <div key={item.id || index} className="repair-task-item" style={{
+                                background: 'var(--bg-tertiary)',
+                                borderRadius: 'var(--radius-md)',
+                                padding: 'var(--space-3)',
+                                marginBottom: 'var(--space-2)',
+                                borderLeft: '3px solid var(--primary-500)'
+                            }}>
+                                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 'var(--space-2)' }}>
+                                    <div style={{ display: 'flex', alignItems: 'center', gap: 'var(--space-2)' }}>
+                                        <span style={{
+                                            background: 'var(--primary-500)',
+                                            color: 'white',
+                                            borderRadius: 'var(--radius-sm)',
+                                            padding: '2px 8px',
+                                            fontSize: 'var(--font-size-xs)',
+                                            fontWeight: 600
+                                        }}>#{index + 1}</span>
+                                        <span style={{ fontWeight: 600 }}>{item.location}</span>
+                                        <span className="badge badge-draft" style={{ fontSize: '10px' }}>{item.repairCode}</span>
+                                    </div>
+                                    <span style={{ fontWeight: 700, color: 'var(--primary-500)', fontSize: 'var(--font-size-lg)' }}>
+                                        RM {item.lineTotal || 0}
+                                    </span>
                                 </div>
-                                <div className="repair-task-desc">
-                                    {item.damageType} - {item.component} (Qty: {item.quantity})
+
+                                <div style={{
+                                    display: 'grid',
+                                    gridTemplateColumns: 'repeat(auto-fit, minmax(120px, 1fr))',
+                                    gap: 'var(--space-2)',
+                                    fontSize: 'var(--font-size-sm)'
+                                }}>
+                                    <div>
+                                        <span style={{ color: 'var(--text-tertiary)' }}>Damage:</span>
+                                        <div style={{ fontWeight: 500 }}>{item.damageType || '-'}</div>
+                                    </div>
+                                    <div>
+                                        <span style={{ color: 'var(--text-tertiary)' }}>Component:</span>
+                                        <div style={{ fontWeight: 500 }}>{item.component || '-'}</div>
+                                    </div>
+                                    <div>
+                                        <span style={{ color: 'var(--text-tertiary)' }}>Severity:</span>
+                                        <div style={{ fontWeight: 500 }}>{item.severity || '-'}</div>
+                                    </div>
+                                    <div>
+                                        <span style={{ color: 'var(--text-tertiary)' }}>Size:</span>
+                                        <div style={{ fontWeight: 500 }}>{item.size || '-'}</div>
+                                    </div>
+                                    <div>
+                                        <span style={{ color: 'var(--text-tertiary)' }}>Quantity:</span>
+                                        <div style={{ fontWeight: 500 }}>{item.quantity || 1}</div>
+                                    </div>
+                                    <div>
+                                        <span style={{ color: 'var(--text-tertiary)' }}>Base Cost:</span>
+                                        <div style={{ fontWeight: 500 }}>RM {item.baseCost || 0}</div>
+                                    </div>
                                 </div>
                             </div>
                         ))}
