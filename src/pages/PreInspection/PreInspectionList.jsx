@@ -184,12 +184,12 @@ export default function PreInspectionList() {
 
     // Complete inspection with checklist results
     const completeInspection = () => {
-        // Failed items from general checklist
+        // Failed items from general checklist (now optional)
         const failedChecks = Object.entries(checklistResults)
             .filter(([, value]) => value === false)
             .map(([key]) => key);
 
-        // NEW: Failed items from damage verification
+        // Failed items from damage verification (REQUIRED)
         const failedDamageItems = Object.entries(damageItemResults)
             .filter(([, value]) => value === false)
             .map(([key]) => {
@@ -197,16 +197,13 @@ export default function PreInspectionList() {
                 return surveyDamageItems[index];
             });
 
-        // Combine all requirements for pass
-        const allChecklistPassed = failedChecks.length === 0 &&
-            Object.values(checklistResults).every(v => v === true);
-
+        // Only damage items verification is required for pass
+        // General checklist and Post-Repair Cleaning are OPTIONAL
         const allDamageItemsPassed = surveyDamageItems.length === 0 ||
             (Object.values(damageItemResults).every(v => v === true) && failedDamageItems.length === 0);
 
-        const allPassed = allChecklistPassed && allDamageItemsPassed;
-
-        const result = allPassed ? 'ACCEPTED' : 'REWORK';
+        // Accept if all damage items passed (checklist items are optional)
+        const result = allDamageItemsPassed ? 'ACCEPTED' : 'REWORK';
 
         const updated = inspections.map(i => {
             if (i.id === inspectingRecord.id) {
@@ -726,38 +723,80 @@ export default function PreInspectionList() {
                                         gap: '8px'
                                     }}>
                                         <AlertTriangle size={18} />
-                                        {t('inspection.damageVerification') || 'Damage Items Verification'} ({surveyDamageItems.length})
+                                        {t('inspection.damageVerification') || 'Repair Items Verification'} ({surveyDamageItems.length})
+                                        <span style={{ marginLeft: 'auto', fontSize: '12px', color: 'var(--error-500)', fontWeight: 600 }}>
+                                            * Required
+                                        </span>
                                     </h4>
                                     <p className="text-muted" style={{ fontSize: '13px', marginBottom: '12px' }}>
-                                        {t('inspection.damageVerificationDesc') || 'Verify that each damage item from the survey has been properly repaired.'}
+                                        {t('inspection.damageVerificationDesc') || 'Verify that each repair item has been properly completed.'}
                                     </p>
-                                    <div className="inspection-checklist">
+                                    <div className="repair-tasks-detailed">
                                         {surveyDamageItems.map((item, index) => (
-                                            <div key={`damage_${index}`} className={`checklist-item ${damageItemResults[`damage_${index}`] === true ? 'passed' :
-                                                damageItemResults[`damage_${index}`] === false ? 'failed' : ''
-                                                }`}>
-                                                <div className="checklist-item-info">
-                                                    <span className="checklist-item-label">
-                                                        {item.location} - {item.component}
-                                                    </span>
-                                                    <span className="checklist-item-desc">
-                                                        {item.damageType} | {item.repairMethod || 'Repair required'}
-                                                        {item.estimatedCost ? ` | RM ${item.estimatedCost}` : ''}
-                                                    </span>
+                                            <div key={`damage_${index}`} style={{
+                                                background: damageItemResults[`damage_${index}`] === true ? 'var(--success-50)' :
+                                                    damageItemResults[`damage_${index}`] === false ? 'var(--error-50)' : 'var(--bg-tertiary)',
+                                                borderRadius: 'var(--radius-md)',
+                                                padding: 'var(--space-3)',
+                                                marginBottom: 'var(--space-2)',
+                                                borderLeft: `3px solid ${damageItemResults[`damage_${index}`] === true ? 'var(--success-500)' :
+                                                    damageItemResults[`damage_${index}`] === false ? 'var(--error-500)' : 'var(--primary-500)'}`
+                                            }}>
+                                                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 'var(--space-2)' }}>
+                                                    <div style={{ display: 'flex', alignItems: 'center', gap: 'var(--space-2)' }}>
+                                                        <span style={{
+                                                            background: 'var(--warning-500)',
+                                                            color: 'white',
+                                                            borderRadius: 'var(--radius-sm)',
+                                                            padding: '2px 8px',
+                                                            fontSize: 'var(--font-size-xs)',
+                                                            fontWeight: 600
+                                                        }}>#{index + 1}</span>
+                                                        <span style={{ fontWeight: 600 }}>{item.location}</span>
+                                                        <span className="badge badge-draft" style={{ fontSize: '10px' }}>{item.repairCode || item.repairMethod || 'Repair'}</span>
+                                                    </div>
+                                                    <div style={{ display: 'flex', gap: 'var(--space-2)' }}>
+                                                        <button
+                                                            className={`btn btn-sm ${damageItemResults[`damage_${index}`] === true ? 'btn-success' : 'btn-ghost'}`}
+                                                            onClick={() => toggleDamageItem(`damage_${index}`, true)}
+                                                        >
+                                                            <CheckCircle size={14} /> Passed
+                                                        </button>
+                                                        <button
+                                                            className={`btn btn-sm ${damageItemResults[`damage_${index}`] === false ? 'btn-danger' : 'btn-ghost'}`}
+                                                            onClick={() => toggleDamageItem(`damage_${index}`, false)}
+                                                        >
+                                                            <XCircle size={14} /> Failed
+                                                        </button>
+                                                    </div>
                                                 </div>
-                                                <div className="checklist-item-actions">
-                                                    <button
-                                                        className={`btn btn-sm ${damageItemResults[`damage_${index}`] === true ? 'btn-success' : 'btn-ghost'}`}
-                                                        onClick={() => toggleDamageItem(`damage_${index}`, true)}
-                                                    >
-                                                        <CheckCircle size={16} /> {t('inspection.repaired') || 'Repaired'}
-                                                    </button>
-                                                    <button
-                                                        className={`btn btn-sm ${damageItemResults[`damage_${index}`] === false ? 'btn-danger' : 'btn-ghost'}`}
-                                                        onClick={() => toggleDamageItem(`damage_${index}`, false)}
-                                                    >
-                                                        <XCircle size={16} /> {t('inspection.notRepaired') || 'Not Fixed'}
-                                                    </button>
+
+                                                <div style={{
+                                                    display: 'grid',
+                                                    gridTemplateColumns: 'repeat(auto-fit, minmax(100px, 1fr))',
+                                                    gap: 'var(--space-2)',
+                                                    fontSize: 'var(--font-size-sm)'
+                                                }}>
+                                                    <div>
+                                                        <span style={{ color: 'var(--text-tertiary)' }}>Damage:</span>
+                                                        <div style={{ fontWeight: 500 }}>{item.damageType || '-'}</div>
+                                                    </div>
+                                                    <div>
+                                                        <span style={{ color: 'var(--text-tertiary)' }}>Component:</span>
+                                                        <div style={{ fontWeight: 500 }}>{item.component || '-'}</div>
+                                                    </div>
+                                                    <div>
+                                                        <span style={{ color: 'var(--text-tertiary)' }}>Severity:</span>
+                                                        <div style={{ fontWeight: 500 }}>{item.severity || '-'}</div>
+                                                    </div>
+                                                    <div>
+                                                        <span style={{ color: 'var(--text-tertiary)' }}>Size:</span>
+                                                        <div style={{ fontWeight: 500 }}>{item.size || '-'}</div>
+                                                    </div>
+                                                    <div>
+                                                        <span style={{ color: 'var(--text-tertiary)' }}>Cost:</span>
+                                                        <div style={{ fontWeight: 500 }}>RM {item.lineTotal || item.estimatedCost || 0}</div>
+                                                    </div>
                                                 </div>
                                             </div>
                                         ))}
@@ -778,6 +817,9 @@ export default function PreInspectionList() {
                                 }}>
                                     <ClipboardCheck size={18} />
                                     {t('inspection.generalChecklist') || 'General Inspection Checklist'}
+                                    <span style={{ marginLeft: 'auto', fontSize: '12px', color: 'var(--text-tertiary)', fontWeight: 400 }}>
+                                        Optional
+                                    </span>
                                 </h4>
                                 <div className="inspection-checklist">
                                     {INSPECTION_CHECKLIST.filter(item => !item.category).map((item) => (
@@ -821,6 +863,9 @@ export default function PreInspectionList() {
                                     }}>
                                         <Droplets size={18} />
                                         {t('inspection.postRepairCleaning') || 'Post-Repair Cleaning'}
+                                        <span style={{ marginLeft: 'auto', fontSize: '12px', color: 'var(--text-tertiary)', fontWeight: 400 }}>
+                                            Optional
+                                        </span>
                                     </h4>
                                     <div className="inspection-checklist">
                                         {INSPECTION_CHECKLIST.filter(item => item.category === 'POST_REPAIR_CLEAN').map((item) => (
