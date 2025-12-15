@@ -77,7 +77,26 @@ export default function SurveyForm() {
     }
 
     const handleInputChange = (field, value) => {
-        setFormData(prev => ({ ...prev, [field]: value }));
+        setFormData(prev => {
+            const newData = { ...prev, [field]: value };
+
+            // Auto-add first damage item when condition is DAMAGED and no items exist
+            if (field === 'initialCondition' && value === 'DAMAGED' && prev.damageItems.length === 0) {
+                newData.damageItems = [{
+                    id: `d${Date.now()}`,
+                    location: '',
+                    damageType: '',
+                    component: '',
+                    severity: 'M',
+                    size: '',
+                    quantity: 1,
+                    repairMethod: '',
+                    estimatedCost: 0
+                }];
+            }
+
+            return newData;
+        });
     };
 
     const addDamageItem = () => {

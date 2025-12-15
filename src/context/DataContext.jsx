@@ -822,6 +822,34 @@ export function DataProvider({ children }) {
         setAuditLogs(mockAuditLogs);
     };
 
+    // Clear ALL data (complete wipe)
+    const clearAllData = () => {
+        // Clear localStorage
+        localStorage.removeItem('mnr_containers');
+        localStorage.removeItem('mnr_surveys');
+        localStorage.removeItem('mnr_eors');
+        localStorage.removeItem('mnr_repair_orders');
+        localStorage.removeItem('mnr_washing_orders');
+        localStorage.removeItem('mnr_washing');
+        localStorage.removeItem('mnr_audit_logs');
+        localStorage.removeItem('mnr_shunting');
+        localStorage.removeItem('mnr_preinspections');
+        localStorage.removeItem('mnr_stacking');
+
+        // Reset state to empty arrays
+        setContainers([]);
+        setSurveys([]);
+        setEORs([]);
+        setRepairOrders([]);
+        setWashingOrders([]);
+        setAuditLogs([]);
+        setShunting([]);
+        setPreinspections([]);
+        setStacking([]);
+
+        return true;
+    };
+
     // Sync containers with approved EORs to AR status (data migration)
     const syncApprovedEORsToAR = () => {
         const approvedEORs = eors.filter(e =>
@@ -912,6 +940,7 @@ export function DataProvider({ children }) {
 
         // Utils
         resetData,
+        clearAllData,
         generateId,
         generateTransactionId,
         syncApprovedEORsToAR,
