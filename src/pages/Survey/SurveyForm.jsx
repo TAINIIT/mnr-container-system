@@ -132,7 +132,8 @@ export default function SurveyForm() {
                 const comp = COMPONENT_CODES.find(c => c.code === items[index].component);
                 const sev = SEVERITY_LEVELS.find(s => s.code === items[index].severity);
                 if (comp && sev) {
-                    items[index].estimatedCost = Math.round(comp.unitPrice * (items[index].quantity || 1) * sev.multiplier);
+                    const cost = Math.round((comp.unitPrice || 0) * (items[index].quantity || 1) * (sev.multiplier || 1));
+                    items[index].estimatedCost = isNaN(cost) ? 0 : cost;
                 }
             }
 

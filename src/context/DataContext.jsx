@@ -511,7 +511,7 @@ export function DataProvider({ children }) {
             status: approvalData.status || 'APPROVED',
             approvedAt: new Date().toISOString(),
             approvedBy: approvalData.approvedBy || userId,
-            approvalNotes: approvalData.notes
+            approvalNotes: approvalData.notes || ''
         }, userId);
 
         if (eor && eor.containerId) {
