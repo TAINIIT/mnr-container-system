@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import {
     Droplets, Search, Filter, Calendar, Clock, CheckCircle,
     XCircle, AlertTriangle, Play, Eye, FileText, RefreshCw,
-    User, MapPin, Truck, ShieldCheck, ShieldX, ChevronDown, ChevronUp
+    User, MapPin, Truck, ShieldCheck, ShieldX, ChevronDown, ChevronUp, ArrowRight
 } from 'lucide-react';
 import { useData } from '../../context/DataContext';
 import { useConfig } from '../../context/ConfigContext';
@@ -148,78 +148,64 @@ const WashingList = () => {
                 </div>
             </div>
 
-            {/* Collapsible Stats Dashboard */}
+            {/* Workflow Tracker Style Dashboard */}
             <div className="card mb-4">
                 <div
                     className="card-header"
-                    style={{
-                        cursor: 'pointer',
-                        display: 'flex',
-                        justifyContent: 'space-between',
-                        alignItems: 'center',
-                        padding: 'var(--space-3) var(--space-4)'
-                    }}
+                    style={{ cursor: 'pointer', display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: 'var(--space-2) var(--space-4)' }}
                     onClick={() => setDashboardVisible(!dashboardVisible)}
                 >
-                    <h4 style={{ margin: 0, display: 'flex', alignItems: 'center', gap: 'var(--space-2)', fontSize: 'var(--font-size-base)' }}>
-                        <Droplets size={16} /> Dashboard
-                        <span className="badge badge-secondary" style={{ fontSize: '11px', marginLeft: '8px' }}>
-                            {stats.inProgress + stats.pendingApproval + stats.pendingSchedule} active
+                    <h4 style={{ margin: 0, display: 'flex', alignItems: 'center', gap: 'var(--space-2)', fontSize: 'var(--font-size-sm)' }}>
+                        <Droplets size={16} /> Washing Workflow
+                        <span className="badge badge-primary" style={{ fontSize: '10px' }}>
+                            {stats.inProgress + stats.pendingApproval + stats.pendingSchedule + stats.scheduled} active
                         </span>
                     </h4>
-                    {dashboardVisible ? <ChevronUp size={18} /> : <ChevronDown size={18} />}
+                    {dashboardVisible ? <ChevronUp size={16} /> : <ChevronDown size={16} />}
                 </div>
 
                 {dashboardVisible && (
-                    <div className="stats-grid" style={{ padding: 'var(--space-3)', gap: 'var(--space-2)' }}>
-                        <div className="stat-card warning" style={{ padding: 'var(--space-2)' }}>
-                            <div className="stat-icon" style={{ width: '32px', height: '32px' }}><ShieldCheck size={16} /></div>
-                            <div className="stat-info">
-                                <span className="stat-value" style={{ fontSize: 'var(--font-size-lg)' }}>{stats.pendingApproval}</span>
-                                <span className="stat-label" style={{ fontSize: '11px' }}>{t('washing.pendingApproval') || 'Pending Approval'}</span>
-                            </div>
+                    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: 'var(--space-3) var(--space-4)', gap: 'var(--space-1)', overflowX: 'auto', flexWrap: 'nowrap' }}>
+                        {/* Approval */}
+                        <div onClick={() => setStatusFilter('PENDING_APPROVAL')} style={{ display: 'flex', alignItems: 'center', gap: '6px', cursor: 'pointer', padding: '6px', borderRadius: '8px', minWidth: 'fit-content' }} className="workflow-stage-hover">
+                            <div style={{ width: '28px', height: '28px', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', background: 'rgba(250, 173, 20, 0.15)', color: 'var(--warning-500)' }}><ShieldCheck size={14} /></div>
+                            <div><div style={{ fontSize: '14px', fontWeight: 600 }}>{stats.pendingApproval}</div><div style={{ fontSize: '9px', color: 'var(--text-tertiary)' }}>Approval</div></div>
                         </div>
-                        <div className="stat-card info" style={{ padding: 'var(--space-2)' }}>
-                            <div className="stat-icon" style={{ width: '32px', height: '32px' }}><Clock size={16} /></div>
-                            <div className="stat-info">
-                                <span className="stat-value" style={{ fontSize: 'var(--font-size-lg)' }}>{stats.pendingSchedule}</span>
-                                <span className="stat-label" style={{ fontSize: '11px' }}>{t('washing.pendingSchedule') || 'Pending Schedule'}</span>
-                            </div>
+                        <ArrowRight size={12} style={{ color: 'var(--text-tertiary)', flexShrink: 0 }} />
+                        {/* Schedule */}
+                        <div onClick={() => setStatusFilter('PENDING_SCHEDULE')} style={{ display: 'flex', alignItems: 'center', gap: '6px', cursor: 'pointer', padding: '6px', borderRadius: '8px', minWidth: 'fit-content' }} className="workflow-stage-hover">
+                            <div style={{ width: '28px', height: '28px', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', background: 'rgba(22, 119, 255, 0.1)', color: 'var(--info-500)' }}><Clock size={14} /></div>
+                            <div><div style={{ fontSize: '14px', fontWeight: 600 }}>{stats.pendingSchedule}</div><div style={{ fontSize: '9px', color: 'var(--text-tertiary)' }}>Schedule</div></div>
                         </div>
-                        <div className="stat-card info" style={{ padding: 'var(--space-2)' }}>
-                            <div className="stat-icon" style={{ width: '32px', height: '32px' }}><Calendar size={16} /></div>
-                            <div className="stat-info">
-                                <span className="stat-value" style={{ fontSize: 'var(--font-size-lg)' }}>{stats.scheduled}</span>
-                                <span className="stat-label" style={{ fontSize: '11px' }}>{t('washing.scheduled') || 'Scheduled'}</span>
-                            </div>
+                        <ArrowRight size={12} style={{ color: 'var(--text-tertiary)', flexShrink: 0 }} />
+                        {/* Scheduled */}
+                        <div onClick={() => setStatusFilter('SCHEDULED')} style={{ display: 'flex', alignItems: 'center', gap: '6px', cursor: 'pointer', padding: '6px', borderRadius: '8px', minWidth: 'fit-content' }} className="workflow-stage-hover">
+                            <div style={{ width: '28px', height: '28px', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', background: 'rgba(22, 119, 255, 0.1)', color: 'var(--info-500)' }}><Calendar size={14} /></div>
+                            <div><div style={{ fontSize: '14px', fontWeight: 600 }}>{stats.scheduled}</div><div style={{ fontSize: '9px', color: 'var(--text-tertiary)' }}>Scheduled</div></div>
                         </div>
-                        <div className="stat-card primary" style={{ padding: 'var(--space-2)' }}>
-                            <div className="stat-icon" style={{ width: '32px', height: '32px' }}><Play size={16} /></div>
-                            <div className="stat-info">
-                                <span className="stat-value" style={{ fontSize: 'var(--font-size-lg)' }}>{stats.inProgress}</span>
-                                <span className="stat-label" style={{ fontSize: '11px' }}>{t('washing.inProgress') || 'In Progress'}</span>
-                            </div>
+                        <ArrowRight size={12} style={{ color: 'var(--text-tertiary)', flexShrink: 0 }} />
+                        {/* Washing */}
+                        <div onClick={() => setStatusFilter('IN_PROGRESS')} style={{ display: 'flex', alignItems: 'center', gap: '6px', cursor: 'pointer', padding: '6px', borderRadius: '8px', minWidth: 'fit-content' }} className="workflow-stage-hover">
+                            <div style={{ width: '28px', height: '28px', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', background: 'rgba(22, 119, 255, 0.15)', color: 'var(--primary-500)' }}><Play size={14} /></div>
+                            <div><div style={{ fontSize: '14px', fontWeight: 600 }}>{stats.inProgress}</div><div style={{ fontSize: '9px', color: 'var(--text-tertiary)' }}>Washing</div></div>
                         </div>
-                        <div className="stat-card warning" style={{ padding: 'var(--space-2)' }}>
-                            <div className="stat-icon" style={{ width: '32px', height: '32px' }}><Eye size={16} /></div>
-                            <div className="stat-info">
-                                <span className="stat-value" style={{ fontSize: 'var(--font-size-lg)' }}>{stats.pendingQC}</span>
-                                <span className="stat-label" style={{ fontSize: '11px' }}>{t('washing.pendingQC') || 'Pending QC'}</span>
-                            </div>
+                        <ArrowRight size={12} style={{ color: 'var(--text-tertiary)', flexShrink: 0 }} />
+                        {/* QC */}
+                        <div onClick={() => setStatusFilter('PENDING_QC')} style={{ display: 'flex', alignItems: 'center', gap: '6px', cursor: 'pointer', padding: '6px', borderRadius: '8px', minWidth: 'fit-content' }} className="workflow-stage-hover">
+                            <div style={{ width: '28px', height: '28px', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', background: 'rgba(250, 173, 20, 0.15)', color: 'var(--warning-500)' }}><Eye size={14} /></div>
+                            <div><div style={{ fontSize: '14px', fontWeight: 600 }}>{stats.pendingQC}</div><div style={{ fontSize: '9px', color: 'var(--text-tertiary)' }}>QC</div></div>
                         </div>
-                        <div className="stat-card danger" style={{ padding: 'var(--space-2)' }}>
-                            <div className="stat-icon" style={{ width: '32px', height: '32px' }}><RefreshCw size={16} /></div>
-                            <div className="stat-info">
-                                <span className="stat-value" style={{ fontSize: 'var(--font-size-lg)' }}>{stats.rework}</span>
-                                <span className="stat-label" style={{ fontSize: '11px' }}>{t('washing.rework') || 'Rework'}</span>
-                            </div>
+                        <ArrowRight size={12} style={{ color: 'var(--text-tertiary)', flexShrink: 0 }} />
+                        {/* Rework */}
+                        <div onClick={() => setStatusFilter('REWORK')} style={{ display: 'flex', alignItems: 'center', gap: '6px', cursor: 'pointer', padding: '6px', borderRadius: '8px', minWidth: 'fit-content' }} className="workflow-stage-hover">
+                            <div style={{ width: '28px', height: '28px', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', background: 'rgba(255, 77, 79, 0.15)', color: 'var(--error-500)' }}><RefreshCw size={14} /></div>
+                            <div><div style={{ fontSize: '14px', fontWeight: 600 }}>{stats.rework}</div><div style={{ fontSize: '9px', color: 'var(--text-tertiary)' }}>Rework</div></div>
                         </div>
-                        <div className="stat-card success" style={{ padding: 'var(--space-2)' }}>
-                            <div className="stat-icon" style={{ width: '32px', height: '32px' }}><CheckCircle size={16} /></div>
-                            <div className="stat-info">
-                                <span className="stat-value" style={{ fontSize: 'var(--font-size-lg)' }}>{stats.completedToday}</span>
-                                <span className="stat-label" style={{ fontSize: '11px' }}>{t('washing.completedToday') || 'Completed Today'}</span>
-                            </div>
+                        <ArrowRight size={12} style={{ color: 'var(--text-tertiary)', flexShrink: 0 }} />
+                        {/* Completed */}
+                        <div onClick={() => setStatusFilter('COMPLETED')} style={{ display: 'flex', alignItems: 'center', gap: '6px', cursor: 'pointer', padding: '6px', borderRadius: '8px', minWidth: 'fit-content' }} className="workflow-stage-hover">
+                            <div style={{ width: '28px', height: '28px', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', background: 'rgba(82, 196, 26, 0.15)', color: 'var(--success-500)' }}><CheckCircle size={14} /></div>
+                            <div><div style={{ fontSize: '14px', fontWeight: 600 }}>{stats.completedToday}</div><div style={{ fontSize: '9px', color: 'var(--text-tertiary)' }}>Today</div></div>
                         </div>
                     </div>
                 )}
