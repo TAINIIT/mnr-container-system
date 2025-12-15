@@ -18,7 +18,7 @@ const REPAIR_TEAMS = [
 ];
 
 export default function RepairOrderList() {
-    const { repairOrders, updateRepairOrder } = useData();
+    const { repairOrders, updateRepairOrder, updateContainer } = useData();
     const { t } = useLanguage();
     const { user } = useAuth();
     const toast = useToast();
@@ -93,7 +93,16 @@ export default function RepairOrderList() {
                 completedAt: new Date().toISOString(),
                 completedBy: user?.username
             }, user?.id);
-            toast.success(`Repair completed for ${ro.containerNumber}`);
+
+            // Also update container status to COMPLETED so it appears in Pre-Inspection
+            if (ro.containerId && updateContainer) {
+                updateContainer(ro.containerId, {
+                    status: 'COMPLETED',
+                    repairEndTime: new Date().toISOString()
+                }, user?.id);
+            }
+
+            toast.success(`Repair completed for ${ro.containerNumber}. Ready for Pre-Inspection.`);
         }
     };
 
