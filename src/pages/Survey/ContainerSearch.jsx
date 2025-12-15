@@ -9,11 +9,11 @@ export default function ContainerSearch() {
     const [search, setSearch] = useState('');
     const navigate = useNavigate();
 
-    // Only show containers that are eligible for survey (gate-in, not yet surveyed as completed)
+    // Show containers eligible for survey: STACKING or DM status, without completed survey
     const eligibleContainers = containers.filter(c => {
         const surveys = getSurveysByContainer(c.id);
         const hasCompletedSurvey = surveys.some(s => s.status === 'COMPLETED' && s.sequence === c.sequence);
-        return c.status === CONTAINER_STATUS.DM && !hasCompletedSurvey;
+        return (c.status === CONTAINER_STATUS.DM || c.status === CONTAINER_STATUS.STACKING) && !hasCompletedSurvey;
     });
 
     const filteredContainers = eligibleContainers.filter(c => {
@@ -68,7 +68,7 @@ export default function ContainerSearch() {
                             <p>
                                 {search ?
                                     'Try a different search term' :
-                                    'All containers have completed surveys or are not in DM status'}
+                                    'All containers have completed surveys or are not in STACKING/DM status'}
                             </p>
                         </div>
                     ) : (

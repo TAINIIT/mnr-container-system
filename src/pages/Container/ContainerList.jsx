@@ -447,16 +447,6 @@ export default function ContainerList() {
                                                 </button>
                                                 <Link to={`/containers/${container.id}`} className="btn btn-ghost btn-sm" onClick={e => e.stopPropagation()}>
                                                     <Eye size={16} /> {t('common.view') || 'View'}
-                                                </Link>
-                                                {container.status === 'STACKING' && (
-                                                    <button
-                                                        className="btn btn-warning btn-sm"
-                                                        onClick={(e) => { e.stopPropagation(); handleChangeToDamaged(container.id, container.containerNumber); }}
-                                                        title="Change to Damaged for Survey"
-                                                    >
-                                                        <AlertTriangle size={16} /> {t('container.toDM') || 'To DM'}
-                                                    </button>
-                                                )}
                                             </div>
                                         </td>
                                     </tr>
