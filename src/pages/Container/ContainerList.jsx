@@ -447,6 +447,7 @@ export default function ContainerList() {
                                                 </button>
                                                 <Link to={`/containers/${container.id}`} className="btn btn-ghost btn-sm" onClick={e => e.stopPropagation()}>
                                                     <Eye size={16} /> {t('common.view') || 'View'}
+                                                </Link>
                                             </div>
                                         </td>
                                     </tr>
