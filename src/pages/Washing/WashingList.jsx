@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import {
     Droplets, Search, Filter, Calendar, Clock, CheckCircle,
     XCircle, AlertTriangle, Play, Eye, FileText, RefreshCw,
-    User, MapPin, Truck, ShieldCheck, ShieldX
+    User, MapPin, Truck, ShieldCheck, ShieldX, ChevronDown, ChevronUp
 } from 'lucide-react';
 import { useData } from '../../context/DataContext';
 import { useConfig } from '../../context/ConfigContext';
@@ -26,6 +26,9 @@ const WashingList = () => {
     const [statusFilter, setStatusFilter] = useState('ALL');
     const [bayFilter, setBayFilter] = useState('ALL');
     const [programFilter, setProgramFilter] = useState('ALL');
+
+    // Dashboard toggle state
+    const [dashboardVisible, setDashboardVisible] = useState(true);
 
     // Get master data
     const CLEANING_PROGRAMS = getCodeList('CLEANING_PROGRAMS') || [];
@@ -145,57 +148,81 @@ const WashingList = () => {
                 </div>
             </div>
 
-            {/* Stats Cards */}
-            <div className="stats-grid">
-                <div className="stat-card warning">
-                    <div className="stat-icon"><ShieldCheck size={24} /></div>
-                    <div className="stat-info">
-                        <span className="stat-value">{stats.pendingApproval}</span>
-                        <span className="stat-label">{t('washing.pendingApproval') || 'Pending Approval'}</span>
-                    </div>
+            {/* Collapsible Stats Dashboard */}
+            <div className="card mb-4">
+                <div
+                    className="card-header"
+                    style={{
+                        cursor: 'pointer',
+                        display: 'flex',
+                        justifyContent: 'space-between',
+                        alignItems: 'center',
+                        padding: 'var(--space-3) var(--space-4)'
+                    }}
+                    onClick={() => setDashboardVisible(!dashboardVisible)}
+                >
+                    <h4 style={{ margin: 0, display: 'flex', alignItems: 'center', gap: 'var(--space-2)', fontSize: 'var(--font-size-base)' }}>
+                        <Droplets size={16} /> Dashboard
+                        <span className="badge badge-secondary" style={{ fontSize: '11px', marginLeft: '8px' }}>
+                            {stats.inProgress + stats.pendingApproval + stats.pendingSchedule} active
+                        </span>
+                    </h4>
+                    {dashboardVisible ? <ChevronUp size={18} /> : <ChevronDown size={18} />}
                 </div>
-                <div className="stat-card info">
-                    <div className="stat-icon"><Clock size={24} /></div>
-                    <div className="stat-info">
-                        <span className="stat-value">{stats.pendingSchedule}</span>
-                        <span className="stat-label">{t('washing.pendingSchedule') || 'Pending Schedule'}</span>
+
+                {dashboardVisible && (
+                    <div className="stats-grid" style={{ padding: 'var(--space-3)', gap: 'var(--space-2)' }}>
+                        <div className="stat-card warning" style={{ padding: 'var(--space-2)' }}>
+                            <div className="stat-icon" style={{ width: '32px', height: '32px' }}><ShieldCheck size={16} /></div>
+                            <div className="stat-info">
+                                <span className="stat-value" style={{ fontSize: 'var(--font-size-lg)' }}>{stats.pendingApproval}</span>
+                                <span className="stat-label" style={{ fontSize: '11px' }}>{t('washing.pendingApproval') || 'Pending Approval'}</span>
+                            </div>
+                        </div>
+                        <div className="stat-card info" style={{ padding: 'var(--space-2)' }}>
+                            <div className="stat-icon" style={{ width: '32px', height: '32px' }}><Clock size={16} /></div>
+                            <div className="stat-info">
+                                <span className="stat-value" style={{ fontSize: 'var(--font-size-lg)' }}>{stats.pendingSchedule}</span>
+                                <span className="stat-label" style={{ fontSize: '11px' }}>{t('washing.pendingSchedule') || 'Pending Schedule'}</span>
+                            </div>
+                        </div>
+                        <div className="stat-card info" style={{ padding: 'var(--space-2)' }}>
+                            <div className="stat-icon" style={{ width: '32px', height: '32px' }}><Calendar size={16} /></div>
+                            <div className="stat-info">
+                                <span className="stat-value" style={{ fontSize: 'var(--font-size-lg)' }}>{stats.scheduled}</span>
+                                <span className="stat-label" style={{ fontSize: '11px' }}>{t('washing.scheduled') || 'Scheduled'}</span>
+                            </div>
+                        </div>
+                        <div className="stat-card primary" style={{ padding: 'var(--space-2)' }}>
+                            <div className="stat-icon" style={{ width: '32px', height: '32px' }}><Play size={16} /></div>
+                            <div className="stat-info">
+                                <span className="stat-value" style={{ fontSize: 'var(--font-size-lg)' }}>{stats.inProgress}</span>
+                                <span className="stat-label" style={{ fontSize: '11px' }}>{t('washing.inProgress') || 'In Progress'}</span>
+                            </div>
+                        </div>
+                        <div className="stat-card warning" style={{ padding: 'var(--space-2)' }}>
+                            <div className="stat-icon" style={{ width: '32px', height: '32px' }}><Eye size={16} /></div>
+                            <div className="stat-info">
+                                <span className="stat-value" style={{ fontSize: 'var(--font-size-lg)' }}>{stats.pendingQC}</span>
+                                <span className="stat-label" style={{ fontSize: '11px' }}>{t('washing.pendingQC') || 'Pending QC'}</span>
+                            </div>
+                        </div>
+                        <div className="stat-card danger" style={{ padding: 'var(--space-2)' }}>
+                            <div className="stat-icon" style={{ width: '32px', height: '32px' }}><RefreshCw size={16} /></div>
+                            <div className="stat-info">
+                                <span className="stat-value" style={{ fontSize: 'var(--font-size-lg)' }}>{stats.rework}</span>
+                                <span className="stat-label" style={{ fontSize: '11px' }}>{t('washing.rework') || 'Rework'}</span>
+                            </div>
+                        </div>
+                        <div className="stat-card success" style={{ padding: 'var(--space-2)' }}>
+                            <div className="stat-icon" style={{ width: '32px', height: '32px' }}><CheckCircle size={16} /></div>
+                            <div className="stat-info">
+                                <span className="stat-value" style={{ fontSize: 'var(--font-size-lg)' }}>{stats.completedToday}</span>
+                                <span className="stat-label" style={{ fontSize: '11px' }}>{t('washing.completedToday') || 'Completed Today'}</span>
+                            </div>
+                        </div>
                     </div>
-                </div>
-                <div className="stat-card info">
-                    <div className="stat-icon"><Calendar size={24} /></div>
-                    <div className="stat-info">
-                        <span className="stat-value">{stats.scheduled}</span>
-                        <span className="stat-label">{t('washing.scheduled') || 'Scheduled'}</span>
-                    </div>
-                </div>
-                <div className="stat-card primary">
-                    <div className="stat-icon"><Play size={24} /></div>
-                    <div className="stat-info">
-                        <span className="stat-value">{stats.inProgress}</span>
-                        <span className="stat-label">{t('washing.inProgress') || 'In Progress'}</span>
-                    </div>
-                </div>
-                <div className="stat-card warning">
-                    <div className="stat-icon"><Eye size={24} /></div>
-                    <div className="stat-info">
-                        <span className="stat-value">{stats.pendingQC}</span>
-                        <span className="stat-label">{t('washing.pendingQC') || 'Pending QC'}</span>
-                    </div>
-                </div>
-                <div className="stat-card danger">
-                    <div className="stat-icon"><RefreshCw size={24} /></div>
-                    <div className="stat-info">
-                        <span className="stat-value">{stats.rework}</span>
-                        <span className="stat-label">{t('washing.rework') || 'Rework'}</span>
-                    </div>
-                </div>
-                <div className="stat-card success">
-                    <div className="stat-icon"><CheckCircle size={24} /></div>
-                    <div className="stat-info">
-                        <span className="stat-value">{stats.completedToday}</span>
-                        <span className="stat-label">{t('washing.completedToday') || 'Completed Today'}</span>
-                    </div>
-                </div>
+                )}
             </div>
 
             {/* Filters */}
