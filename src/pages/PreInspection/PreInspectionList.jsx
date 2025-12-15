@@ -6,7 +6,7 @@ import { useConfig } from '../../context/ConfigContext';
 import { useLanguage } from '../../context/LanguageContext';
 import { useToast } from '../../components/common/Toast';
 import RetrieveButton from '../../components/common/RetrieveButton';
-import { ClipboardCheck, Plus, Calendar, CheckCircle, XCircle, AlertTriangle, Search, ChevronLeft, ChevronRight, Camera, RotateCcw, ListChecks, Droplets } from 'lucide-react';
+import { ClipboardCheck, Plus, Calendar, CheckCircle, XCircle, AlertTriangle, Search, ChevronLeft, ChevronRight, Camera, RotateCcw, ListChecks, Droplets, RefreshCw } from 'lucide-react';
 import { LINERS } from '../../data/masterCodes';
 
 export default function PreInspectionList() {
@@ -359,6 +359,33 @@ export default function PreInspectionList() {
         return scheduled === new Date().toDateString();
     });
 
+    // Sync repair status - fix containers with completed ROs but wrong status
+    const syncRepairStatus = () => {
+        // Find containers that have completed repair orders but status is not COMPLETED
+        const containersToFix = containers.filter(c => {
+            const hasCompletedRO = repairOrders.some(ro =>
+                ro.containerId === c.id && ro.status === 'COMPLETED'
+            );
+            return hasCompletedRO && c.status !== 'COMPLETED' && c.status !== 'AV';
+        });
+
+        if (containersToFix.length === 0) {
+            toast.info('All container statuses are already synced.');
+            return;
+        }
+
+        // Update each container
+        containersToFix.forEach(c => {
+            updateContainer(c.id, {
+                status: 'COMPLETED',
+                repairEndTime: new Date().toISOString(),
+                syncedAt: new Date().toISOString()
+            }, user?.id);
+        });
+
+        toast.success(`Synced ${containersToFix.length} container(s) to COMPLETED status.`);
+    };
+
     return (
         <div className="page-list-layout">
             {/* Fixed Header Area */}
@@ -370,6 +397,13 @@ export default function PreInspectionList() {
                     </div>
                     <div className="flex gap-2">
                         <RetrieveButton screenId="pre_inspection" />
+                        <button
+                            className="btn btn-secondary btn-sm"
+                            onClick={syncRepairStatus}
+                            title="Sync container status from completed repair orders"
+                        >
+                            <RefreshCw size={16} /> Sync Status
+                        </button>
                         <button className="btn btn-primary" onClick={() => setShowModal(true)}>
                             <Plus size={16} /> {t('inspection.schedule')}
                         </button>
