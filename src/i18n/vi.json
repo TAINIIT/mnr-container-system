@@ -75,7 +75,9 @@
         "retrieve": "Lấy lại dữ liệu",
         "dataReloaded": "Dữ liệu đã được tải lại thành công",
         "reloadError": "Không thể tải lại dữ liệu",
-        "exportCSV": "Xuất CSV"
+        "exportCSV": "Xuất CSV",
+        "showFilters": "Hiện Bộ Lọc",
+        "hideFilters": "Ẩn Bộ Lọc"
     },
     "admin": {
         "groupCode": "Mã nhóm",

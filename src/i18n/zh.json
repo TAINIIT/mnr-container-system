@@ -75,7 +75,9 @@
         "retrieve": "检索",
         "dataReloaded": "数据重新加载成功",
         "reloadError": "重新加载数据失败",
-        "exportCSV": "导出CSV"
+        "exportCSV": "导出CSV",
+        "showFilters": "显示筛选",
+        "hideFilters": "隐藏筛选"
     },
     "admin": {
         "groupCode": "组代码",

@@ -75,7 +75,9 @@
         "retrieve": "Muat Semula",
         "dataReloaded": "Data berjaya dimuat semula",
         "reloadError": "Gagal memuatkan semula data",
-        "exportCSV": "Eksport CSV"
+        "exportCSV": "Eksport CSV",
+        "showFilters": "Tunjuk Penapis",
+        "hideFilters": "Sembunyikan Penapis"
     },
     "admin": {
         "groupCode": "Kod Kumpulan",

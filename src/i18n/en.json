@@ -75,7 +75,9 @@
         "retrieve": "Retrieve",
         "dataReloaded": "Data reloaded successfully",
         "reloadError": "Failed to reload data",
-        "exportCSV": "Export CSV"
+        "exportCSV": "Export CSV",
+        "showFilters": "Show Filters",
+        "hideFilters": "Hide Filters"
     },
     "greetings": {
         "goodMorning": "Good Morning",

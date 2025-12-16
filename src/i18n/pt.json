@@ -75,7 +75,9 @@
         "retrieve": "Recuperar",
         "dataReloaded": "Dados recarregados com sucesso",
         "reloadError": "Falha ao recarregar dados",
-        "exportCSV": "Exportar CSV"
+        "exportCSV": "Exportar CSV",
+        "showFilters": "Mostrar Filtros",
+        "hideFilters": "Ocultar Filtros"
     },
     "admin": {
         "groupCode": "Código do Grupo",
