@@ -41,6 +41,9 @@ export default function PreInspectionList() {
     // Collapsible filters - auto-collapse on mobile
     const [filtersVisible, setFiltersVisible] = useState(() => window.innerWidth > 768);
 
+    // Collapsible stats - hidden by default on tablet/mobile (<=1024px)
+    const [statsVisible, setStatsVisible] = useState(() => window.innerWidth > 1024);
+
     // Inspection modal with checklist
     const [showInspectionModal, setShowInspectionModal] = useState(false);
     const [inspectingRecord, setInspectingRecord] = useState(null);
@@ -410,35 +413,46 @@ export default function PreInspectionList() {
                     </div>
                 </div>
 
-                {/* Stats */}
-                <div className="grid grid-cols-5 mb-4">
-                    <div className="stat-card">
-                        <div className="stat-card-value">{inspections.length}</div>
-                        <div className="stat-card-label">{t('inspection.total') || 'Total Inspections'}</div>
-                    </div>
-                    <div className="stat-card">
-                        <div className="stat-card-value" style={{ color: 'var(--primary-500)' }}>
-                            {todayInspections.length}
+                {/* Stats Toggle Button - visible on tablet/mobile */}
+                <button
+                    className="stats-toggle-btn"
+                    onClick={() => setStatsVisible(!statsVisible)}
+                >
+                    <span>{t('common.stats') || 'Stats'}</span>
+                    {statsVisible ? <ChevronUp size={14} /> : <ChevronDown size={14} />}
+                </button>
+
+                {/* Stats - Collapsible */}
+                <div className={`compact-stats-wrapper ${!statsVisible ? 'collapsed' : ''}`}>
+                    <div className="grid grid-cols-5 mb-4">
+                        <div className="stat-card">
+                            <div className="stat-card-value">{inspections.length}</div>
+                            <div className="stat-card-label">{t('inspection.total') || 'Total Inspections'}</div>
                         </div>
-                        <div className="stat-card-label">{t('inspection.today') || "Today's"}</div>
-                    </div>
-                    <div className="stat-card">
-                        <div className="stat-card-value" style={{ color: 'var(--success-500)' }}>
-                            {inspections.filter(i => i.result === 'ACCEPTED').length}
+                        <div className="stat-card">
+                            <div className="stat-card-value" style={{ color: 'var(--primary-500)' }}>
+                                {todayInspections.length}
+                            </div>
+                            <div className="stat-card-label">{t('inspection.today') || "Today's"}</div>
                         </div>
-                        <div className="stat-card-label">{t('inspection.accepted') || 'Accepted'}</div>
-                    </div>
-                    <div className="stat-card">
-                        <div className="stat-card-value" style={{ color: 'var(--warning-500)' }}>
-                            {reworkStats.totalReworks}
+                        <div className="stat-card">
+                            <div className="stat-card-value" style={{ color: 'var(--success-500)' }}>
+                                {inspections.filter(i => i.result === 'ACCEPTED').length}
+                            </div>
+                            <div className="stat-card-label">{t('inspection.accepted') || 'Accepted'}</div>
                         </div>
-                        <div className="stat-card-label">{t('inspection.reworkRequired') || 'Rework Required'}</div>
-                    </div>
-                    <div className="stat-card">
-                        <div className="stat-card-value" style={{ color: 'var(--error-500)' }}>
-                            {containers.filter(c => (c.reworkCount || 0) > 1).length}
+                        <div className="stat-card">
+                            <div className="stat-card-value" style={{ color: 'var(--warning-500)' }}>
+                                {reworkStats.totalReworks}
+                            </div>
+                            <div className="stat-card-label">{t('inspection.reworkRequired') || 'Rework Required'}</div>
                         </div>
-                        <div className="stat-card-label">{t('inspection.multipleReworks') || 'Multiple Reworks'}</div>
+                        <div className="stat-card">
+                            <div className="stat-card-value" style={{ color: 'var(--error-500)' }}>
+                                {containers.filter(c => (c.reworkCount || 0) > 1).length}
+                            </div>
+                            <div className="stat-card-label">{t('inspection.multipleReworks') || 'Multiple Reworks'}</div>
+                        </div>
                     </div>
                 </div>
 
