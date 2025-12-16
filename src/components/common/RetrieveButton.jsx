@@ -27,10 +27,9 @@ export default function RetrieveButton({ screenId, onRetrieve }) {
     const handleRetrieve = async () => {
         setIsLoading(true);
         try {
-            // Small delay for visual feedback
-            await new Promise(resolve => setTimeout(resolve, 300));
-            reloadFromStorage();
-            toast.success(t('common.dataReloaded') || 'Data reloaded successfully');
+            // Force refresh from Firebase/localStorage
+            await reloadFromStorage();
+            toast.success(t('common.dataReloaded') || 'Data reloaded from server');
             if (onRetrieve) onRetrieve();
         } catch (error) {
             toast.error(t('common.reloadError') || 'Failed to reload data');

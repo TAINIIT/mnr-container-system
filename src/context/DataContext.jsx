@@ -151,14 +151,53 @@ export function DataProvider({ children }) {
         }
     }, []);
 
-    // Reload data - only used in DEMO_MODE since Firebase auto-syncs
-    const reloadFromStorage = () => {
+    // Reload data - force refresh from Firebase or localStorage
+    const reloadFromStorage = async () => {
         if (DEMO_MODE) {
             // Demo mode: reload from localStorage
             loadDataFromStorage();
+        } else {
+            // Firebase mode: force a fresh fetch from all collections
+            console.log('🔄 Forcing refresh from Firebase...');
+            try {
+                const [
+                    containersData,
+                    surveysData,
+                    eorsData,
+                    repairOrdersData,
+                    washingOrdersData,
+                    shuntingData,
+                    preinspectionsData,
+                    stackingData,
+                    auditLogsData
+                ] = await Promise.all([
+                    FirebaseDataService.getAll('containers'),
+                    FirebaseDataService.getAll('surveys'),
+                    FirebaseDataService.getAll('eors'),
+                    FirebaseDataService.getAll('repairOrders'),
+                    FirebaseDataService.getAll('washingOrders'),
+                    FirebaseDataService.getAll('shunting'),
+                    FirebaseDataService.getAll('preinspections'),
+                    FirebaseDataService.getAll('stacking'),
+                    FirebaseDataService.getAll('auditLogs')
+                ]);
+
+                setContainers(containersData.length > 0 ? containersData : mockContainers);
+                setSurveys(surveysData.length > 0 ? surveysData : mockSurveys);
+                setEORs(eorsData.length > 0 ? eorsData : mockEORs);
+                setRepairOrders(repairOrdersData.length > 0 ? repairOrdersData : mockRepairOrders);
+                setWashingOrders(washingOrdersData);
+                setShunting(shuntingData);
+                setPreinspections(preinspectionsData);
+                setStacking(stackingData);
+                setAuditLogs(auditLogsData.length > 0 ? auditLogsData : mockAuditLogs);
+
+                console.log('✅ Firebase refresh complete!');
+            } catch (error) {
+                console.error('Firebase refresh error:', error);
+                // Fallback to existing data
+            }
         }
-        // Firebase mode: data is already synced automatically via onValue listeners
-        // No action needed - just return
     };
 
     // Persist data to storage (localStorage for demo, Firebase for production)
