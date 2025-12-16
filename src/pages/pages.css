@@ -1551,4 +1551,44 @@
         width: 100%;
         min-width: 140px;
     }
+
+    /* Compact filter dropdowns on mobile */
+    .filters select,
+    .filters .form-input,
+    .filters-wrapper select,
+    .filters-wrapper .form-input,
+    .filters-bar select {
+        min-height: 38px;
+        padding: 6px 10px;
+        font-size: 12px;
+        width: auto;
+        min-width: 100px;
+        flex: 1;
+    }
+
+    /* Search box full width on mobile */
+    .filters .search-box,
+    .filters-wrapper .search-box {
+        flex: 1 1 100%;
+        min-width: 100%;
+    }
+
+    .filters .search-box .form-input,
+    .filters-wrapper .search-box .form-input {
+        min-height: 40px;
+        padding: 8px 12px 8px 36px;
+        font-size: 14px;
+    }
+
+    /* Filter group items stack and shrink */
+    .filter-group {
+        flex-wrap: wrap;
+        gap: var(--space-2);
+    }
+
+    .filter-group select {
+        flex: 1;
+        min-width: 80px;
+        font-size: 12px;
+    }
 }
