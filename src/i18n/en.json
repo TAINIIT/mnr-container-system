@@ -77,7 +77,8 @@
         "reloadError": "Failed to reload data",
         "exportCSV": "Export CSV",
         "showFilters": "Show Filters",
-        "hideFilters": "Hide Filters"
+        "hideFilters": "Hide Filters",
+        "stats": "Stats"
     },
     "greetings": {
         "goodMorning": "Good Morning",

@@ -77,7 +77,8 @@
         "reloadError": "데이터 다시 로드 실패",
         "exportCSV": "CSV 내보내기",
         "showFilters": "필터 표시",
-        "hideFilters": "필터 숨기기"
+        "hideFilters": "필터 숨기기",
+        "stats": "통계"
     },
     "admin": {
         "groupCode": "그룹 코드",

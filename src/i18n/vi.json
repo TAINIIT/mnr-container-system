@@ -77,7 +77,8 @@
         "reloadError": "Không thể tải lại dữ liệu",
         "exportCSV": "Xuất CSV",
         "showFilters": "Hiện Bộ Lọc",
-        "hideFilters": "Ẩn Bộ Lọc"
+        "hideFilters": "Ẩn Bộ Lọc",
+        "stats": "Thống Kê"
     },
     "admin": {
         "groupCode": "Mã nhóm",

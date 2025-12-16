@@ -77,7 +77,8 @@
         "reloadError": "Gagal memuatkan semula data",
         "exportCSV": "Eksport CSV",
         "showFilters": "Tunjuk Penapis",
-        "hideFilters": "Sembunyikan Penapis"
+        "hideFilters": "Sembunyikan Penapis",
+        "stats": "Statistik"
     },
     "admin": {
         "groupCode": "Kod Kumpulan",
