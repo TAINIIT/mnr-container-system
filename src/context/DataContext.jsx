@@ -604,6 +604,10 @@ export function DataProvider({ children }) {
                 if (updates.status && updates.status !== r.status) {
                     addAuditLog('REPAIR_ORDER', id, AUDIT_ACTIONS.STATUS_CHANGE, userId, {}, r.status, updates.status);
                 }
+                // Immediate Firebase sync for real-time visibility
+                if (!DEMO_MODE) {
+                    FirebaseDataService.update('repairOrders', id, updated);
+                }
                 return updated;
             }
             return r;
