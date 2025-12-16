@@ -841,6 +841,55 @@ textarea:disabled {
   gap: var(--space-1);
 }
 
+/* Stats Toggle Button - visible only on tablet/mobile */
+.stats-toggle-btn {
+  display: none;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  padding: 8px 16px;
+  background: var(--bg-secondary);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  color: var(--text-secondary);
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  margin-bottom: var(--space-2);
+  width: 100%;
+}
+
+.stats-toggle-btn:hover {
+  background: var(--bg-tertiary);
+  color: var(--text-primary);
+}
+
+/* Collapsible Stats Wrapper */
+.compact-stats-wrapper {
+  overflow: hidden;
+  transition: all 0.3s ease;
+}
+
+.compact-stats-wrapper.collapsed {
+  height: 0;
+  margin: 0;
+  padding: 0;
+  opacity: 0;
+}
+
+.compact-stats-wrapper:not(.collapsed) {
+  height: auto;
+  opacity: 1;
+}
+
+/* Show stats toggle on tablet and mobile only */
+@media (max-width: 1024px) {
+  .stats-toggle-btn {
+    display: flex;
+  }
+}
+
 /* Flex Utilities */
 .flex {
   display: flex;

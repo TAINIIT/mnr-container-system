@@ -45,6 +45,9 @@ export default function ShuntingList() {
     // Driver workload visibility toggle
     const [driverWorkloadVisible, setDriverWorkloadVisible] = useState(true);
 
+    // Collapsible stats - hidden by default on tablet/mobile (<=1024px)
+    const [statsVisible, setStatsVisible] = useState(() => window.innerWidth > 1024);
+
     // Collapsible filters - auto-collapse on mobile
     const [filtersVisible, setFiltersVisible] = useState(() => window.innerWidth > 768);
 
@@ -253,27 +256,38 @@ export default function ShuntingList() {
                     </div>
                 </div>
 
-                {/* Compact Stats Row */}
-                <div className="compact-stats">
-                    <div className="compact-stat">
-                        <span className="compact-stat-value">{stats.total}</span>
-                        <span className="compact-stat-label">{t('shunting.totalRequests') || 'Total'}</span>
-                    </div>
-                    <div className="compact-stat">
-                        <span className="compact-stat-value" style={{ color: 'var(--warning-500)' }}>{stats.new}</span>
-                        <span className="compact-stat-label">{t('shunting.pending') || 'Pending'}</span>
-                    </div>
-                    <div className="compact-stat">
-                        <span className="compact-stat-value" style={{ color: 'var(--secondary-500)' }}>{stats.dispatched}</span>
-                        <span className="compact-stat-label">{t('shunting.dispatched') || 'Dispatched'}</span>
-                    </div>
-                    <div className="compact-stat">
-                        <span className="compact-stat-value" style={{ color: 'var(--primary-500)' }}>{stats.inProgress}</span>
-                        <span className="compact-stat-label">{t('shunting.inProgress') || 'In Progress'}</span>
-                    </div>
-                    <div className="compact-stat">
-                        <span className="compact-stat-value" style={{ color: 'var(--error-500)' }}>{stats.urgent}</span>
-                        <span className="compact-stat-label"><AlertTriangle size={12} /> {t('shunting.urgent') || 'Urgent'}</span>
+                {/* Stats Toggle Button - always visible on tablet/mobile */}
+                <button
+                    className="stats-toggle-btn"
+                    onClick={() => setStatsVisible(!statsVisible)}
+                >
+                    <span>{t('common.stats') || 'Stats'}</span>
+                    {statsVisible ? <ChevronUp size={14} /> : <ChevronDown size={14} />}
+                </button>
+
+                {/* Compact Stats Row - Collapsible */}
+                <div className={`compact-stats-wrapper ${!statsVisible ? 'collapsed' : ''}`}>
+                    <div className="compact-stats">
+                        <div className="compact-stat">
+                            <span className="compact-stat-value">{stats.total}</span>
+                            <span className="compact-stat-label">{t('shunting.totalRequests') || 'Total'}</span>
+                        </div>
+                        <div className="compact-stat">
+                            <span className="compact-stat-value" style={{ color: 'var(--warning-500)' }}>{stats.new}</span>
+                            <span className="compact-stat-label">{t('shunting.pending') || 'Pending'}</span>
+                        </div>
+                        <div className="compact-stat">
+                            <span className="compact-stat-value" style={{ color: 'var(--secondary-500)' }}>{stats.dispatched}</span>
+                            <span className="compact-stat-label">{t('shunting.dispatched') || 'Dispatched'}</span>
+                        </div>
+                        <div className="compact-stat">
+                            <span className="compact-stat-value" style={{ color: 'var(--primary-500)' }}>{stats.inProgress}</span>
+                            <span className="compact-stat-label">{t('shunting.inProgress') || 'In Progress'}</span>
+                        </div>
+                        <div className="compact-stat">
+                            <span className="compact-stat-value" style={{ color: 'var(--error-500)' }}>{stats.urgent}</span>
+                            <span className="compact-stat-label"><AlertTriangle size={12} /> {t('shunting.urgent') || 'Urgent'}</span>
+                        </div>
                     </div>
                 </div>
 

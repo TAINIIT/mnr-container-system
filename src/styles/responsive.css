@@ -441,3 +441,74 @@
         text-transform: uppercase;
     }
 }
+
+/* ============================================
+   FILTER COMBOBOXES - Always horizontal row
+   Forces filters to stay in one line on all devices
+   ============================================ */
+
+/* Override all media queries - filters must be horizontal */
+@media (max-width: 1024px) {
+
+    .filters,
+    .filters-wrapper .filters {
+        display: flex !important;
+        flex-direction: row !important;
+        flex-wrap: nowrap !important;
+        overflow-x: auto !important;
+        -webkit-overflow-scrolling: touch;
+        gap: 8px !important;
+        padding: 8px 12px !important;
+    }
+
+    .filters select,
+    .filters-wrapper select {
+        flex-shrink: 0 !important;
+        min-width: 100px !important;
+        max-width: 140px !important;
+        font-size: 13px !important;
+        padding: 8px 10px !important;
+    }
+
+    .filters .search-box,
+    .filters-wrapper .search-box {
+        flex: 0 0 auto !important;
+        min-width: 140px !important;
+        max-width: 180px !important;
+    }
+
+    /* Hide scrollbar but keep functionality */
+    .filters::-webkit-scrollbar,
+    .filters-wrapper .filters::-webkit-scrollbar {
+        display: none;
+    }
+}
+
+/* Mobile specific - smaller but still horizontal */
+@media (max-width: 480px) {
+
+    .filters,
+    .filters-wrapper .filters {
+        gap: 6px !important;
+        padding: 6px 10px !important;
+    }
+
+    .filters select,
+    .filters-wrapper select {
+        min-width: 90px !important;
+        max-width: 120px !important;
+        font-size: 12px !important;
+        padding: 6px 8px !important;
+    }
+
+    .filters .search-box,
+    .filters-wrapper .search-box {
+        min-width: 120px !important;
+        max-width: 150px !important;
+    }
+
+    .filters .search-box .form-input {
+        font-size: 12px !important;
+        padding: 6px 8px 6px 28px !important;
+    }
+}
