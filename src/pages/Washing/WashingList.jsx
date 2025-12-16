@@ -265,6 +265,7 @@ const WashingList = () => {
                 <table className="data-table">
                     <thead>
                         <tr>
+                            <th>{t('common.actions') || 'Actions'}</th>
                             <th>{t('columns.containerNumber') || 'Container'}</th>
                             <th>{t('columns.type') || 'Type'}</th>
                             <th>{t('columns.liner') || 'Liner'}</th>
@@ -272,7 +273,6 @@ const WashingList = () => {
                             <th>{t('washing.bay') || 'Bay'}</th>
                             <th>{t('common.status') || 'Status'}</th>
                             <th>{t('washing.scheduledAt') || 'Scheduled'}</th>
-                            <th>{t('common.actions') || 'Actions'}</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -292,40 +292,6 @@ const WashingList = () => {
 
                                 return (
                                     <tr key={wo.id} className={wo.status === 'REWORK' ? 'rework-row' : ''}>
-                                        <td>
-                                            <div className="container-cell">
-                                                <span className="container-number">{wo.containerNumber}</span>
-                                                <span className="container-id">{wo.id}</span>
-                                            </div>
-                                        </td>
-                                        <td>
-                                            <span className={`type-badge ${wo.containerType?.toLowerCase()}`}>
-                                                {wo.containerType}
-                                            </span>
-                                        </td>
-                                        <td>{wo.liner}</td>
-                                        <td>
-                                            <span className="program-badge">
-                                                {program?.name || wo.cleaningProgram}
-                                            </span>
-                                        </td>
-                                        <td>
-                                            {bay ? (
-                                                <span className="bay-badge">
-                                                    <MapPin size={12} /> {bay.name}
-                                                </span>
-                                            ) : '-'}
-                                        </td>
-                                        <td>
-                                            <span className={`status-badge ${statusConfig.color}`}>
-                                                <StatusIcon size={14} />
-                                                {statusConfig.label}
-                                                {wo.reworkCount > 0 && (
-                                                    <span className="rework-count">#{wo.reworkCount}</span>
-                                                )}
-                                            </span>
-                                        </td>
-                                        <td>{formatDate(wo.scheduledAt)}</td>
                                         <td>
                                             <div className="action-buttons">
                                                 {wo.status === 'PENDING_APPROVAL' && (
@@ -394,6 +360,40 @@ const WashingList = () => {
                                                 </button>
                                             </div>
                                         </td>
+                                        <td>
+                                            <div className="container-cell">
+                                                <span className="container-number">{wo.containerNumber}</span>
+                                                <span className="container-id">{wo.id}</span>
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <span className={`type-badge ${wo.containerType?.toLowerCase()}`}>
+                                                {wo.containerType}
+                                            </span>
+                                        </td>
+                                        <td>{wo.liner}</td>
+                                        <td>
+                                            <span className="program-badge">
+                                                {program?.name || wo.cleaningProgram}
+                                            </span>
+                                        </td>
+                                        <td>
+                                            {bay ? (
+                                                <span className="bay-badge">
+                                                    <MapPin size={12} /> {bay.name}
+                                                </span>
+                                            ) : '-'}
+                                        </td>
+                                        <td>
+                                            <span className={`status-badge ${statusConfig.color}`}>
+                                                <StatusIcon size={14} />
+                                                {statusConfig.label}
+                                                {wo.reworkCount > 0 && (
+                                                    <span className="rework-count">#{wo.reworkCount}</span>
+                                                )}
+                                            </span>
+                                        </td>
+                                        <td>{formatDate(wo.scheduledAt)}</td>
                                     </tr>
                                 );
                             })
@@ -423,11 +423,11 @@ const WashingList = () => {
                         <table className="data-table">
                             <thead>
                                 <tr>
+                                    <th>{t('common.actions')}</th>
                                     <th>{t('columns.containerNumber')}</th>
                                     <th>{t('columns.type')}</th>
                                     <th>{t('columns.liner')}</th>
                                     <th>{t('columns.containerStatus')}</th>
-                                    <th>{t('common.actions')}</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -436,18 +436,18 @@ const WashingList = () => {
                                     .slice(0, 50) // Show max 50 at a time
                                     .map(c => (
                                         <tr key={c.id}>
-                                            <td><span className="container-number">{c.containerNumber}</span></td>
-                                            <td><span className={`type-badge ${c.type?.toLowerCase()}`}>{c.type}</span></td>
-                                            <td>{c.liner}</td>
-                                            <td><span className={`status-badge status-${c.status?.toLowerCase()}`}>{c.status}</span></td>
                                             <td>
                                                 <button
                                                     className="btn btn-sm btn-primary"
                                                     onClick={() => navigate(`/washing/new?containerId=${c.id}`)}
                                                 >
-                                                    <Droplets size={14} /> {t('washing.createOrder') || 'Create Order'}
+                                                    <Droplets size={14} />
                                                 </button>
                                             </td>
+                                            <td><span className="container-number">{c.containerNumber}</span></td>
+                                            <td><span className={`type-badge ${c.type?.toLowerCase()}`}>{c.type}</span></td>
+                                            <td>{c.liner}</td>
+                                            <td><span className={`status-badge status-${c.status?.toLowerCase()}`}>{c.status}</span></td>
                                         </tr>
                                     ))}
                             </tbody>
