@@ -322,10 +322,14 @@ export function DataProvider({ children }) {
     const updateContainer = (id, updates, userId) => {
         setContainers(prev => prev.map(c => {
             if (c.id === id) {
-                const updated = { ...c, ...updates };
+                const updated = { ...c, ...updates, updatedAt: new Date().toISOString(), updatedBy: userId };
                 if (updates.status && updates.status !== c.status) {
                     addAuditLog('CONTAINER', id, AUDIT_ACTIONS.STATUS_CHANGE, userId,
                         { containerNumber: c.containerNumber }, c.status, updates.status);
+                }
+                // Immediate Firebase sync for real-time visibility
+                if (!DEMO_MODE) {
+                    FirebaseDataService.update('containers', id, updated);
                 }
                 return updated;
             }
@@ -399,6 +403,10 @@ export function DataProvider({ children }) {
                     addAuditLog('SURVEY', id, AUDIT_ACTIONS.STATUS_CHANGE, userId, {}, s.status, updates.status);
                 } else {
                     addAuditLog('SURVEY', id, AUDIT_ACTIONS.UPDATE, userId, { fields: Object.keys(updates) });
+                }
+                // Immediate Firebase sync for real-time visibility
+                if (!DEMO_MODE) {
+                    FirebaseDataService.update('surveys', id, updated);
                 }
                 return updated;
             }
@@ -759,6 +767,10 @@ export function DataProvider({ children }) {
                 const updated = { ...w, ...updates, updatedAt: new Date().toISOString(), updatedBy: userId };
                 if (updates.status && updates.status !== w.status) {
                     addAuditLog('WASHING_ORDER', id, AUDIT_ACTIONS.STATUS_CHANGE, userId, {}, w.status, updates.status);
+                }
+                // Immediate Firebase sync for real-time visibility
+                if (!DEMO_MODE) {
+                    FirebaseDataService.update('washingOrders', id, updated);
                 }
                 return updated;
             }
