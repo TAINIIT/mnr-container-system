@@ -244,7 +244,13 @@
         "timeFormatDesc": "Định dạng hiển thị giờ",
         "moveUp": "Di chuyển lên",
         "moveDown": "Di chuyển xuống",
-        "itemMoved": "Đã di chuyển mục"
+        "itemMoved": "Đã di chuyển mục",
+        "dataManagement": "Quản lý dữ liệu",
+        "currentData": "Dữ liệu hiện tại",
+        "dataOverview": "Tổng quan dữ liệu trong hệ thống",
+        "clearAllData": "Xóa tất cả dữ liệu",
+        "clearDataDesc": "Xóa vĩnh viễn tất cả container, khảo sát, EOR, lệnh sửa chữa và dữ liệu rửa. Thao tác này không thể hoàn tác.",
+        "clearData": "Xóa tất cả dữ liệu"
     },
     "auth": {
         "login": "Đăng nhập",
@@ -617,7 +623,8 @@
         "monitoring": "Giám sát",
         "jobMonitoring": "Giám sát công việc",
         "homePageManagement": "Trang chủ",
-        "washingStation": "Trạm Rửa Container"
+        "washingStation": "Trạm Rửa Container",
+        "chatManagement": "Trò chuyện trực tuyến"
     },
     "columns": {
         "containerNumber": "Số Container",

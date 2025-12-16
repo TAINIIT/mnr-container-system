@@ -12,9 +12,12 @@ import './Admin.css';
 export default function SystemSettings() {
     const { settings, updateSettings, DEFAULT_SETTINGS } = useConfig();
     const { t, language, setLanguage } = useLanguage();
-    const { clearAllData, containers, surveys, eors, repairOrders, washingOrders } = useData();
+    const { clearAllData, clearSelectedCollections, containers, surveys, eors, repairOrders, washingOrders, shunting, preinspections, stacking } = useData();
     const toast = useToast();
     const [showClearConfirm, setShowClearConfirm] = useState(false);
+    const [showSelectiveClear, setShowSelectiveClear] = useState(false);
+    const [selectedCollections, setSelectedCollections] = useState([]);
+    const [isClearing, setIsClearing] = useState(false);
 
     const [formData, setFormData] = useState({
         autoApprovalThreshold: settings.autoApprovalThreshold ?? 100,
@@ -32,6 +35,61 @@ export default function SystemSettings() {
         enableQuickActions: settings.enableQuickActions ?? true
     });
 
+    // Available collections for selective clearing
+    const CLEARABLE_COLLECTIONS = [
+        { id: 'surveys', label: 'Surveys', count: surveys.length },
+        { id: 'eors', label: 'EOR List', count: eors.length },
+        { id: 'repairOrders', label: 'Repair Orders', count: repairOrders.length },
+        { id: 'shunting', label: 'Shunting List', count: shunting.length },
+        { id: 'preinspections', label: 'Pre-Inspection', count: preinspections.length },
+        { id: 'washingOrders', label: 'Washing Station', count: washingOrders.length },
+        { id: 'stacking', label: 'Stacking & Release', count: stacking.length }
+    ];
+
+    const handleClearAllData = async () => {
+        setIsClearing(true);
+        try {
+            await clearAllData();
+            setShowClearConfirm(false);
+            toast.success('All data cleared from Firebase! Page will reload...');
+            setTimeout(() => window.location.reload(), 1000);
+        } catch (error) {
+            toast.error('Failed to clear data: ' + error.message);
+        } finally {
+            setIsClearing(false);
+        }
+    };
+
+    const handleSelectiveDelete = async () => {
+        if (selectedCollections.length === 0) {
+            toast.warning('Please select at least one collection to clear');
+            return;
+        }
+        setIsClearing(true);
+        try {
+            const result = await clearSelectedCollections(selectedCollections);
+            if (result.success) {
+                toast.success(`Cleared ${result.cleared.length} collections from Firebase! Page will reload...`);
+                setTimeout(() => window.location.reload(), 1000);
+            } else {
+                toast.error(`Failed to clear some collections: ${result.failed.join(', ')}`);
+            }
+        } catch (error) {
+            toast.error('Failed to clear data: ' + error.message);
+        } finally {
+            setIsClearing(false);
+            setShowSelectiveClear(false);
+        }
+    };
+
+    const toggleCollection = (collectionId) => {
+        setSelectedCollections(prev =>
+            prev.includes(collectionId)
+                ? prev.filter(id => id !== collectionId)
+                : [...prev, collectionId]
+        );
+    };
+
     const [hasChanges, setHasChanges] = useState(false);
     const [activeSection, setActiveSection] = useState('eor');
 
@@ -43,13 +101,6 @@ export default function SystemSettings() {
         { id: 'workflow', label: t('admin.workflowSettings') || 'Workflow', icon: Clock },
         { id: 'data', label: t('admin.dataManagement') || 'Data Management', icon: Database }
     ];
-
-    const handleClearAllData = () => {
-        clearAllData();
-        setShowClearConfirm(false);
-        toast.success('All data cleared! Page will reload...');
-        setTimeout(() => window.location.reload(), 1000);
-    };
 
     const handleChange = (field, value) => {
         setFormData(prev => ({ ...prev, [field]: value }));
@@ -465,12 +516,82 @@ export default function SystemSettings() {
                                     ) : (
                                         <div style={{ display: 'flex', gap: 'var(--space-2)', alignItems: 'center' }}>
                                             <span style={{ color: 'var(--error-600)', fontWeight: 500, fontSize: '13px' }}>Are you sure?</span>
-                                            <button className="btn btn-danger btn-sm" onClick={handleClearAllData}>
-                                                Yes, Delete All
+                                            <button className="btn btn-danger btn-sm" onClick={handleClearAllData} disabled={isClearing}>
+                                                {isClearing ? 'Clearing...' : 'Yes, Delete All'}
                                             </button>
-                                            <button className="btn btn-secondary btn-sm" onClick={() => setShowClearConfirm(false)}>
+                                            <button className="btn btn-secondary btn-sm" onClick={() => setShowClearConfirm(false)} disabled={isClearing}>
                                                 Cancel
                                             </button>
+                                        </div>
+                                    )}
+                                </div>
+                            </div>
+
+                            {/* Selective Clear Section */}
+                            <div className="setting-item" style={{ borderColor: 'var(--warning-200)', background: 'rgba(255,193,7,0.05)' }}>
+                                <div className="setting-info">
+                                    <label className="setting-label" style={{ color: 'var(--warning-600)' }}>
+                                        <Database size={16} style={{ marginRight: '8px' }} />
+                                        Clear Selected Collections
+                                    </label>
+                                    <p className="setting-description">
+                                        Selectively delete specific collections without affecting Containers data.
+                                    </p>
+                                </div>
+                                <div className="setting-control">
+                                    {!showSelectiveClear ? (
+                                        <button
+                                            className="btn btn-warning"
+                                            onClick={() => setShowSelectiveClear(true)}
+                                        >
+                                            <Trash2 size={16} /> Select Collections
+                                        </button>
+                                    ) : (
+                                        <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--space-3)', maxWidth: '100%' }}>
+                                            <div style={{
+                                                display: 'flex',
+                                                flexWrap: 'wrap',
+                                                gap: 'var(--space-2)',
+                                                maxWidth: '100%'
+                                            }}>
+                                                {CLEARABLE_COLLECTIONS.map(col => (
+                                                    <label key={col.id} style={{
+                                                        display: 'flex',
+                                                        alignItems: 'center',
+                                                        gap: 'var(--space-2)',
+                                                        padding: 'var(--space-2) var(--space-3)',
+                                                        background: selectedCollections.includes(col.id) ? 'var(--error-50)' : 'var(--bg-tertiary)',
+                                                        borderRadius: 'var(--radius-md)',
+                                                        cursor: 'pointer',
+                                                        border: selectedCollections.includes(col.id) ? '1px solid var(--error-300)' : '1px solid var(--border-color)',
+                                                        fontSize: '13px',
+                                                        whiteSpace: 'nowrap'
+                                                    }}>
+                                                        <input
+                                                            type="checkbox"
+                                                            checked={selectedCollections.includes(col.id)}
+                                                            onChange={() => toggleCollection(col.id)}
+                                                        />
+                                                        <span>{col.label} ({col.count})</span>
+                                                    </label>
+                                                ))}
+                                            </div>
+                                            <div style={{ display: 'flex', gap: 'var(--space-2)' }}>
+                                                <button
+                                                    className="btn btn-danger btn-sm"
+                                                    onClick={handleSelectiveDelete}
+                                                    disabled={isClearing || selectedCollections.length === 0}
+                                                >
+                                                    {isClearing ? 'Clearing...' : `Delete ${selectedCollections.length} Selected`}
+                                                </button>
+                                                <button
+                                                    className="btn btn-secondary btn-sm"
+                                                    onClick={() => { setShowSelectiveClear(false); setSelectedCollections([]); }}
+                                                    disabled={isClearing}
+                                                >
+                                                    Cancel
+                                                </button>
+                                            </div>
                                         </div>
                                     )}
                                 </div>

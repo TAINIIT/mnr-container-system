@@ -14,14 +14,14 @@ const pathToTitle = (path) => {
         '/containers/register': 'Register Container',
         '/containers/ar': 'AR Containers',
         '/surveys': 'Survey List',
-        '/surveys/search': 'New Survey',
+        '/surveys/search': 'Survey Detail', // Use same tab as Survey Detail
         '/eor': 'EOR List',
         '/repair-orders': 'Repair Orders',
         '/shunting': 'Shunting',
         '/pre-inspection': 'Pre-Inspection',
         '/stacking': 'Stacking & Release',
         '/washing': 'Washing Station',
-        '/washing/new': 'New Washing Order',
+        '/washing/new': 'Washing Detail', // Use same tab as Washing Detail
         '/monitoring/jobs': 'Job Monitoring',
         '/admin/codes': 'Master Codes',
         '/admin/groups': 'Permission Groups',
@@ -35,12 +35,12 @@ const pathToTitle = (path) => {
     const basePath = path.split('?')[0];
     if (pathMappings[basePath]) return pathMappings[basePath];
 
-    // Detail pages
+    // Detail pages - all use consistent "Detail" naming for single-tab-per-screen
     if (basePath.startsWith('/containers/') && basePath !== '/containers/register' && basePath !== '/containers/ar') {
         return 'Container Detail';
     }
-    if (basePath.startsWith('/surveys/') && basePath !== '/surveys/search') {
-        if (basePath.includes('/new/')) return 'New Survey';
+    if (basePath.startsWith('/surveys/')) {
+        // All survey pages (new, edit, detail) use the same tab
         return 'Survey Detail';
     }
     if (basePath.startsWith('/eor/')) {
@@ -75,12 +75,21 @@ export function TabProvider({ children }) {
 
     // No sessionStorage persistence - F5 resets to welcome screen
 
-    // Open or focus a tab
+    // Open or focus a tab - now matches by TITLE for single-tab-per-screen experience
     const openTab = useCallback((path, customTitle = null) => {
         const title = customTitle || pathToTitle(path);
 
-        const existingTab = tabsRef.current.find(t => t.path === path);
+        // Find existing tab with same TITLE (not path) for single-tab-per-screen
+        const existingTab = tabsRef.current.find(t => t.title === title);
         if (existingTab) {
+            // Update the path if different (navigate within same "screen")
+            if (existingTab.path !== path) {
+                setTabs(prev => prev.map(t =>
+                    t.id === existingTab.id
+                        ? { ...t, path }
+                        : t
+                ));
+            }
             setActiveTabId(existingTab.id);
             return existingTab.id;
         }
@@ -92,8 +101,9 @@ export function TabProvider({ children }) {
         };
 
         setTabs(prev => {
-            if (prev.some(t => t.path === path)) {
-                return prev;
+            // Double-check for title match to avoid race conditions
+            if (prev.some(t => t.title === title)) {
+                return prev.map(t => t.title === title ? { ...t, path } : t);
             }
             if (prev.length >= MAX_TABS) {
                 return [...prev.slice(1), newTab];

@@ -249,7 +249,13 @@
         "timeFormatDesc": "Format used for displaying time",
         "moveUp": "Move Up",
         "moveDown": "Move Down",
-        "itemMoved": "Item moved"
+        "itemMoved": "Item moved",
+        "dataManagement": "Data Management",
+        "currentData": "Current Data",
+        "dataOverview": "Overview of data stored in the system",
+        "clearAllData": "Clear All Data",
+        "clearDataDesc": "Permanently delete all containers, surveys, EORs, repair orders, and washing data. This action cannot be undone.",
+        "clearData": "Clear All Data"
     },
     "auth": {
         "login": "Login",

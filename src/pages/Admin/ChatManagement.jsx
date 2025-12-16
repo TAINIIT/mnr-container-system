@@ -72,7 +72,10 @@ export default function ChatManagement() {
         }
     }, [selectedChatId, chats]);
 
-    const selectedChat = selectedChatId ? getChat(selectedChatId) : null;
+    // Find selectedChat directly from chats array to ensure it updates when new messages arrive
+    const selectedChat = selectedChatId
+        ? (Array.isArray(chats) ? chats.find(c => c.id === selectedChatId) : null)
+        : null;
 
     const handleSelectChat = (chatId) => {
         setSelectedChatId(chatId);

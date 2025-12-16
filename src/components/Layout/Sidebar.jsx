@@ -64,12 +64,13 @@ const menuItems = [
         section: 'nav.surveyDamage',
         sectionId: 'survey'
     },
-    {
-        path: '/surveys/search',
-        icon: Search,
-        labelKey: 'nav.newSurvey',
-        screenId: 'survey_new'
-    },
+    // Hidden: New Survey menu - users access via Container List or direct link
+    // {
+    //     path: '/surveys/search',
+    //     icon: Search,
+    //     labelKey: 'nav.newSurvey',
+    //     screenId: 'survey_new'
+    // },
     {
         path: '/surveys',
         icon: ClipboardList,

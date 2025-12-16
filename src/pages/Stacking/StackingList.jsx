@@ -5,7 +5,7 @@ import { useAuth } from '../../context/AuthContext';
 import { useLanguage } from '../../context/LanguageContext';
 import { useToast } from '../../components/common/Toast';
 import RetrieveButton from '../../components/common/RetrieveButton';
-import { Package, Plus, CheckCircle, Truck, ArrowRight, Search, FileText, Mail, MapPin, Download, Printer, ChevronLeft, ChevronRight, BarChart3 } from 'lucide-react';
+import { Package, Plus, CheckCircle, Truck, ArrowRight, Search, FileText, Mail, MapPin, Download, Printer, ChevronLeft, ChevronRight, BarChart3, Filter, ChevronUp, ChevronDown } from 'lucide-react';
 import { YARD_BLOCKS, LINERS } from '../../data/masterCodes';
 
 export default function StackingList() {
@@ -36,6 +36,9 @@ export default function StackingList() {
     const [locationSearch, setLocationSearch] = useState('');
     const [currentPage, setCurrentPage] = useState(1);
     const itemsPerPage = 50;
+
+    // Collapsible filters - auto-collapse on mobile
+    const [filtersVisible, setFiltersVisible] = useState(() => window.innerWidth > 768);
 
     // Get pre-inspections to find accepted containers
     const preinspections = JSON.parse(localStorage.getItem('mnr_preinspections') || '[]');
@@ -367,39 +370,51 @@ export default function StackingList() {
             <div className="card">
                 <div className="card-header">
                     <h3 className="card-title">{t('stacking.stackingRequests') || 'Stacking Requests'}</h3>
-                    <div className="filters">
-                        <div className="search-box">
-                            <Search size={18} />
-                            <input
-                                type="text"
+                    {/* Mobile Filter Toggle */}
+                    <button
+                        className={`mobile-filter-toggle ${!filtersVisible ? 'collapsed' : ''}`}
+                        onClick={() => setFiltersVisible(!filtersVisible)}
+                    >
+                        <Filter size={16} />
+                        {filtersVisible ? t('common.hideFilters') || 'Hide Filters' : t('common.showFilters') || 'Show Filters'}
+                        {filtersVisible ? <ChevronUp size={16} /> : <ChevronDown size={16} />}
+                    </button>
+
+                    <div className={`filters-wrapper mobile-collapse-default ${!filtersVisible ? 'collapsed' : ''}`}>
+                        <div className="filters">
+                            <div className="search-box">
+                                <Search size={18} />
+                                <input
+                                    type="text"
+                                    className="form-input"
+                                    placeholder={t('common.search') + '...'}
+                                    value={search}
+                                    onChange={(e) => { setSearch(e.target.value); setCurrentPage(1); }}
+                                />
+                            </div>
+                            <select
                                 className="form-input"
-                                placeholder={t('common.search') + '...'}
-                                value={search}
-                                onChange={(e) => { setSearch(e.target.value); setCurrentPage(1); }}
-                            />
+                                style={{ width: 140 }}
+                                value={statusFilter}
+                                onChange={(e) => { setStatusFilter(e.target.value); setCurrentPage(1); }}
+                            >
+                                <option value="">{t('common.allStatuses') || 'All Statuses'}</option>
+                                <option value="NEW">{t('stacking.new') || 'New'}</option>
+                                <option value="IN_PROGRESS">{t('common.inProgress') || 'In Progress'}</option>
+                                <option value="COMPLETED">{t('stacking.released') || 'Released'}</option>
+                            </select>
+                            <select
+                                className="form-input"
+                                style={{ width: 130 }}
+                                value={linerFilter}
+                                onChange={(e) => { setLinerFilter(e.target.value); setCurrentPage(1); }}
+                            >
+                                <option value="">{t('common.allLiners') || 'All Liners'}</option>
+                                {LINERS.map((liner) => (
+                                    <option key={liner.code} value={liner.code}>{liner.code}</option>
+                                ))}
+                            </select>
                         </div>
-                        <select
-                            className="form-input"
-                            style={{ width: 140 }}
-                            value={statusFilter}
-                            onChange={(e) => { setStatusFilter(e.target.value); setCurrentPage(1); }}
-                        >
-                            <option value="">{t('common.allStatuses') || 'All Statuses'}</option>
-                            <option value="NEW">{t('stacking.new') || 'New'}</option>
-                            <option value="IN_PROGRESS">{t('common.inProgress') || 'In Progress'}</option>
-                            <option value="COMPLETED">{t('stacking.released') || 'Released'}</option>
-                        </select>
-                        <select
-                            className="form-input"
-                            style={{ width: 130 }}
-                            value={linerFilter}
-                            onChange={(e) => { setLinerFilter(e.target.value); setCurrentPage(1); }}
-                        >
-                            <option value="">{t('common.allLiners') || 'All Liners'}</option>
-                            {LINERS.map((liner) => (
-                                <option key={liner.code} value={liner.code}>{liner.code}</option>
-                            ))}
-                        </select>
                     </div>
                 </div>
 

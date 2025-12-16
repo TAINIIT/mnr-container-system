@@ -191,7 +191,41 @@
     color: white;
 }
 
-/* Responsive adjustments */
+/* Responsive adjustments for tablet */
+@media (max-width: 1024px) and (min-width: 769px) {
+    .tab-item {
+        min-width: 80px;
+        max-width: 160px;
+        padding: 8px 10px;
+    }
+
+    .tab-title {
+        font-size: 0.8rem;
+    }
+
+    .tab-bar-info {
+        font-size: 0.7rem;
+    }
+
+    /* iPad: Always show close button and make it touch-friendly */
+    .tab-close {
+        opacity: 1 !important;
+        width: 28px;
+        height: 28px;
+        min-width: 28px;
+        min-height: 28px;
+        /* iOS touch fixes */
+        -webkit-tap-highlight-color: rgba(0, 0, 0, 0.1);
+        touch-action: manipulation;
+    }
+
+    .tab-close:active {
+        background: rgba(255, 255, 255, 0.2);
+        transform: scale(0.9);
+    }
+}
+
+/* Mobile responsive */
 @media (max-width: 768px) {
     .tab-item {
         min-width: 100px;
@@ -201,5 +235,35 @@
 
     .tab-bar-info {
         display: none;
+    }
+
+    .tab-bar {
+        padding: 6px 6px 0;
+    }
+
+    .tab-bar-actions {
+        padding-left: 4px;
+    }
+
+    .tab-close-all {
+        width: 36px;
+        height: 36px;
+    }
+
+    /* Mobile: Always show close button with large touch target */
+    .tab-close {
+        opacity: 1 !important;
+        width: 32px;
+        height: 32px;
+        min-width: 32px;
+        min-height: 32px;
+        /* iOS touch fixes */
+        -webkit-tap-highlight-color: rgba(0, 0, 0, 0.1);
+        touch-action: manipulation;
+    }
+
+    .tab-close:active {
+        background: rgba(255, 255, 255, 0.3);
+        transform: scale(0.9);
     }
 }

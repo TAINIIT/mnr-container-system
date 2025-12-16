@@ -4,7 +4,7 @@ import { useData } from '../../context/DataContext';
 import { useAuth } from '../../context/AuthContext';
 import { useLanguage } from '../../context/LanguageContext';
 import RetrieveButton from '../../components/common/RetrieveButton';
-import { ClipboardList, Search, Eye, Plus, FileText, ChevronLeft, ChevronRight, Calendar } from 'lucide-react';
+import { ClipboardList, Search, Eye, Plus, FileText, ChevronLeft, ChevronRight, Calendar, Filter, ChevronUp, ChevronDown } from 'lucide-react';
 import { SURVEY_STATUS_LABELS, SURVEY_TYPE_LABELS, CONFIG } from '../../config/constants';
 import { LINERS } from '../../data/masterCodes';
 
@@ -25,6 +25,9 @@ export default function SurveyList() {
     const [linerFilter, setLinerFilter] = useState('');
     const [dateFrom, setDateFrom] = useState('');
     const [dateTo, setDateTo] = useState('');
+
+    // Collapsible filters - auto-collapse on mobile
+    const [filtersVisible, setFiltersVisible] = useState(() => window.innerWidth > 768);
 
     // Pagination state
     const [currentPage, setCurrentPage] = useState(1);
@@ -108,78 +111,90 @@ export default function SurveyList() {
                     </div>
                 </div>
 
-                <div className="filters">
-                    <div className="search-box">
-                        <Search size={18} />
-                        <input
-                            type="text"
-                            className="form-input"
-                            placeholder={t('common.search') + '...'}
-                            value={search}
-                            onChange={(e) => handleFilterChange(setSearch, e.target.value)}
-                        />
-                    </div>
-                    <select
-                        className="form-input"
-                        style={{ width: 160 }}
-                        value={statusFilter}
-                        onChange={(e) => handleFilterChange(setStatusFilter, e.target.value)}
-                    >
-                        <option value="">{t('common.allStatuses') || 'All Statuses'}</option>
-                        {Object.entries(SURVEY_STATUS_LABELS).map(([key, label]) => (
-                            <option key={key} value={key}>{label}</option>
-                        ))}
-                    </select>
-                    <select
-                        className="form-input"
-                        style={{ width: 150 }}
-                        value={typeFilter}
-                        onChange={(e) => handleFilterChange(setTypeFilter, e.target.value)}
-                    >
-                        <option value="">{t('survey.allTypes') || 'All Types'}</option>
-                        {Object.entries(SURVEY_TYPE_LABELS).map(([key, label]) => (
-                            <option key={key} value={key}>{label}</option>
-                        ))}
-                    </select>
-                    <select
-                        className="form-input"
-                        style={{ width: 140 }}
-                        value={linerFilter}
-                        onChange={(e) => handleFilterChange(setLinerFilter, e.target.value)}
-                    >
-                        <option value="">{t('common.allLiners') || 'All Liners'}</option>
-                        {LINERS.map((liner) => (
-                            <option key={liner.code} value={liner.code}>{liner.code}</option>
-                        ))}
-                    </select>
-                </div>
+                {/* Mobile Filter Toggle */}
+                <button
+                    className={`mobile-filter-toggle ${!filtersVisible ? 'collapsed' : ''}`}
+                    onClick={() => setFiltersVisible(!filtersVisible)}
+                >
+                    <Filter size={16} />
+                    {filtersVisible ? t('common.hideFilters') || 'Hide Filters' : t('common.showFilters') || 'Show Filters'}
+                    {filtersVisible ? <ChevronUp size={16} /> : <ChevronDown size={16} />}
+                </button>
 
-                {/* Date Range Filters */}
-                <div className="filters date-filters">
-                    <div className="date-filter-group">
-                        <Calendar size={16} />
-                        <label>{t('common.from') || 'From'}:</label>
-                        <input
-                            type="date"
+                <div className={`filters-wrapper mobile-collapse-default ${!filtersVisible ? 'collapsed' : ''}`}>
+                    <div className="filters">
+                        <div className="search-box">
+                            <Search size={18} />
+                            <input
+                                type="text"
+                                className="form-input"
+                                placeholder={t('common.search') + '...'}
+                                value={search}
+                                onChange={(e) => handleFilterChange(setSearch, e.target.value)}
+                            />
+                        </div>
+                        <select
                             className="form-input"
-                            value={dateFrom}
-                            onChange={(e) => handleFilterChange(setDateFrom, e.target.value)}
-                        />
-                        <label>{t('common.to') || 'To'}:</label>
-                        <input
-                            type="date"
+                            style={{ width: 160 }}
+                            value={statusFilter}
+                            onChange={(e) => handleFilterChange(setStatusFilter, e.target.value)}
+                        >
+                            <option value="">{t('common.allStatuses') || 'All Statuses'}</option>
+                            {Object.entries(SURVEY_STATUS_LABELS).map(([key, label]) => (
+                                <option key={key} value={key}>{label}</option>
+                            ))}
+                        </select>
+                        <select
                             className="form-input"
-                            value={dateTo}
-                            onChange={(e) => handleFilterChange(setDateTo, e.target.value)}
-                        />
-                        {(dateFrom || dateTo) && (
-                            <button
-                                className="btn btn-ghost btn-sm"
-                                onClick={() => { setDateFrom(''); setDateTo(''); setCurrentPage(1); }}
-                            >
-                                {t('common.clearDates') || 'Clear'}
-                            </button>
-                        )}
+                            style={{ width: 150 }}
+                            value={typeFilter}
+                            onChange={(e) => handleFilterChange(setTypeFilter, e.target.value)}
+                        >
+                            <option value="">{t('survey.allTypes') || 'All Types'}</option>
+                            {Object.entries(SURVEY_TYPE_LABELS).map(([key, label]) => (
+                                <option key={key} value={key}>{label}</option>
+                            ))}
+                        </select>
+                        <select
+                            className="form-input"
+                            style={{ width: 140 }}
+                            value={linerFilter}
+                            onChange={(e) => handleFilterChange(setLinerFilter, e.target.value)}
+                        >
+                            <option value="">{t('common.allLiners') || 'All Liners'}</option>
+                            {LINERS.map((liner) => (
+                                <option key={liner.code} value={liner.code}>{liner.code}</option>
+                            ))}
+                        </select>
+                    </div>
+
+                    {/* Date Range Filters */}
+                    <div className="filters date-filters">
+                        <div className="date-filter-group">
+                            <Calendar size={16} />
+                            <label>{t('common.from') || 'From'}:</label>
+                            <input
+                                type="date"
+                                className="form-input"
+                                value={dateFrom}
+                                onChange={(e) => handleFilterChange(setDateFrom, e.target.value)}
+                            />
+                            <label>{t('common.to') || 'To'}:</label>
+                            <input
+                                type="date"
+                                className="form-input"
+                                value={dateTo}
+                                onChange={(e) => handleFilterChange(setDateTo, e.target.value)}
+                            />
+                            {(dateFrom || dateTo) && (
+                                <button
+                                    className="btn btn-ghost btn-sm"
+                                    onClick={() => { setDateFrom(''); setDateTo(''); setCurrentPage(1); }}
+                                >
+                                    {t('common.clearDates') || 'Clear'}
+                                </button>
+                            )}
+                        </div>
                     </div>
                 </div>
             </div>

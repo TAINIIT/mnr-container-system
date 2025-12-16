@@ -617,7 +617,8 @@
         "monitoring": "Monitoramento",
         "jobMonitoring": "Monitoramento de Trabalho",
         "homePageManagement": "Página Inicial",
-        "washingStation": "Estação de Lavagem"
+        "washingStation": "Estação de Lavagem",
+        "chatManagement": "Chat ao Vivo"
     },
     "columns": {
         "containerNumber": "Número do Contentor",

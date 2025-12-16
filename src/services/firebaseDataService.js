@@ -278,6 +278,45 @@ class FirebaseDataService {
     static generateId(prefix = '') {
         return `${prefix}${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
     }
+
+    /**
+     * Clear multiple collections from Firebase and localStorage
+     * @param {Array<string>} paths - Array of collection paths to clear
+     * @returns {Promise<Object>} Result with success status and details
+     */
+    static async clearCollections(paths) {
+        const results = {
+            success: true,
+            cleared: [],
+            failed: [],
+            errors: []
+        };
+
+        for (const path of paths) {
+            try {
+                // Clear from localStorage first
+                const key = STORAGE_KEYS[path] || `mnr_${path}`;
+                localStorage.removeItem(key);
+                console.log(`🗑️ Cleared localStorage: ${key}`);
+
+                // Clear from Firebase if not in demo mode
+                if (!DEMO_MODE) {
+                    const dataRef = ref(database, path);
+                    await remove(dataRef);
+                    console.log(`🔥🗑️ Cleared Firebase: ${path}`);
+                }
+
+                results.cleared.push(path);
+            } catch (error) {
+                console.error(`Error clearing ${path}:`, error);
+                results.failed.push(path);
+                results.errors.push({ path, error: error.message });
+                results.success = false;
+            }
+        }
+
+        return results;
+    }
 }
 
 export default FirebaseDataService;

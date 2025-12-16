@@ -455,36 +455,47 @@ export function DataProvider({ children }) {
     };
 
     const updateEOR = (id, updates, userId) => {
-        setEORs(prev => prev.map(e => {
-            if (e.id === id) {
-                // Calculate new subtotal if repairItems changed
-                let subtotal = e.repairItems?.reduce((sum, item) => sum + (item.lineTotal || 0), 0) || 0;
-                if (updates.repairItems) {
-                    subtotal = updates.repairItems.reduce((sum, item) => sum + (item.lineTotal || 0), 0);
+        let updatedEOR = null;
+
+        setEORs(prev => {
+            const newEORs = prev.map(e => {
+                if (e.id === id) {
+                    // Calculate new subtotal if repairItems changed
+                    let subtotal = e.repairItems?.reduce((sum, item) => sum + (item.lineTotal || 0), 0) || 0;
+                    if (updates.repairItems) {
+                        subtotal = updates.repairItems.reduce((sum, item) => sum + (item.lineTotal || 0), 0);
+                    }
+
+                    // Use updated discount if provided, otherwise use existing
+                    const discount = updates.discount !== undefined ? updates.discount : (e.discount || 0);
+                    const newTotalCost = Math.max(0, subtotal - discount);
+
+                    const threshold = getAutoApprovalThreshold();
+                    const needApproval = newTotalCost > threshold;
+
+                    updatedEOR = {
+                        ...e,
+                        ...updates,
+                        discount, // Ensure discount is saved
+                        totalCost: newTotalCost,
+                        needApproval,
+                        updatedAt: new Date().toISOString(),
+                        updatedBy: userId
+                    };
+
+                    return updatedEOR;
                 }
+                return e;
+            });
 
-                // Use updated discount if provided, otherwise use existing
-                const discount = updates.discount !== undefined ? updates.discount : (e.discount || 0);
-                const newTotalCost = Math.max(0, subtotal - discount);
-
-                const threshold = getAutoApprovalThreshold();
-                const needApproval = newTotalCost > threshold;
-
-                const updated = {
-                    ...e,
-                    ...updates,
-                    discount, // Ensure discount is saved
-                    totalCost: newTotalCost,
-                    needApproval,
-                    updatedAt: new Date().toISOString(),
-                    updatedBy: userId
-                };
-
-                addAuditLog('EOR', id, AUDIT_ACTIONS.UPDATE, userId, { fields: Object.keys(updates) });
-                return updated;
+            // Immediate Firebase sync for real-time visibility
+            if (!DEMO_MODE && updatedEOR) {
+                FirebaseDataService.update('eors', id, updatedEOR);
             }
-            return e;
-        }));
+
+            addAuditLog('EOR', id, AUDIT_ACTIONS.UPDATE, userId, { fields: Object.keys(updates) });
+            return newEORs;
+        });
     };
 
     const sendEOR = (id, recipient, method, userId) => {
@@ -822,8 +833,8 @@ export function DataProvider({ children }) {
         setAuditLogs(mockAuditLogs);
     };
 
-    // Clear ALL data (complete wipe)
-    const clearAllData = () => {
+    // Clear ALL data (complete wipe) - now also clears Firebase
+    const clearAllData = async () => {
         // Clear localStorage
         localStorage.removeItem('mnr_containers');
         localStorage.removeItem('mnr_surveys');
@@ -835,6 +846,13 @@ export function DataProvider({ children }) {
         localStorage.removeItem('mnr_shunting');
         localStorage.removeItem('mnr_preinspections');
         localStorage.removeItem('mnr_stacking');
+
+        // Clear Firebase collections
+        const collectionsToWipe = [
+            'containers', 'surveys', 'eors', 'repairOrders',
+            'washingOrders', 'shunting', 'preinspections', 'stacking', 'auditLogs'
+        ];
+        await FirebaseDataService.clearCollections(collectionsToWipe);
 
         // Reset state to empty arrays
         setContainers([]);
@@ -848,6 +866,35 @@ export function DataProvider({ children }) {
         setStacking([]);
 
         return true;
+    };
+
+    // Clear selected collections only (for selective data wipe)
+    const clearSelectedCollections = async (collections) => {
+        // Map of collection names to their state setters and localStorage keys
+        const collectionMap = {
+            surveys: { setter: setSurveys, key: 'mnr_surveys' },
+            eors: { setter: setEORs, key: 'mnr_eors' },
+            repairOrders: { setter: setRepairOrders, key: 'mnr_repair_orders' },
+            shunting: { setter: setShunting, key: 'mnr_shunting' },
+            preinspections: { setter: setPreinspections, key: 'mnr_preinspections' },
+            washingOrders: { setter: setWashingOrders, key: 'mnr_washing_orders' },
+            stacking: { setter: setStacking, key: 'mnr_stacking' }
+        };
+
+        // Clear from Firebase
+        const result = await FirebaseDataService.clearCollections(collections);
+
+        // Clear from localStorage and reset state
+        collections.forEach(collectionName => {
+            const config = collectionMap[collectionName];
+            if (config) {
+                localStorage.removeItem(config.key);
+                config.setter([]);
+                console.log(`🗑️ Cleared: ${collectionName}`);
+            }
+        });
+
+        return result;
     };
 
     // Sync containers with approved EORs to AR status (data migration)
@@ -941,6 +988,7 @@ export function DataProvider({ children }) {
         // Utils
         resetData,
         clearAllData,
+        clearSelectedCollections,
         generateId,
         generateTransactionId,
         syncApprovedEORsToAR,

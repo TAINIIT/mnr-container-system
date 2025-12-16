@@ -30,6 +30,9 @@ const WashingList = () => {
     // Dashboard toggle state
     const [dashboardVisible, setDashboardVisible] = useState(true);
 
+    // Collapsible filters - auto-collapse on mobile
+    const [filtersVisible, setFiltersVisible] = useState(() => window.innerWidth > 768);
+
     // Get master data
     const CLEANING_PROGRAMS = getCodeList('CLEANING_PROGRAMS') || [];
     const WASH_BAYS = getCodeList('WASH_BAYS') || [];
@@ -211,37 +214,49 @@ const WashingList = () => {
                 )}
             </div>
 
+            {/* Mobile Filter Toggle */}
+            <button
+                className={`mobile-filter-toggle ${!filtersVisible ? 'collapsed' : ''}`}
+                onClick={() => setFiltersVisible(!filtersVisible)}
+            >
+                <Filter size={16} />
+                {filtersVisible ? t('common.hideFilters') || 'Hide Filters' : t('common.showFilters') || 'Show Filters'}
+                {filtersVisible ? <ChevronUp size={16} /> : <ChevronDown size={16} />}
+            </button>
+
             {/* Filters */}
-            <div className="filters-bar">
-                <div className="search-box">
-                    <Search size={16} />
-                    <input
-                        type="text"
-                        placeholder={t('washing.searchPlaceholder') || 'Search container, liner...'}
-                        value={searchTerm}
-                        onChange={(e) => setSearchTerm(e.target.value)}
-                    />
-                </div>
-                <div className="filter-group">
-                    <Filter size={16} />
-                    <select value={statusFilter} onChange={(e) => setStatusFilter(e.target.value)}>
-                        <option value="ALL">{t('common.allStatuses') || 'All Statuses'}</option>
-                        {Object.entries(STATUS_CONFIG).map(([key, config]) => (
-                            <option key={key} value={key}>{config.label}</option>
-                        ))}
-                    </select>
-                    <select value={bayFilter} onChange={(e) => setBayFilter(e.target.value)}>
-                        <option value="ALL">{t('washing.allBays') || 'All Bays'}</option>
-                        {WASH_BAYS.filter(b => b.active !== false).map(bay => (
-                            <option key={bay.code} value={bay.code}>{bay.name}</option>
-                        ))}
-                    </select>
-                    <select value={programFilter} onChange={(e) => setProgramFilter(e.target.value)}>
-                        <option value="ALL">{t('washing.allPrograms') || 'All Programs'}</option>
-                        {CLEANING_PROGRAMS.filter(p => p.active !== false).map(prog => (
-                            <option key={prog.code} value={prog.code}>{prog.name}</option>
-                        ))}
-                    </select>
+            <div className={`filters-wrapper mobile-collapse-default ${!filtersVisible ? 'collapsed' : ''}`}>
+                <div className="filters-bar">
+                    <div className="search-box">
+                        <Search size={16} />
+                        <input
+                            type="text"
+                            placeholder={t('washing.searchPlaceholder') || 'Search container, liner...'}
+                            value={searchTerm}
+                            onChange={(e) => setSearchTerm(e.target.value)}
+                        />
+                    </div>
+                    <div className="filter-group">
+                        <Filter size={16} />
+                        <select value={statusFilter} onChange={(e) => setStatusFilter(e.target.value)}>
+                            <option value="ALL">{t('common.allStatuses') || 'All Statuses'}</option>
+                            {Object.entries(STATUS_CONFIG).map(([key, config]) => (
+                                <option key={key} value={key}>{config.label}</option>
+                            ))}
+                        </select>
+                        <select value={bayFilter} onChange={(e) => setBayFilter(e.target.value)}>
+                            <option value="ALL">{t('washing.allBays') || 'All Bays'}</option>
+                            {WASH_BAYS.filter(b => b.active !== false).map(bay => (
+                                <option key={bay.code} value={bay.code}>{bay.name}</option>
+                            ))}
+                        </select>
+                        <select value={programFilter} onChange={(e) => setProgramFilter(e.target.value)}>
+                            <option value="ALL">{t('washing.allPrograms') || 'All Programs'}</option>
+                            {CLEANING_PROGRAMS.filter(p => p.active !== false).map(prog => (
+                                <option key={prog.code} value={prog.code}>{prog.name}</option>
+                            ))}
+                        </select>
+                    </div>
                 </div>
             </div>
 

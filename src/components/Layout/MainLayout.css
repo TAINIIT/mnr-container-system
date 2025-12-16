@@ -35,4 +35,14 @@
     .layout.sidebar-collapsed .layout-main {
         margin-left: 0;
     }
+
+    .layout-content {
+        padding: var(--space-3);
+    }
+}
+
+@media (max-width: 768px) {
+    .layout-content {
+        padding: var(--space-2);
+    }
 }

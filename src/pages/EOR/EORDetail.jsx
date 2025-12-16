@@ -127,6 +127,8 @@ export default function EORDetail() {
 
         if (result.success) {
             toast.success(`Repair Order ${result.ro.id} created!`);
+            // Navigate to Repair Orders page after successful creation
+            navigate('/repair-orders');
         } else {
             toast.error(result.error);
         }
@@ -283,12 +285,22 @@ export default function EORDetail() {
                         </button>
                     )}
                     {canApprove && (
-                        <button className="btn btn-success" onClick={() => handleApprove('APPROVED')}>
+                        <button
+                            type="button"
+                            className="btn btn-success"
+                            onClick={(e) => { e.stopPropagation(); handleApprove('APPROVED'); }}
+                            style={{ touchAction: 'manipulation', WebkitTapHighlightColor: 'transparent' }}
+                        >
                             <CheckCircle size={16} /> Approve
                         </button>
                     )}
                     {canReject && (
-                        <button className="btn btn-danger" onClick={() => handleApprove('REJECTED')}>
+                        <button
+                            type="button"
+                            className="btn btn-danger"
+                            onClick={(e) => { e.stopPropagation(); handleApprove('REJECTED'); }}
+                            style={{ touchAction: 'manipulation', WebkitTapHighlightColor: 'transparent' }}
+                        >
                             Reject
                         </button>
                     )}

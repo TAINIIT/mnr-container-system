@@ -43,9 +43,15 @@
     color: var(--text-secondary);
     cursor: pointer;
     transition: all var(--transition-fast);
+    /* iOS touch fixes */
+    -webkit-tap-highlight-color: rgba(0, 0, 0, 0.1);
+    touch-action: manipulation;
+    -webkit-user-select: none;
+    user-select: none;
 }
 
-.header-btn:hover {
+.header-btn:hover,
+.header-btn:active {
     background: var(--bg-tertiary);
     color: var(--text-primary);
 }
@@ -187,9 +193,15 @@
     border: none;
     cursor: pointer;
     transition: all var(--transition-fast);
+    /* iOS touch fixes */
+    -webkit-tap-highlight-color: rgba(0, 0, 0, 0.1);
+    touch-action: manipulation;
+    -webkit-user-select: none;
+    user-select: none;
 }
 
-.header-user:hover {
+.header-user:hover,
+.header-user:active {
     background: var(--neutral-200);
 }
 

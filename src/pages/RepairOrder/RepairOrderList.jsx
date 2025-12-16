@@ -5,7 +5,7 @@ import { useLanguage } from '../../context/LanguageContext';
 import { useAuth } from '../../context/AuthContext';
 import { useToast } from '../../components/common/Toast';
 import RetrieveButton from '../../components/common/RetrieveButton';
-import { Wrench, Eye, Search, Play, CheckCircle, Users, ChevronLeft, ChevronRight, Filter } from 'lucide-react';
+import { Wrench, Eye, Search, Play, CheckCircle, Users, ChevronLeft, ChevronRight, Filter, ChevronUp, ChevronDown } from 'lucide-react';
 import { RO_STATUS_LABELS, CONFIG } from '../../config/constants';
 import { LINERS } from '../../data/masterCodes';
 
@@ -36,6 +36,9 @@ export default function RepairOrderList() {
     const [showAssignModal, setShowAssignModal] = useState(false);
     const [selectedRO, setSelectedRO] = useState(null);
     const [selectedTeam, setSelectedTeam] = useState('');
+
+    // Collapsible filters - auto-collapse on mobile
+    const [filtersVisible, setFiltersVisible] = useState(() => window.innerWidth > 768);
 
     // Pagination
     const [currentPage, setCurrentPage] = useState(1);
@@ -174,51 +177,63 @@ export default function RepairOrderList() {
                     </div>
                 </div>
 
+                {/* Mobile Filter Toggle */}
+                <button
+                    className={`mobile-filter-toggle ${!filtersVisible ? 'collapsed' : ''}`}
+                    onClick={() => setFiltersVisible(!filtersVisible)}
+                >
+                    <Filter size={16} />
+                    {filtersVisible ? t('common.hideFilters') || 'Hide Filters' : t('common.showFilters') || 'Show Filters'}
+                    {filtersVisible ? <ChevronUp size={16} /> : <ChevronDown size={16} />}
+                </button>
+
                 {/* Filters Section */}
-                <div className="filters">
-                    <div className="search-box">
-                        <Search size={18} />
-                        <input
-                            type="text"
+                <div className={`filters-wrapper mobile-collapse-default ${!filtersVisible ? 'collapsed' : ''}`}>
+                    <div className="filters">
+                        <div className="search-box">
+                            <Search size={18} />
+                            <input
+                                type="text"
+                                className="form-input"
+                                placeholder={t('common.search') + '...'}
+                                value={search}
+                                onChange={(e) => handleFilterChange(setSearch, e.target.value)}
+                            />
+                        </div>
+                        <select
                             className="form-input"
-                            placeholder={t('common.search') + '...'}
-                            value={search}
-                            onChange={(e) => handleFilterChange(setSearch, e.target.value)}
-                        />
+                            style={{ width: 160 }}
+                            value={statusFilter}
+                            onChange={(e) => handleFilterChange(setStatusFilter, e.target.value)}
+                        >
+                            <option value="">{t('common.allStatuses') || 'All Statuses'}</option>
+                            {Object.entries(RO_STATUS_LABELS).map(([key, label]) => (
+                                <option key={key} value={key}>{label}</option>
+                            ))}
+                        </select>
+                        <select
+                            className="form-input"
+                            style={{ width: 150 }}
+                            value={linerFilter}
+                            onChange={(e) => handleFilterChange(setLinerFilter, e.target.value)}
+                        >
+                            <option value="">{t('common.allLiners') || 'All Liners'}</option>
+                            {LINERS.map((liner) => (
+                                <option key={liner.code} value={liner.code}>{liner.code}</option>
+                            ))}
+                        </select>
+                        <select
+                            className="form-input"
+                            style={{ width: 180 }}
+                            value={teamFilter}
+                            onChange={(e) => handleFilterChange(setTeamFilter, e.target.value)}
+                        >
+                            <option value="">{t('repairOrder.allTeams') || 'All Teams'}</option>
+                            {REPAIR_TEAMS.map((team) => (
+                                <option key={team.id} value={team.id}>{team.name}</option>
+                            ))}
+                        </select>
                     </div>
-                    <select
-                        className="form-input"
-                        style={{ width: 160 }}
-                        value={statusFilter}
-                        onChange={(e) => handleFilterChange(setStatusFilter, e.target.value)}
-                    >
-                        <option value="">{t('common.allStatuses') || 'All Statuses'}</option>
-                        {Object.entries(RO_STATUS_LABELS).map(([key, label]) => (
-                            <option key={key} value={key}>{label}</option>
-                        ))}
-                    </select>
-                    <select
-                        className="form-input"
-                        style={{ width: 150 }}
-                        value={linerFilter}
-                        onChange={(e) => handleFilterChange(setLinerFilter, e.target.value)}
-                    >
-                        <option value="">{t('common.allLiners') || 'All Liners'}</option>
-                        {LINERS.map((liner) => (
-                            <option key={liner.code} value={liner.code}>{liner.code}</option>
-                        ))}
-                    </select>
-                    <select
-                        className="form-input"
-                        style={{ width: 180 }}
-                        value={teamFilter}
-                        onChange={(e) => handleFilterChange(setTeamFilter, e.target.value)}
-                    >
-                        <option value="">{t('repairOrder.allTeams') || 'All Teams'}</option>
-                        {REPAIR_TEAMS.map((team) => (
-                            <option key={team.id} value={team.id}>{team.name}</option>
-                        ))}
-                    </select>
                 </div>
             </div>
 

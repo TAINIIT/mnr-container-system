@@ -6,7 +6,7 @@ import { useConfig } from '../../context/ConfigContext';
 import { useLanguage } from '../../context/LanguageContext';
 import { useToast } from '../../components/common/Toast';
 import RetrieveButton from '../../components/common/RetrieveButton';
-import { ClipboardCheck, Plus, Calendar, CheckCircle, XCircle, AlertTriangle, Search, ChevronLeft, ChevronRight, Camera, RotateCcw, ListChecks, Droplets, RefreshCw } from 'lucide-react';
+import { ClipboardCheck, Plus, Calendar, CheckCircle, XCircle, AlertTriangle, Search, ChevronLeft, ChevronRight, Camera, RotateCcw, ListChecks, Droplets, RefreshCw, Filter, ChevronUp, ChevronDown } from 'lucide-react';
 import { LINERS } from '../../data/masterCodes';
 
 export default function PreInspectionList() {
@@ -37,6 +37,9 @@ export default function PreInspectionList() {
     const [resultFilter, setResultFilter] = useState('');
     const [currentPage, setCurrentPage] = useState(1);
     const itemsPerPage = 50;
+
+    // Collapsible filters - auto-collapse on mobile
+    const [filtersVisible, setFiltersVisible] = useState(() => window.innerWidth > 768);
 
     // Inspection modal with checklist
     const [showInspectionModal, setShowInspectionModal] = useState(false);
@@ -439,49 +442,61 @@ export default function PreInspectionList() {
                     </div>
                 </div>
 
+                {/* Mobile Filter Toggle */}
+                <button
+                    className={`mobile-filter-toggle ${!filtersVisible ? 'collapsed' : ''}`}
+                    onClick={() => setFiltersVisible(!filtersVisible)}
+                >
+                    <Filter size={16} />
+                    {filtersVisible ? t('common.hideFilters') || 'Hide Filters' : t('common.showFilters') || 'Show Filters'}
+                    {filtersVisible ? <ChevronUp size={16} /> : <ChevronDown size={16} />}
+                </button>
+
                 {/* Filters */}
-                <div className="filters">
-                    <div className="search-box">
-                        <Search size={18} />
-                        <input
-                            type="text"
+                <div className={`filters-wrapper mobile-collapse-default ${!filtersVisible ? 'collapsed' : ''}`}>
+                    <div className="filters">
+                        <div className="search-box">
+                            <Search size={18} />
+                            <input
+                                type="text"
+                                className="form-input"
+                                placeholder={t('common.search') + '...'}
+                                value={search}
+                                onChange={(e) => { setSearch(e.target.value); setCurrentPage(1); }}
+                            />
+                        </div>
+                        <select
                             className="form-input"
-                            placeholder={t('common.search') + '...'}
-                            value={search}
-                            onChange={(e) => { setSearch(e.target.value); setCurrentPage(1); }}
-                        />
+                            style={{ width: 130 }}
+                            value={statusFilter}
+                            onChange={(e) => { setStatusFilter(e.target.value); setCurrentPage(1); }}
+                        >
+                            <option value="">{t('common.allStatuses') || 'All Statuses'}</option>
+                            <option value="PLANNED">{t('inspection.planned') || 'Planned'}</option>
+                            <option value="COMPLETED">{t('inspection.completed') || 'Completed'}</option>
+                        </select>
+                        <select
+                            className="form-input"
+                            style={{ width: 130 }}
+                            value={resultFilter}
+                            onChange={(e) => { setResultFilter(e.target.value); setCurrentPage(1); }}
+                        >
+                            <option value="">{t('inspection.allResults') || 'All Results'}</option>
+                            <option value="ACCEPTED">{t('inspection.accepted') || 'Accepted'}</option>
+                            <option value="REWORK">{t('inspection.rework') || 'Rework'}</option>
+                        </select>
+                        <select
+                            className="form-input"
+                            style={{ width: 120 }}
+                            value={linerFilter}
+                            onChange={(e) => { setLinerFilter(e.target.value); setCurrentPage(1); }}
+                        >
+                            <option value="">{t('common.allLiners') || 'All Liners'}</option>
+                            {LINERS.map((liner) => (
+                                <option key={liner.code} value={liner.code}>{liner.code}</option>
+                            ))}
+                        </select>
                     </div>
-                    <select
-                        className="form-input"
-                        style={{ width: 130 }}
-                        value={statusFilter}
-                        onChange={(e) => { setStatusFilter(e.target.value); setCurrentPage(1); }}
-                    >
-                        <option value="">{t('common.allStatuses') || 'All Statuses'}</option>
-                        <option value="PLANNED">{t('inspection.planned') || 'Planned'}</option>
-                        <option value="COMPLETED">{t('inspection.completed') || 'Completed'}</option>
-                    </select>
-                    <select
-                        className="form-input"
-                        style={{ width: 130 }}
-                        value={resultFilter}
-                        onChange={(e) => { setResultFilter(e.target.value); setCurrentPage(1); }}
-                    >
-                        <option value="">{t('inspection.allResults') || 'All Results'}</option>
-                        <option value="ACCEPTED">{t('inspection.accepted') || 'Accepted'}</option>
-                        <option value="REWORK">{t('inspection.rework') || 'Rework'}</option>
-                    </select>
-                    <select
-                        className="form-input"
-                        style={{ width: 120 }}
-                        value={linerFilter}
-                        onChange={(e) => { setLinerFilter(e.target.value); setCurrentPage(1); }}
-                    >
-                        <option value="">{t('common.allLiners') || 'All Liners'}</option>
-                        {LINERS.map((liner) => (
-                            <option key={liner.code} value={liner.code}>{liner.code}</option>
-                        ))}
-                    </select>
                 </div>
             </div>
 

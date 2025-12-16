@@ -617,7 +617,8 @@
         "monitoring": "모니터링",
         "jobMonitoring": "작업 모니터링",
         "homePageManagement": "홈페이지",
-        "washingStation": "세척 스테이션"
+        "washingStation": "세척 스테이션",
+        "chatManagement": "실시간 채팅"
     },
     "columns": {
         "containerNumber": "컨테이너 번호",

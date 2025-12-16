@@ -6,12 +6,12 @@ import { useConfig } from '../../context/ConfigContext';
 import { useLanguage } from '../../context/LanguageContext';
 import { useToast } from '../../components/common/Toast';
 import RetrieveButton from '../../components/common/RetrieveButton';
-import { Truck, Plus, Search, Play, CheckCircle, MapPin, Clock, AlertTriangle, ChevronLeft, ChevronRight, Users, ArrowRight, Flag, ChevronDown, ChevronUp } from 'lucide-react';
+import { Truck, Plus, Search, Play, CheckCircle, MapPin, Clock, AlertTriangle, ChevronLeft, ChevronRight, Users, ArrowRight, Flag, ChevronDown, ChevronUp, Filter } from 'lucide-react';
 import { SHUNTING_STATUS } from '../../config/constants';
 import { YARD_BLOCKS, LINERS } from '../../data/masterCodes';
 
 export default function ShuntingList() {
-    const { containers, repairOrders, surveys, updateContainer } = useData();
+    const { containers, repairOrders, surveys, eors, updateContainer } = useData();
     const { user } = useAuth();
     const { getCodeList } = useConfig();
 
@@ -45,11 +45,33 @@ export default function ShuntingList() {
     // Driver workload visibility toggle
     const [driverWorkloadVisible, setDriverWorkloadVisible] = useState(true);
 
-    // Containers that need shunting (AR status with approved EOR)
-    const eligibleContainers = containers.filter(c =>
-        c.status === 'AR' &&
-        !shuntingRequests.some(s => s.containerId === c.id && s.status !== 'COMPLETED')
-    );
+    // Collapsible filters - auto-collapse on mobile
+    const [filtersVisible, setFiltersVisible] = useState(() => window.innerWidth > 768);
+
+    // Containers that need shunting: have AR status OR have an approved EOR (backup check)
+    const eligibleContainers = containers.filter(c => {
+        // Already has pending shunting request that's not completed
+        const hasPendingShunting = shuntingRequests.some(s =>
+            s.containerId === c.id && s.status !== 'COMPLETED'
+        );
+        if (hasPendingShunting) return false;
+
+        // Check if container status is AR (normal case)
+        if (c.status === 'AR') return true;
+
+        // Backup: check if container has an approved EOR (in case status wasn't synced)
+        const hasApprovedEOR = eors.some(e =>
+            e.containerId === c.id &&
+            (e.status === 'APPROVED' || e.status === 'AUTO_APPROVED')
+        );
+
+        // Also check: container is in DM status but has approved EOR
+        if ((c.status === 'DM' || c.status === 'STACKING') && hasApprovedEOR) {
+            return true;
+        }
+
+        return false;
+    });
 
     // Filter requests
     const filteredRequests = shuntingRequests.filter(req => {
@@ -255,40 +277,52 @@ export default function ShuntingList() {
                     </div>
                 </div>
 
+                {/* Mobile Filter Toggle */}
+                <button
+                    className={`mobile-filter-toggle ${!filtersVisible ? 'collapsed' : ''}`}
+                    onClick={() => setFiltersVisible(!filtersVisible)}
+                >
+                    <Filter size={16} />
+                    {filtersVisible ? t('common.hideFilters') || 'Hide Filters' : t('common.showFilters') || 'Show Filters'}
+                    {filtersVisible ? <ChevronUp size={16} /> : <ChevronDown size={16} />}
+                </button>
+
                 {/* Filters */}
-                <div className="filters">
-                    <div className="search-box">
-                        <Search size={18} />
-                        <input
-                            type="text"
+                <div className={`filters-wrapper mobile-collapse-default ${!filtersVisible ? 'collapsed' : ''}`}>
+                    <div className="filters">
+                        <div className="search-box">
+                            <Search size={18} />
+                            <input
+                                type="text"
+                                className="form-input"
+                                placeholder={t('common.search') + '...'}
+                                value={search}
+                                onChange={(e) => { setSearch(e.target.value); setCurrentPage(1); }}
+                            />
+                        </div>
+                        <select
                             className="form-input"
-                            placeholder={t('common.search') + '...'}
-                            value={search}
-                            onChange={(e) => { setSearch(e.target.value); setCurrentPage(1); }}
-                        />
+                            style={{ width: 140 }}
+                            value={statusFilter}
+                            onChange={(e) => { setStatusFilter(e.target.value); setCurrentPage(1); }}
+                        >
+                            <option value="">{t('common.allStatuses') || 'All Statuses'}</option>
+                            <option value="NEW">{t('shunting.new') || 'New'}</option>
+                            <option value="DISPATCHED">{t('shunting.dispatched') || 'Dispatched'}</option>
+                            <option value="IN_PROGRESS">{t('common.inProgress') || 'In Progress'}</option>
+                            <option value="COMPLETED">{t('common.completed') || 'Completed'}</option>
+                        </select>
+                        <select
+                            className="form-input"
+                            style={{ width: 130 }}
+                            value={priorityFilter}
+                            onChange={(e) => { setPriorityFilter(e.target.value); setCurrentPage(1); }}
+                        >
+                            <option value="">{t('shunting.allPriorities') || 'All Priorities'}</option>
+                            <option value="NORMAL">{t('shunting.normal') || 'Normal'}</option>
+                            <option value="URGENT">{t('shunting.urgent') || 'Urgent'}</option>
+                        </select>
                     </div>
-                    <select
-                        className="form-input"
-                        style={{ width: 140 }}
-                        value={statusFilter}
-                        onChange={(e) => { setStatusFilter(e.target.value); setCurrentPage(1); }}
-                    >
-                        <option value="">{t('common.allStatuses') || 'All Statuses'}</option>
-                        <option value="NEW">{t('shunting.new') || 'New'}</option>
-                        <option value="DISPATCHED">{t('shunting.dispatched') || 'Dispatched'}</option>
-                        <option value="IN_PROGRESS">{t('common.inProgress') || 'In Progress'}</option>
-                        <option value="COMPLETED">{t('common.completed') || 'Completed'}</option>
-                    </select>
-                    <select
-                        className="form-input"
-                        style={{ width: 130 }}
-                        value={priorityFilter}
-                        onChange={(e) => { setPriorityFilter(e.target.value); setCurrentPage(1); }}
-                    >
-                        <option value="">{t('shunting.allPriorities') || 'All Priorities'}</option>
-                        <option value="NORMAL">{t('shunting.normal') || 'Normal'}</option>
-                        <option value="URGENT">{t('shunting.urgent') || 'Urgent'}</option>
-                    </select>
                 </div>
             </div>
 

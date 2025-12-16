@@ -617,7 +617,8 @@
         "monitoring": "监控",
         "jobMonitoring": "作业监控",
         "homePageManagement": "首页",
-        "washingStation": "洗箱站"
+        "washingStation": "洗箱站",
+        "chatManagement": "在线聊天"
     },
     "columns": {
         "containerNumber": "箱号",

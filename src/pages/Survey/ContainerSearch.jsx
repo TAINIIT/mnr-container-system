@@ -5,18 +5,36 @@ import { Search, Container, AlertCircle, CheckCircle, ArrowRight } from 'lucide-
 import { CONTAINER_STATUS, CONTAINER_STATUS_LABELS } from '../../config/constants';
 
 export default function ContainerSearch() {
-    const { containers, getSurveysByContainer } = useData();
+    const { containers, getSurveysByContainer, eors, repairOrders } = useData();
     const [search, setSearch] = useState('');
     const navigate = useNavigate();
 
-    // Show containers eligible for survey: STACKING or DM status, without completed or draft survey
+    // Show containers eligible for survey: STACKING or DM status, without active workflow
     const eligibleContainers = containers.filter(c => {
         const surveys = getSurveysByContainer(c.id);
-        // Exclude if has COMPLETED survey for current sequence
-        const hasCompletedSurvey = surveys.some(s => s.status === 'COMPLETED' && s.sequence === c.sequence);
-        // Exclude if has DRAFT survey (pending work)
-        const hasDraftSurvey = surveys.some(s => s.status === 'DRAFT' && s.sequence === c.sequence);
-        return (c.status === CONTAINER_STATUS.DM || c.status === CONTAINER_STATUS.STACKING) && !hasCompletedSurvey && !hasDraftSurvey;
+
+        // Exclude if has any survey that is NOT completed/released
+        const hasActiveSurvey = surveys.some(s =>
+            s.status !== 'COMPLETED' && s.status !== 'RELEASED'
+        );
+        if (hasActiveSurvey) return false;
+
+        // Exclude if has active EOR (pending approval)
+        const hasActiveEOR = eors.some(e =>
+            e.containerId === c.id &&
+            !['APPROVED', 'AUTO_APPROVED', 'REJECTED'].includes(e.status)
+        );
+        if (hasActiveEOR) return false;
+
+        // Exclude if has active Repair Order
+        const hasActiveRO = repairOrders.some(r =>
+            r.containerId === c.id &&
+            !['COMPLETED', 'QC_PASSED'].includes(r.status)
+        );
+        if (hasActiveRO) return false;
+
+        // Only allow STACKING or DM status containers
+        return c.status === CONTAINER_STATUS.DM || c.status === CONTAINER_STATUS.STACKING;
     });
 
     const filteredContainers = eligibleContainers.filter(c => {

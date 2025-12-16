@@ -10,7 +10,7 @@ import { CONTAINER_STATUS_LABELS, CONFIG } from '../../config/constants';
 import { LINERS } from '../../data/masterCodes';
 
 export default function ContainerList() {
-    const { containers, surveys, eors, repairOrders, updateContainer } = useData();
+    const { containers, surveys, eors, repairOrders, shunting, washingOrders, preinspections, stacking, updateContainer } = useData();
     const { user } = useAuth();
     // Helper to get user's shipping line
     const getExternalLiner = () => {
@@ -56,13 +56,45 @@ export default function ContainerList() {
     const shuntingRequests = JSON.parse(localStorage.getItem('mnr_shunting') || '[]');
     const inspections = JSON.parse(localStorage.getItem('mnr_preinspections') || '[]');
 
+    // Helper to check if container has active/incomplete workflow
+    const hasActiveWorkflow = (container) => {
+        // Check if container has any survey that is NOT completed/released
+        const containerSurveys = surveys.filter(s => s.containerId === container.id);
+        if (containerSurveys.length > 0) {
+            // Has surveys - check if any are still in progress (not COMPLETED or RELEASED)
+            const hasIncompleteSurvey = containerSurveys.some(s =>
+                s.status !== 'COMPLETED' && s.status !== 'RELEASED'
+            );
+            if (hasIncompleteSurvey) return true;
+
+            // Also check if there are active EORs or Repair Orders
+            const hasActiveEOR = eors.some(e =>
+                e.containerId === container.id &&
+                !['APPROVED', 'AUTO_APPROVED', 'REJECTED'].includes(e.status)
+            );
+            if (hasActiveEOR) return true;
+
+            const hasActiveRO = repairOrders.some(r =>
+                r.containerId === container.id &&
+                !['COMPLETED', 'QC_PASSED'].includes(r.status)
+            );
+            if (hasActiveRO) return true;
+        }
+        return false;
+    };
+
     const filteredContainers = containers.filter(c => {
         const matchesSearch = !search ||
             c.containerNumber.toLowerCase().includes(search.toLowerCase()) ||
             (c.booking && c.booking.toLowerCase().includes(search.toLowerCase()));
         const matchesStatus = !statusFilter || c.status === statusFilter;
         const matchesLiner = !linerFilter || c.liner === linerFilter;
-        return matchesSearch && matchesStatus && matchesLiner;
+
+        // WORKFLOW RULE: Hide containers with active (incomplete) workflow
+        // Container is available if: no surveys, OR all surveys completed AND status is AV/COMPLETED
+        const isAvailableForNewWorkflow = !hasActiveWorkflow(c);
+
+        return matchesSearch && matchesStatus && matchesLiner && isAvailableForNewWorkflow;
     });
 
     // Pagination calculations
@@ -257,18 +289,74 @@ export default function ContainerList() {
         return `badge-${map[status] || 'draft'}`;
     };
 
-    // Get workflow stage indicator
+    // Get workflow stage indicator - shows CURRENT active step
     const getWorkflowStage = (container) => {
-        // Check for active repair order
-        const activeRO = repairOrders.find(r => r.containerId === container.id && r.status === 'IN_PROGRESS');
+        // If container is AV (Available) or released - no active workflow
+        if (container.status === 'AV' || container.status === 'RELEASED') {
+            return null;
+        }
+
+        // Get stacking data from context or localStorage
+        const stackingData = stacking || JSON.parse(localStorage.getItem('mnr_stacking') || '[]');
+        const washingData = washingOrders || JSON.parse(localStorage.getItem('mnr_washing') || '[]');
+        const preinspectionData = preinspections || JSON.parse(localStorage.getItem('mnr_preinspections') || '[]');
+
+        // Check workflow steps in REVERSE order (latest first)
+
+        // 7. Stacking completed = workflow done
+        const completedStacking = stackingData.find(s =>
+            (s.containerId === container.id || s.containerNumber === container.containerNumber) &&
+            s.status === 'COMPLETED'
+        );
+        if (completedStacking) return null; // Workflow complete
+
+        // 7. Active Stacking
+        const activeStacking = stackingData.find(s =>
+            (s.containerId === container.id || s.containerNumber === container.containerNumber) &&
+            s.status !== 'COMPLETED'
+        );
+        if (activeStacking) return { stage: 'Stacking', color: 'var(--info-500)' };
+
+        // 6. Pre-Inspection
+        const activePreinspection = preinspectionData.find(p =>
+            (p.containerId === container.id || p.containerNumber === container.containerNumber) &&
+            !['ACCEPTED', 'COMPLETED'].includes(p.status) && !p.result
+        );
+        if (activePreinspection) return { stage: 'Pre-Inspection', color: 'var(--purple-500)' };
+
+        // 5. Washing
+        const activeWashing = washingData.find(w =>
+            (w.containerId === container.id || w.containerNumber === container.containerNumber) &&
+            !['COMPLETED', 'QC_PASSED'].includes(w.status)
+        );
+        if (activeWashing) return { stage: 'Washing', color: 'var(--success-500)' };
+
+        // 4. Repair Order
+        const activeRO = repairOrders.find(r =>
+            r.containerId === container.id &&
+            !['COMPLETED', 'QC_PASSED'].includes(r.status)
+        );
         if (activeRO) return { stage: 'Repair', color: 'var(--warning-500)' };
 
-        // Check for pending EOR
-        const pendingEOR = eors.find(e => e.containerId === container.id && (e.status === 'PENDING' || e.status === 'SENT'));
-        if (pendingEOR) return { stage: 'Approval', color: 'var(--secondary-500)' };
+        // 3. Shunting
+        const activeShunting = (shunting || []).find(s =>
+            (s.containerId === container.id || s.containerNumber === container.containerNumber) &&
+            s.status !== 'COMPLETED'
+        );
+        if (activeShunting) return { stage: 'Shunting', color: 'var(--orange-500)' };
 
-        // Check for active survey
-        const activeSurvey = surveys.find(s => s.containerId === container.id && s.status === 'IN_PROGRESS');
+        // 2. EOR pending approval
+        const pendingEOR = eors.find(e =>
+            e.containerId === container.id &&
+            ['PENDING', 'SENT', 'DRAFT'].includes(e.status)
+        );
+        if (pendingEOR) return { stage: 'EOR Approval', color: 'var(--secondary-500)' };
+
+        // 1. Survey
+        const activeSurvey = surveys.find(s =>
+            s.containerId === container.id &&
+            !['COMPLETED', 'RELEASED'].includes(s.status)
+        );
         if (activeSurvey) return { stage: 'Survey', color: 'var(--primary-500)' };
 
         return null;

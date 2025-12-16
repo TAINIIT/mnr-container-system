@@ -26,6 +26,33 @@
     .grid-cols-3 {
         grid-template-columns: repeat(2, 1fr);
     }
+
+    /* Tablet: Larger buttons with 16px font for better touch interaction */
+    .btn {
+        padding: 12px 20px;
+        font-size: 16px;
+        min-height: 48px;
+        /* iOS touch optimization */
+        -webkit-tap-highlight-color: rgba(0, 0, 0, 0.1);
+        touch-action: manipulation;
+    }
+
+    .btn-sm {
+        padding: 10px 16px;
+        font-size: 15px;
+        min-height: 44px;
+    }
+
+    .btn-lg {
+        padding: 14px 24px;
+        font-size: 17px;
+        min-height: 52px;
+    }
+
+    /* Active state feedback for touch */
+    .btn:active {
+        transform: scale(0.98);
+    }
 }
 
 /* Tablet (8 inch and below) */
@@ -219,11 +246,15 @@
     z-index: 249;
     opacity: 0;
     transition: opacity 0.3s ease;
+    pointer-events: none;
+    /* Don't block clicks when hidden */
 }
 
 .sidebar-overlay.visible {
     display: block;
     opacity: 1;
+    pointer-events: auto;
+    /* Allow clicks when visible */
 }
 
 /* Mobile Menu Button */
@@ -236,17 +267,30 @@
     cursor: pointer;
     border-radius: var(--radius-md);
     transition: background 0.15s ease;
+    /* iOS touch fixes */
+    -webkit-tap-highlight-color: rgba(0, 0, 0, 0.1);
+    touch-action: manipulation;
+    -webkit-user-select: none;
+    user-select: none;
 }
 
-.mobile-menu-btn:hover {
+.mobile-menu-btn:hover,
+.mobile-menu-btn:active {
     background: var(--bg-tertiary);
 }
 
-@media (max-width: 768px) {
+/* Show menu button on tablet and mobile (when sidebar is hidden) */
+@media (max-width: 1024px) {
     .mobile-menu-btn {
         display: flex;
         align-items: center;
         justify-content: center;
+        min-width: 44px;
+        min-height: 44px;
+    }
+
+    .sidebar-overlay {
+        display: block;
     }
 
     .sidebar {

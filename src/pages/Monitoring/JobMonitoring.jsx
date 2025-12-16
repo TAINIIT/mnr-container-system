@@ -4,6 +4,8 @@ import { useAuth } from '../../context/AuthContext';
 import { useLanguage } from '../../context/LanguageContext';
 import { useToast } from '../../components/common/Toast';
 import RetrieveButton from '../../components/common/RetrieveButton';
+import FirebaseDataService from '../../services/firebaseDataService';
+import { DEMO_MODE } from '../../config/firebase';
 import {
     Search, Trash2, AlertTriangle, FileText, ClipboardList,
     Wrench, Truck, ClipboardCheck, Package, RefreshCw, CheckCircle
@@ -22,7 +24,18 @@ const WORKFLOW_STEPS = {
 };
 
 export default function JobMonitoring() {
-    const { containers, reloadFromStorage } = useData();
+    // Use data from context instead of localStorage for Firebase sync
+    const {
+        containers,
+        surveys,
+        eors,
+        repairOrders,
+        shunting,
+        washingOrders,
+        preinspections,
+        stacking,
+        reloadFromStorage
+    } = useData();
     const { canPerform } = useAuth();
     const { t } = useLanguage();
     const toast = useToast();
@@ -33,32 +46,15 @@ export default function JobMonitoring() {
     const [selectedTransaction, setSelectedTransaction] = useState(null);
     const [selectedContainer, setSelectedContainer] = useState(null);
 
-    // Local state for all job data - reloaded from localStorage
-    const [localSurveys, setLocalSurveys] = useState([]);
-    const [localEors, setLocalEors] = useState([]);
-    const [localRepairOrders, setLocalRepairOrders] = useState([]);
-    const [localShunting, setLocalShunting] = useState([]);
-    const [localWashing, setLocalWashing] = useState([]);
-    const [localPreinspections, setLocalPreinspections] = useState([]);
-    const [localStacking, setLocalStacking] = useState([]);
-    const [localContainers, setLocalContainers] = useState([]);
-
-    // Load all data from localStorage
-    const loadData = useCallback(() => {
-        setLocalSurveys(JSON.parse(localStorage.getItem('mnr_surveys') || '[]'));
-        setLocalEors(JSON.parse(localStorage.getItem('mnr_eors') || '[]'));
-        setLocalRepairOrders(JSON.parse(localStorage.getItem('mnr_repair_orders') || '[]'));
-        setLocalShunting(JSON.parse(localStorage.getItem('mnr_shunting') || '[]'));
-        setLocalWashing(JSON.parse(localStorage.getItem('mnr_washing') || '[]'));
-        setLocalPreinspections(JSON.parse(localStorage.getItem('mnr_preinspections') || '[]'));
-        setLocalStacking(JSON.parse(localStorage.getItem('mnr_stacking') || '[]'));
-        setLocalContainers(JSON.parse(localStorage.getItem('mnr_containers') || '[]'));
-    }, []);
-
-    // Initial load
-    useEffect(() => {
-        loadData();
-    }, [loadData]);
+    // Use context data directly (for Firebase sync)
+    const localSurveys = surveys || [];
+    const localEors = eors || [];
+    const localRepairOrders = repairOrders || [];
+    const localShunting = shunting || [];
+    const localWashing = washingOrders || [];
+    const localPreinspections = preinspections || [];
+    const localStacking = stacking || [];
+    const localContainers = containers || [];
 
     // Build job list for selected container
     const containerJobs = useMemo(() => {
@@ -261,8 +257,8 @@ export default function JobMonitoring() {
         return 'STACKING';
     };
 
-    // Delete a single specific job - NO PAGE RELOAD
-    const deleteSpecificJob = (job) => {
+    // Delete a single specific job - with Firebase sync
+    const deleteSpecificJob = async (job) => {
         if (!canPerform('delete_job')) {
             toast.error('You do not have permission to delete jobs');
             return;
@@ -270,74 +266,80 @@ export default function JobMonitoring() {
 
         const containerId = selectedContainer.id;
 
-        // Delete from appropriate storage and update local state
-        switch (job.type) {
-            case 'survey': {
-                const updated = localSurveys.filter(s => s.id !== job.id);
-                localStorage.setItem('mnr_surveys', JSON.stringify(updated));
-                setLocalSurveys(updated);
-                break;
-            }
-            case 'eor': {
-                const updated = localEors.filter(e => e.id !== job.id);
-                localStorage.setItem('mnr_eors', JSON.stringify(updated));
-                setLocalEors(updated);
-                break;
-            }
-            case 'shunting': {
-                const updated = localShunting.filter(s => s.id !== job.id);
-                localStorage.setItem('mnr_shunting', JSON.stringify(updated));
-                setLocalShunting(updated);
-                break;
-            }
-            case 'repairOrder': {
-                const updated = localRepairOrders.filter(r => r.id !== job.id);
-                localStorage.setItem('mnr_repair_orders', JSON.stringify(updated));
-                setLocalRepairOrders(updated);
-                break;
-            }
-            case 'washing': {
-                const updated = localWashing.filter(w => w.id !== job.id);
-                localStorage.setItem('mnr_washing', JSON.stringify(updated));
-                setLocalWashing(updated);
-                break;
-            }
-            case 'preinspection': {
-                const updated = localPreinspections.filter(p => p.id !== job.id);
-                localStorage.setItem('mnr_preinspections', JSON.stringify(updated));
-                setLocalPreinspections(updated);
-                break;
-            }
-            case 'stacking': {
-                const updated = localStacking.filter(s => s.id !== job.id);
-                localStorage.setItem('mnr_stacking', JSON.stringify(updated));
-                setLocalStacking(updated);
-                break;
-            }
+        // Map job type to Firebase path
+        const pathMap = {
+            survey: 'surveys',
+            eor: 'eors',
+            shunting: 'shunting',
+            repairOrder: 'repairOrders',
+            washing: 'washingOrders',
+            preinspection: 'preinspections',
+            stacking: 'stacking'
+        };
+
+        const firebasePath = pathMap[job.type];
+
+        if (!firebasePath) {
+            toast.error(`Unknown job type: ${job.type}`);
+            return;
         }
 
-        // Calculate remaining jobs (without the deleted one)
-        const remainingJobs = containerJobs.filter(j => j.id !== job.id);
-        const newStatus = calculateStatusFromJobs(remainingJobs);
-
-        // Update container status in localStorage and local state
-        const updatedContainers = localContainers.map(c => {
-            if (c.id === containerId) {
-                return { ...c, status: newStatus };
+        try {
+            // Delete from Firebase
+            if (!DEMO_MODE) {
+                await FirebaseDataService.delete(firebasePath, job.id);
             }
-            return c;
-        });
-        localStorage.setItem('mnr_containers', JSON.stringify(updatedContainers));
-        setLocalContainers(updatedContainers);
 
-        // Update selected container's status for UI
-        setSelectedContainer(prev => prev ? { ...prev, status: newStatus } : null);
+            // Also delete from localStorage for immediate local update
+            const storageKeyMap = {
+                surveys: 'mnr_surveys',
+                eors: 'mnr_eors',
+                shunting: 'mnr_shunting',
+                repairOrders: 'mnr_repair_orders',
+                washingOrders: 'mnr_washing',
+                preinspections: 'mnr_preinspections',
+                stacking: 'mnr_stacking'
+            };
 
-        toast.success(`Deleted ${job.description}. Container status: ${newStatus}. ${remainingJobs.length} job(s) remaining.`);
+            const storageKey = storageKeyMap[firebasePath];
+            if (storageKey) {
+                const stored = JSON.parse(localStorage.getItem(storageKey) || '[]');
+                const updated = stored.filter(item => item.id !== job.id);
+                localStorage.setItem(storageKey, JSON.stringify(updated));
+            }
 
-        // Sync DataContext React state with localStorage changes
-        // This ensures Workflow Guide and other screens see the updated data
-        reloadFromStorage();
+            // Calculate remaining jobs (without the deleted one)
+            const remainingJobs = containerJobs.filter(j => j.id !== job.id);
+            const newStatus = calculateStatusFromJobs(remainingJobs);
+
+            // Update container status in Firebase and localStorage
+            const updatedContainers = localContainers.map(c => {
+                if (c.id === containerId) {
+                    return { ...c, status: newStatus };
+                }
+                return c;
+            });
+            localStorage.setItem('mnr_containers', JSON.stringify(updatedContainers));
+
+            if (!DEMO_MODE) {
+                const containerToUpdate = updatedContainers.find(c => c.id === containerId);
+                if (containerToUpdate) {
+                    await FirebaseDataService.update('containers', containerId, containerToUpdate);
+                }
+            }
+
+            // Update selected container's status for UI
+            setSelectedContainer(prev => prev ? { ...prev, status: newStatus } : null);
+
+            toast.success(`Deleted ${job.description}. Container status: ${newStatus}. ${remainingJobs.length} job(s) remaining.`);
+
+            // Sync DataContext React state with changes
+            reloadFromStorage();
+
+        } catch (error) {
+            console.error('Failed to delete job:', error);
+            toast.error(`Failed to delete job: ${error.message}`);
+        }
     };
 
     const getStepIcon = (type) => {
@@ -389,7 +391,7 @@ export default function JobMonitoring() {
                     <div style={{ position: 'relative' }}>
                         <input
                             type="text"
-                            className="form-control"
+                            className="form-input"
                             placeholder="Enter Transaction ID (min 3 chars)..."
                             value={transactionIdSearch}
                             onChange={(e) => setTransactionIdSearch(e.target.value)}
@@ -451,7 +453,7 @@ export default function JobMonitoring() {
                     <div style={{ position: 'relative' }}>
                         <input
                             type="text"
-                            className="form-control"
+                            className="form-input"
                             placeholder="Enter Container Number (min 3 chars)..."
                             value={containerSearch}
                             onChange={(e) => setContainerSearch(e.target.value)}

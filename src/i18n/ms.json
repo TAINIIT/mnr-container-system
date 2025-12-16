@@ -617,7 +617,8 @@
         "monitoring": "Pemantauan",
         "jobMonitoring": "Pemantauan Kerja",
         "homePageManagement": "Halaman Utama",
-        "washingStation": "Stesen Cucian"
+        "washingStation": "Stesen Cucian",
+        "chatManagement": "Sembang Langsung"
     },
     "columns": {
         "containerNumber": "Nombor Kontena",

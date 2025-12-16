@@ -156,21 +156,36 @@ export function ChatProvider({ children }) {
             const newChats = safePrev.map(chat => {
                 if (chat.id === chatId) {
                     const safeMessages = Array.isArray(chat.messages) ? chat.messages : [];
-                    return {
+                    const updatedChat = {
                         ...chat,
                         messages: [...safeMessages, message],
                         updatedAt: new Date().toISOString(),
                         unreadAdmin: sender !== 'agent' ? (chat.unreadAdmin || 0) + 1 : chat.unreadAdmin
                     };
+
+                    // Save ONLY this specific chat to Firebase (prevents race condition)
+                    if (!DEMO_MODE) {
+                        const chatRef = ref(database, `${FIREBASE_CHATS_PATH}/${chatId}`);
+                        set(chatRef, updatedChat).catch(err => {
+                            console.error('Error saving chat to Firebase:', err);
+                        });
+                    }
+
+                    return updatedChat;
                 }
                 return chat;
             });
-            saveChats(newChats);
+
+            // For demo mode, save all chats to localStorage
+            if (DEMO_MODE) {
+                localStorage.setItem(STORAGE_KEY, JSON.stringify(newChats));
+            }
+
             return newChats;
         });
 
         return message;
-    }, [saveChats]);
+    }, []);
 
     // Mark messages as read
     const markAsRead = useCallback((chatId) => {

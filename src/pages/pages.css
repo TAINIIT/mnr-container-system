@@ -1404,3 +1404,151 @@
     max-width: 700px;
     width: 90%;
 }
+
+/* ============================================= */
+/* Mobile Responsive - Auto-collapse Filters    */
+/* ============================================= */
+
+/* Filter toggle button - shown on mobile only */
+.mobile-filter-toggle {
+    display: none;
+    align-items: center;
+    gap: 6px;
+    padding: 8px 14px;
+    background: var(--bg-secondary);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-md);
+    color: var(--text-secondary);
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    margin-bottom: var(--space-2);
+}
+
+.mobile-filter-toggle:hover {
+    background: var(--bg-tertiary);
+    color: var(--text-primary);
+}
+
+.mobile-filter-toggle svg {
+    transition: transform 0.2s ease;
+}
+
+.mobile-filter-toggle.collapsed svg:last-child {
+    transform: rotate(180deg);
+}
+
+/* Desktop: filters always visible, toggle hidden */
+@media (min-width: 769px) {
+    .mobile-filter-toggle {
+        display: none !important;
+    }
+
+    .filters-wrapper.mobile-collapse-default {
+        height: auto !important;
+        opacity: 1 !important;
+        overflow: visible !important;
+    }
+}
+
+/* Mobile/Tablet: show toggle, auto-collapse filters */
+@media (max-width: 768px) {
+    .mobile-filter-toggle {
+        display: flex;
+        width: 100%;
+        justify-content: center;
+    }
+
+    /* Default collapsed state on mobile */
+    .filters-wrapper.mobile-collapse-default.collapsed {
+        height: 0;
+        margin: 0;
+        padding: 0;
+        opacity: 0;
+        overflow: hidden;
+        transition: all 0.3s ease;
+    }
+
+    .filters-wrapper.mobile-collapse-default:not(.collapsed) {
+        height: auto;
+        opacity: 1;
+        overflow: visible;
+        transition: all 0.3s ease;
+    }
+
+    /* Ensure filters stay visible when expanded */
+    .filters-wrapper.mobile-collapse-default .filters {
+        padding: var(--space-3);
+    }
+
+    /* Cost summary row - more compact on mobile */
+    .cost-summary-row {
+        grid-template-columns: repeat(2, 1fr);
+        gap: var(--space-2);
+    }
+
+    .cost-card {
+        padding: var(--space-2);
+    }
+
+    .cost-card-value {
+        font-size: var(--font-size-base);
+    }
+
+    /* EOR tabs scroll on mobile */
+    .eor-tabs {
+        overflow-x: auto;
+        flex-wrap: nowrap;
+        padding-bottom: var(--space-2);
+    }
+
+    .tab-btn {
+        white-space: nowrap;
+        flex-shrink: 0;
+    }
+
+    /* Stats grid more compact */
+    .grid.grid-cols-4,
+    .grid.grid-cols-5 {
+        grid-template-columns: repeat(2, 1fr);
+        gap: var(--space-2);
+    }
+
+    /* Stat cards smaller on mobile */
+    .stat-card {
+        padding: var(--space-2);
+    }
+
+    .stat-card-value {
+        font-size: var(--font-size-lg);
+    }
+
+    .stat-card-label {
+        font-size: var(--font-size-xs);
+    }
+
+    /* Header stats inline scroll */
+    .header-stats {
+        overflow-x: auto;
+        flex-wrap: nowrap;
+        gap: var(--space-2);
+        padding-bottom: var(--space-1);
+    }
+
+    .header-stat {
+        flex-shrink: 0;
+        min-width: 70px;
+        padding: var(--space-2);
+    }
+
+    /* Date filters stack */
+    .date-filter-group {
+        flex-wrap: wrap;
+    }
+
+    .date-filter-group input[type="date"] {
+        width: 100%;
+        min-width: 140px;
+    }
+}

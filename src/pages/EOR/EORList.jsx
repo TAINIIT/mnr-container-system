@@ -39,8 +39,8 @@ export default function EORList() {
     const [currentPage, setCurrentPage] = useState(1);
     const itemsPerPage = CONFIG.CONTAINERS_PER_PAGE || 50;
 
-    // Collapsible filters
-    const [filtersVisible, setFiltersVisible] = useState(true);
+    // Collapsible filters - auto-collapse on mobile
+    const [filtersVisible, setFiltersVisible] = useState(() => window.innerWidth > 768);
 
     // Get EORs based on active tab
     const getTabFilteredEORs = () => {
