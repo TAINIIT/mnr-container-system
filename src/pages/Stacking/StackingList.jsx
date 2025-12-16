@@ -40,6 +40,9 @@ export default function StackingList() {
     // Collapsible filters - auto-collapse on mobile
     const [filtersVisible, setFiltersVisible] = useState(() => window.innerWidth > 768);
 
+    // Collapsible stats - hidden by default on tablet/mobile (<=1024px)
+    const [statsVisible, setStatsVisible] = useState(() => window.innerWidth > 1024);
+
     // Get pre-inspections to find accepted containers
     const preinspections = JSON.parse(localStorage.getItem('mnr_preinspections') || '[]');
     const acceptedContainerIds = preinspections
@@ -308,29 +311,40 @@ export default function StackingList() {
                     </div>
                 </div>
 
-                {/* Stats */}
-                <div className="grid grid-cols-4">
-                    <div className="stat-card">
-                        <div className="stat-card-value">{readyContainers.length}</div>
-                        <div className="stat-card-label">{t('stacking.readyToStackLabel') || 'Ready to Stack'}</div>
-                    </div>
-                    <div className="stat-card">
-                        <div className="stat-card-value" style={{ color: 'var(--warning-500)' }}>
-                            {stackingRequests.filter(s => s.status === 'NEW').length}
+                {/* Stats Toggle Button - visible on tablet/mobile */}
+                <button
+                    className="stats-toggle-btn"
+                    onClick={() => setStatsVisible(!statsVisible)}
+                >
+                    <span>{t('common.stats') || 'Stats'}</span>
+                    {statsVisible ? <ChevronUp size={14} /> : <ChevronDown size={14} />}
+                </button>
+
+                {/* Stats - Collapsible */}
+                <div className={`compact-stats-wrapper ${!statsVisible ? 'collapsed' : ''}`}>
+                    <div className="grid grid-cols-4">
+                        <div className="stat-card">
+                            <div className="stat-card-value">{readyContainers.length}</div>
+                            <div className="stat-card-label">{t('stacking.readyToStackLabel') || 'Ready to Stack'}</div>
                         </div>
-                        <div className="stat-card-label">{t('common.pending') || 'Pending'}</div>
-                    </div>
-                    <div className="stat-card">
-                        <div className="stat-card-value" style={{ color: 'var(--primary-500)' }}>
-                            {stackingRequests.filter(s => s.status === 'IN_PROGRESS').length}
+                        <div className="stat-card">
+                            <div className="stat-card-value" style={{ color: 'var(--warning-500)' }}>
+                                {stackingRequests.filter(s => s.status === 'NEW').length}
+                            </div>
+                            <div className="stat-card-label">{t('common.pending') || 'Pending'}</div>
                         </div>
-                        <div className="stat-card-label">{t('common.inProgress') || 'In Progress'}</div>
-                    </div>
-                    <div className="stat-card">
-                        <div className="stat-card-value" style={{ color: 'var(--success-500)' }}>
-                            {stackingRequests.filter(s => s.status === 'COMPLETED').length}
+                        <div className="stat-card">
+                            <div className="stat-card-value" style={{ color: 'var(--primary-500)' }}>
+                                {stackingRequests.filter(s => s.status === 'IN_PROGRESS').length}
+                            </div>
+                            <div className="stat-card-label">{t('common.inProgress') || 'In Progress'}</div>
                         </div>
-                        <div className="stat-card-label">{t('stacking.released') || 'Released'}</div>
+                        <div className="stat-card">
+                            <div className="stat-card-value" style={{ color: 'var(--success-500)' }}>
+                                {stackingRequests.filter(s => s.status === 'COMPLETED').length}
+                            </div>
+                            <div className="stat-card-label">{t('stacking.released') || 'Released'}</div>
+                        </div>
                     </div>
                 </div>
             </div>
