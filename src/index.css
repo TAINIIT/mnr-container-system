@@ -1038,6 +1038,8 @@ textarea:disabled {
   display: flex;
   flex-direction: column;
   gap: var(--space-2);
+  pointer-events: none;
+  /* Don't block clicks on underlying elements */
 }
 
 .toast {
@@ -1051,6 +1053,8 @@ textarea:disabled {
   border-left: 4px solid;
   animation: slideUp var(--transition-base);
   min-width: 300px;
+  pointer-events: auto;
+  /* Allow clicks on the toast itself */
 }
 
 .toast-success {

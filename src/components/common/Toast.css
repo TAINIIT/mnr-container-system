@@ -7,6 +7,8 @@
     flex-direction: column;
     gap: var(--space-2);
     max-width: 400px;
+    pointer-events: none;
+    /* Don't block clicks on underlying elements */
 }
 
 .toast {
@@ -20,6 +22,8 @@
     border-left: 4px solid;
     animation: slideInRight 0.3s ease;
     min-width: 300px;
+    pointer-events: auto;
+    /* Allow clicks on the toast itself */
 }
 
 @keyframes slideInRight {
