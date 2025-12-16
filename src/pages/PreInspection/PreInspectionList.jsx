@@ -554,6 +554,7 @@ export default function PreInspectionList() {
                         <table className="table">
                             <thead>
                                 <tr>
+                                    <th>{t('columns.actions')}</th>
                                     <th>{t('columns.transactionId')}</th>
                                     <th>{t('columns.containerNumber')}</th>
                                     <th>{t('columns.liner')}</th>
@@ -561,35 +562,11 @@ export default function PreInspectionList() {
                                     <th>{t('inspection.reworkCount') || 'Rework #'}</th>
                                     <th>{t('columns.inspectionStatus')}</th>
                                     <th>{t('columns.result')}</th>
-                                    <th>{t('columns.actions')}</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 {paginatedInspections.map((ins) => (
                                     <tr key={ins.id}>
-                                        <td style={{ fontWeight: 500 }}>{ins.surveyTransactionId || ins.id}</td>
-                                        <td><span className="container-number">{ins.containerNumber}</span></td>
-                                        <td>{ins.liner}</td>
-                                        <td>{new Date(ins.scheduledDate).toLocaleDateString()}</td>
-                                        <td>
-                                            {(ins.reworkCount || 0) > 0 ? (
-                                                <span className={`badge ${ins.reworkCount > 1 ? 'badge-dm' : 'badge-ar'}`}>
-                                                    #{ins.reworkCount}
-                                                </span>
-                                            ) : '-'}
-                                        </td>
-                                        <td>
-                                            <span className={`badge badge-${ins.status.toLowerCase()}`}>
-                                                {ins.status}
-                                            </span>
-                                        </td>
-                                        <td>
-                                            {ins.result ? (
-                                                <span className={`badge ${ins.result === 'ACCEPTED' ? 'badge-av' : 'badge-dm'}`}>
-                                                    {ins.result}
-                                                </span>
-                                            ) : '-'}
-                                        </td>
                                         <td>
                                             {/* Show actions if:
                                                 1. Status is not COMPLETED and not ACCEPTED (normal flow), OR
@@ -607,7 +584,7 @@ export default function PreInspectionList() {
                                                             onClick={() => startInspection(ins)}
                                                             title={ins.result === 'REWORK' ? 'Re-Inspect after rework' : 'Start Full Inspection'}
                                                         >
-                                                            <ListChecks size={14} /> {ins.result === 'REWORK' ? 'Re-Inspect' : 'Inspect'}
+                                                            <ListChecks size={14} />
                                                         </button>
                                                         <button
                                                             className="btn btn-success btn-sm"
@@ -634,6 +611,29 @@ export default function PreInspectionList() {
                                                     )
                                                 );
                                             })()}
+                                        </td>
+                                        <td style={{ fontWeight: 500 }}>{ins.surveyTransactionId || ins.id}</td>
+                                        <td><span className="container-number">{ins.containerNumber}</span></td>
+                                        <td>{ins.liner}</td>
+                                        <td>{new Date(ins.scheduledDate).toLocaleDateString()}</td>
+                                        <td>
+                                            {(ins.reworkCount || 0) > 0 ? (
+                                                <span className={`badge ${ins.reworkCount > 1 ? 'badge-dm' : 'badge-ar'}`}>
+                                                    #{ins.reworkCount}
+                                                </span>
+                                            ) : '-'}
+                                        </td>
+                                        <td>
+                                            <span className={`badge badge-${ins.status.toLowerCase()}`}>
+                                                {ins.status}
+                                            </span>
+                                        </td>
+                                        <td>
+                                            {ins.result ? (
+                                                <span className={`badge ${ins.result === 'ACCEPTED' ? 'badge-av' : 'badge-dm'}`}>
+                                                    {ins.result}
+                                                </span>
+                                            ) : '-'}
                                         </td>
                                     </tr>
                                 ))}

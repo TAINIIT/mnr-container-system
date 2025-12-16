@@ -346,6 +346,7 @@ export default function EORList() {
                                         />
                                     </th>
                                 )}
+                                <th>{t('columns.actions')}</th>
                                 <th>{t('columns.transactionId')}</th>
                                 <th>{t('columns.containerNumber')}</th>
                                 <th>{t('columns.liner')}</th>
@@ -353,7 +354,6 @@ export default function EORList() {
                                 <th>{t('columns.approval')}</th>
                                 <th>{t('columns.eorStatus')}</th>
                                 <th>{t('columns.createdAt')}</th>
-                                <th>{t('columns.actions')}</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -387,29 +387,6 @@ export default function EORList() {
                                                 )}
                                             </td>
                                         )}
-                                        <td><span style={{ fontWeight: 500 }}>{eor.surveyId || eor.id}</span></td>
-                                        <td><span className="container-number">{eor.containerNumber}</span></td>
-                                        <td>{eor.liner}</td>
-                                        <td>
-                                            <span style={{ fontWeight: 600 }}>RM {eor.totalCost}</span>
-                                        </td>
-                                        <td>
-                                            {eor.autoApproved ? (
-                                                <span className="badge badge-av">Auto</span>
-                                            ) : eor.status === 'APPROVED' ? (
-                                                <span className="badge badge-av">Manual</span>
-                                            ) : eor.needApproval ? (
-                                                <span className="badge badge-ar">Required</span>
-                                            ) : (
-                                                <span className="badge badge-draft">N/A</span>
-                                            )}
-                                        </td>
-                                        <td>
-                                            <span className={`badge ${getStatusBadgeClass(eor.status)}`}>
-                                                {EOR_STATUS_LABELS[eor.status]}
-                                            </span>
-                                        </td>
-                                        <td>{new Date(eor.createdAt).toLocaleDateString()}</td>
                                         <td>
                                             <div className="flex gap-2">
                                                 {canApprove && (
@@ -447,6 +424,29 @@ export default function EORList() {
                                                 </Link>
                                             </div>
                                         </td>
+                                        <td><span style={{ fontWeight: 500 }}>{eor.surveyId || eor.id}</span></td>
+                                        <td><span className="container-number">{eor.containerNumber}</span></td>
+                                        <td>{eor.liner}</td>
+                                        <td>
+                                            <span style={{ fontWeight: 600 }}>RM {eor.totalCost}</span>
+                                        </td>
+                                        <td>
+                                            {eor.autoApproved ? (
+                                                <span className="badge badge-av">Auto</span>
+                                            ) : eor.status === 'APPROVED' ? (
+                                                <span className="badge badge-av">Manual</span>
+                                            ) : eor.needApproval ? (
+                                                <span className="badge badge-ar">Required</span>
+                                            ) : (
+                                                <span className="badge badge-draft">N/A</span>
+                                            )}
+                                        </td>
+                                        <td>
+                                            <span className={`badge ${getStatusBadgeClass(eor.status)}`}>
+                                                {EOR_STATUS_LABELS[eor.status]}
+                                            </span>
+                                        </td>
+                                        <td>{new Date(eor.createdAt).toLocaleDateString()}</td>
                                     </tr>
                                 );
                             })}

@@ -390,6 +390,7 @@ export default function ShuntingList() {
                         <table className="table">
                             <thead>
                                 <tr>
+                                    <th>{t('columns.actions')}</th>
                                     <th>{t('columns.transactionId')}</th>
                                     <th>{t('columns.containerNumber')}</th>
                                     <th>{t('columns.liner')}</th>
@@ -398,7 +399,6 @@ export default function ShuntingList() {
                                     <th>{t('columns.priority')}</th>
                                     <th>{t('columns.shuntingStatus')}</th>
                                     <th>{t('columns.waitTime') || 'Wait Time'}</th>
-                                    <th>{t('columns.actions')}</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -411,6 +411,37 @@ export default function ShuntingList() {
 
                                     return (
                                         <tr key={req.id} className={req.priority === 'URGENT' ? 'urgent-row' : ''}>
+                                            <td>
+                                                <div className="action-buttons">
+                                                    {req.status === 'NEW' && (
+                                                        <>
+                                                            <button
+                                                                className="btn btn-secondary btn-sm"
+                                                                onClick={() => openDispatchModal(req)}
+                                                                title={t('shunting.dispatch') || 'Dispatch'}
+                                                            >
+                                                                <Truck size={14} />
+                                                            </button>
+                                                        </>
+                                                    )}
+                                                    {req.status === 'DISPATCHED' && (
+                                                        <button
+                                                            className="btn btn-primary btn-sm"
+                                                            onClick={() => updateStatus(req.id, 'IN_PROGRESS')}
+                                                        >
+                                                            <Play size={14} />
+                                                        </button>
+                                                    )}
+                                                    {req.status === 'IN_PROGRESS' && (
+                                                        <button
+                                                            className="btn btn-success btn-sm"
+                                                            onClick={() => updateStatus(req.id, 'COMPLETED')}
+                                                        >
+                                                            <CheckCircle size={14} />
+                                                        </button>
+                                                    )}
+                                                </div>
+                                            </td>
                                             <td style={{ fontWeight: 500 }}>{req.surveyTransactionId || req.id}</td>
                                             <td><span className="container-number">{req.containerNumber}</span></td>
                                             <td>{req.liner}</td>
@@ -436,7 +467,7 @@ export default function ShuntingList() {
                                                         className="btn btn-ghost btn-sm"
                                                         onClick={() => openDispatchModal(req)}
                                                     >
-                                                        <Users size={14} /> {t('shunting.assign') || 'Assign'}
+                                                        <Users size={14} />
                                                     </button>
                                                 )}
                                             </td>
@@ -457,37 +488,6 @@ export default function ShuntingList() {
                                                         <Clock size={12} /> {waitDisplay}
                                                     </span>
                                                 )}
-                                            </td>
-                                            <td>
-                                                <div className="action-buttons">
-                                                    {req.status === 'NEW' && (
-                                                        <>
-                                                            <button
-                                                                className="btn btn-secondary btn-sm"
-                                                                onClick={() => openDispatchModal(req)}
-                                                                title={t('shunting.dispatch') || 'Dispatch'}
-                                                            >
-                                                                <Truck size={14} /> {t('shunting.dispatch') || 'Dispatch'}
-                                                            </button>
-                                                        </>
-                                                    )}
-                                                    {req.status === 'DISPATCHED' && (
-                                                        <button
-                                                            className="btn btn-primary btn-sm"
-                                                            onClick={() => updateStatus(req.id, 'IN_PROGRESS')}
-                                                        >
-                                                            <Play size={14} /> {t('shunting.start') || 'Start'}
-                                                        </button>
-                                                    )}
-                                                    {req.status === 'IN_PROGRESS' && (
-                                                        <button
-                                                            className="btn btn-success btn-sm"
-                                                            onClick={() => updateStatus(req.id, 'COMPLETED')}
-                                                        >
-                                                            <CheckCircle size={14} /> {t('shunting.complete') || 'Complete'}
-                                                        </button>
-                                                    )}
-                                                </div>
                                             </td>
                                         </tr>
                                     );

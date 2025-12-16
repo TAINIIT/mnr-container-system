@@ -250,6 +250,7 @@ export default function RepairOrderList() {
                         <table className="table">
                             <thead>
                                 <tr>
+                                    <th>{t('columns.actions')}</th>
                                     <th>{t('columns.transactionId')}</th>
                                     <th>{t('columns.containerNumber')}</th>
                                     <th>{t('columns.liner')}</th>
@@ -257,12 +258,36 @@ export default function RepairOrderList() {
                                     <th>{t('columns.roStatus')}</th>
                                     <th>{t('columns.assignedTeam')}</th>
                                     <th>{t('columns.createdAt')}</th>
-                                    <th>{t('columns.actions')}</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 {paginatedROs.map((ro) => (
                                     <tr key={ro.id} onDoubleClick={() => navigate(`/repair-orders/${ro.id}`)} style={{ cursor: 'pointer' }}>
+                                        <td>
+                                            <div className="action-buttons">
+                                                {ro.status === 'PENDING' && (
+                                                    <button
+                                                        className="btn btn-success btn-sm"
+                                                        onClick={(e) => { e.stopPropagation(); handleStartRepair(ro); }}
+                                                        title="Start Repair"
+                                                    >
+                                                        <Play size={14} />
+                                                    </button>
+                                                )}
+                                                {ro.status === 'IN_PROGRESS' && (
+                                                    <button
+                                                        className="btn btn-primary btn-sm"
+                                                        onClick={(e) => { e.stopPropagation(); handleCompleteRepair(ro); }}
+                                                        title="Complete Repair"
+                                                    >
+                                                        <CheckCircle size={14} />
+                                                    </button>
+                                                )}
+                                                <Link to={`/repair-orders/${ro.id}`} className="btn btn-ghost btn-sm">
+                                                    <Eye size={16} />
+                                                </Link>
+                                            </div>
+                                        </td>
                                         <td><span style={{ fontWeight: 500 }}>{ro.surveyId || ro.id}</span></td>
                                         <td><span className="container-number">{ro.containerNumber}</span></td>
                                         <td>{ro.liner}</td>
@@ -300,31 +325,6 @@ export default function RepairOrderList() {
                                             )}
                                         </td>
                                         <td>{new Date(ro.createdAt).toLocaleDateString()}</td>
-                                        <td>
-                                            <div className="action-buttons">
-                                                {ro.status === 'PENDING' && (
-                                                    <button
-                                                        className="btn btn-success btn-sm"
-                                                        onClick={(e) => { e.stopPropagation(); handleStartRepair(ro); }}
-                                                        title="Start Repair"
-                                                    >
-                                                        <Play size={14} /> {t('repairOrder.start') || 'Start'}
-                                                    </button>
-                                                )}
-                                                {ro.status === 'IN_PROGRESS' && (
-                                                    <button
-                                                        className="btn btn-primary btn-sm"
-                                                        onClick={(e) => { e.stopPropagation(); handleCompleteRepair(ro); }}
-                                                        title="Complete Repair"
-                                                    >
-                                                        <CheckCircle size={14} /> {t('repairOrder.complete') || 'Complete'}
-                                                    </button>
-                                                )}
-                                                <Link to={`/repair-orders/${ro.id}`} className="btn btn-ghost btn-sm">
-                                                    <Eye size={16} /> {t('common.view') || 'View'}
-                                                </Link>
-                                            </div>
-                                        </td>
                                     </tr>
                                 ))}
                             </tbody>

@@ -479,6 +479,7 @@ export default function ContainerList() {
                                         checked={paginatedContainers.length > 0 && paginatedContainers.every(c => selectedContainers.includes(c.id))}
                                     />
                                 </th>
+                                <th>{t('columns.actions')}</th>
                                 <th>{t('columns.containerNumber')}</th>
                                 <th>{t('columns.size')}/{t('columns.type')}</th>
                                 <th>{t('columns.liner')}</th>
@@ -486,7 +487,6 @@ export default function ContainerList() {
                                 <th>{t('container.workflowStage') || 'Stage'}</th>
                                 <th>{t('columns.location')}</th>
                                 <th>{t('columns.gateInDate')}</th>
-                                <th>{t('columns.actions')}</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -500,6 +500,20 @@ export default function ContainerList() {
                                                 checked={selectedContainers.includes(container.id)}
                                                 onChange={() => toggleSelect(container.id)}
                                             />
+                                        </td>
+                                        <td>
+                                            <div className="action-buttons">
+                                                <button
+                                                    className="btn btn-ghost btn-sm"
+                                                    onClick={(e) => { e.stopPropagation(); setShowTimeline(container); }}
+                                                    title={t('container.viewTimeline') || 'View Timeline'}
+                                                >
+                                                    <History size={16} />
+                                                </button>
+                                                <Link to={`/containers/${container.id}`} className="btn btn-ghost btn-sm" onClick={e => e.stopPropagation()}>
+                                                    <Eye size={16} />
+                                                </Link>
+                                            </div>
                                         </td>
                                         <td>
                                             <span className="container-number">{container.containerNumber}</span>
@@ -524,20 +538,6 @@ export default function ContainerList() {
                                                 '-'}
                                         </td>
                                         <td>{new Date(container.gateInDate).toLocaleDateString()}</td>
-                                        <td>
-                                            <div className="action-buttons">
-                                                <button
-                                                    className="btn btn-ghost btn-sm"
-                                                    onClick={(e) => { e.stopPropagation(); setShowTimeline(container); }}
-                                                    title={t('container.viewTimeline') || 'View Timeline'}
-                                                >
-                                                    <History size={16} />
-                                                </button>
-                                                <Link to={`/containers/${container.id}`} className="btn btn-ghost btn-sm" onClick={e => e.stopPropagation()}>
-                                                    <Eye size={16} /> {t('common.view') || 'View'}
-                                                </Link>
-                                            </div>
-                                        </td>
                                     </tr>
                                 );
                             })}

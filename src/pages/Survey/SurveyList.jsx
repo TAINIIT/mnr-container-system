@@ -205,6 +205,7 @@ export default function SurveyList() {
                     <table className="table">
                         <thead>
                             <tr>
+                                <th>{t('columns.actions')}</th>
                                 <th>{t('columns.transactionId')}</th>
                                 <th>{t('columns.containerNumber')}</th>
                                 <th>{t('columns.liner')}</th>
@@ -213,12 +214,39 @@ export default function SurveyList() {
                                 <th>{t('columns.initialCondition')}</th>
                                 <th>{t('columns.surveyStatus')}</th>
                                 <th>{t('columns.createdAt')}</th>
-                                <th>{t('columns.actions')}</th>
                             </tr>
                         </thead>
                         <tbody>
                             {paginatedSurveys.map((survey) => (
                                 <tr key={survey.id} onDoubleClick={() => navigate(`/surveys/${survey.id}`)} style={{ cursor: 'pointer' }}>
+                                    <td>
+                                        <div className="action-buttons">
+                                            <Link to={`/surveys/${survey.id}`} className="btn btn-ghost btn-sm">
+                                                <Eye size={16} />
+                                            </Link>
+                                            {!isExternal && survey.status === 'COMPLETED' && survey.initialCondition === 'DAMAGED' && (
+                                                (() => {
+                                                    const existingEOR = eors.find(e => e.surveyId === survey.id || e.containerId === survey.containerId);
+                                                    if (existingEOR) {
+                                                        return (
+                                                            <span className="badge badge-completed" style={{ fontSize: '11px' }}>
+                                                                EOR: {existingEOR.status}
+                                                            </span>
+                                                        );
+                                                    }
+                                                    return (
+                                                        <Link
+                                                            to={`/eor/new/${survey.id}`}
+                                                            className="btn btn-primary btn-sm"
+                                                            title={t('survey.createEOR') || 'Create EOR'}
+                                                        >
+                                                            <FileText size={14} />
+                                                        </Link>
+                                                    );
+                                                })()
+                                            )}
+                                        </div>
+                                    </td>
                                     <td><span style={{ fontWeight: 500 }}>{survey.id}</span></td>
                                     <td><span className="container-number">{survey.containerNumber}</span></td>
                                     <td>{survey.liner}</td>
@@ -246,35 +274,6 @@ export default function SurveyList() {
                                         </span>
                                     </td>
                                     <td>{new Date(survey.createdAt).toLocaleDateString()}</td>
-                                    <td>
-                                        <div className="action-buttons">
-                                            <Link to={`/surveys/${survey.id}`} className="btn btn-ghost btn-sm">
-                                                <Eye size={16} /> {t('common.view') || 'View'}
-                                            </Link>
-                                            {/* Only internal users can create EORs, and only if no EOR exists yet */}
-                                            {!isExternal && survey.status === 'COMPLETED' && survey.initialCondition === 'DAMAGED' && (
-                                                (() => {
-                                                    const existingEOR = eors.find(e => e.surveyId === survey.id || e.containerId === survey.containerId);
-                                                    if (existingEOR) {
-                                                        return (
-                                                            <span className="badge badge-completed" style={{ fontSize: '11px' }}>
-                                                                EOR: {existingEOR.status}
-                                                            </span>
-                                                        );
-                                                    }
-                                                    return (
-                                                        <Link
-                                                            to={`/eor/new/${survey.id}`}
-                                                            className="btn btn-primary btn-sm"
-                                                            title={t('survey.createEOR') || 'Create EOR'}
-                                                        >
-                                                            <FileText size={14} /> {t('survey.createEOR') || 'Create EOR'}
-                                                        </Link>
-                                                    );
-                                                })()
-                                            )}
-                                        </div>
-                                    </td>
                                 </tr>
                             ))}
                         </tbody>

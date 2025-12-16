@@ -444,6 +444,7 @@ export default function StackingList() {
                             <table className="table">
                                 <thead>
                                     <tr>
+                                        <th>{t('columns.actions')}</th>
                                         <th>{t('columns.transactionId')}</th>
                                         <th>{t('columns.containerNumber')}</th>
                                         <th>{t('columns.liner')}</th>
@@ -451,12 +452,21 @@ export default function StackingList() {
                                         <th>{t('columns.targetLocation')}</th>
                                         <th>{t('columns.stackingStatus')}</th>
                                         <th>{t('columns.gatePass') || 'Gate Pass'}</th>
-                                        <th>{t('columns.actions')}</th>
                                     </tr>
                                 </thead>
                                 <tbody>
                                     {paginatedRequests.map((req) => (
                                         <tr key={req.id}>
+                                            <td>
+                                                {req.status !== 'COMPLETED' && (
+                                                    <button
+                                                        className="btn btn-success btn-sm"
+                                                        onClick={() => completeStacking(req)}
+                                                    >
+                                                        <CheckCircle size={14} />
+                                                    </button>
+                                                )}
+                                            </td>
                                             <td style={{ fontWeight: 500 }}>{req.surveyTransactionId || req.id}</td>
                                             <td><span className="container-number">{req.containerNumber}</span></td>
                                             <td>{req.liner}</td>
@@ -485,16 +495,6 @@ export default function StackingList() {
                                                         <Printer size={14} /> {req.gatePassNumber}
                                                     </button>
                                                 ) : '-'}
-                                            </td>
-                                            <td>
-                                                {req.status !== 'COMPLETED' && (
-                                                    <button
-                                                        className="btn btn-success btn-sm"
-                                                        onClick={() => completeStacking(req)}
-                                                    >
-                                                        <CheckCircle size={14} /> {t('stacking.completeRelease') || 'Complete & Release'}
-                                                    </button>
-                                                )}
                                             </td>
                                         </tr>
                                     ))}
